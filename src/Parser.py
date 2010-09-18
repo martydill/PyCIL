@@ -1,0 +1,276 @@
+from Instructions.Ret import Ret
+from Instructions.ldstr import ldstr
+from Method import Method
+from Variable import Variable
+import Types
+import unittest
+
+BlockStart = '{'
+BlockEnd = '}'
+
+class ParseException(Exception):
+    pass
+
+class Parser:
+
+    def __init__(self, data = None):
+        self.methods = []
+        self.tokens = []
+        
+        if data != None:
+            self.set_parse_data(data)
+            
+    def set_parse_data(self, data):
+        self.lines = data.splitlines()
+        
+    def parse(self, fileData):
+        
+        self.set_parse_data(fileData)
+
+        token = self.getNextToken()
+
+        while token != '':
+
+            #if line != '\n' and line != '\r':
+
+            if token.startswith('.method'):
+                self.methods.append(self.parseMethod())
+
+            token = self.getNextToken()
+
+
+    def getNextToken(self):
+
+        while True:
+            if self.tokens is None or len(self.tokens) == 0:
+                if len(self.lines) == 0:
+                    return ''
+                self.tokens = my_split(self.lines.pop(0).strip(), ['(', ')'])
+
+            token = self.tokens.pop(0).strip()
+            if len(token) > 0:
+                return token
+
+    def parseLocals(self):
+        locals = []
+        token = self.getNextToken()
+        if token != 'init':
+            raise ParseException('Expected init, found ' + token) # fixme - only required for verifiable methods
+        token = self.getNextToken()
+        if token != '(':
+            raise ParseException('Expected (, found' + token)
+        token = self.getNextToken()
+        lastToken = ''
+        while not token.endswith(')'):
+            v = Variable()
+            locals.append(v)
+            if token.startswith('['):
+                v.alias = token[1:-1]
+                lastToken = token
+                token = self.getNextToken()
+            v.type = Types.BuiltInTypes[token] # fixme - non-builtin types
+            lastToken = token
+            token = self.getNextToken()
+            #if token.endswith(')'):
+            #    v.name = token[:-1]
+            #    token = ')'
+            #else:
+            v.name = token
+            lastToken= token
+            token = self.getNextToken()
+            
+        return locals
+    
+    def parseMethod(self):
+        method = Method()
+
+        token = self.getNextToken()
+
+        while token != BlockStart:
+
+            print '*' + token + '*'
+            if token in Method.AttributeTypes.keys():
+                method.attributes.append(token)
+            elif token in Types.BuiltInTypes:
+                method.returnType = Types.BuiltInTypes[token]
+            else:
+                method.name = token
+
+            token = self.getNextToken()
+
+        token = self.getNextToken()
+        while token != BlockEnd:
+            if token == '.maxstack':
+                method.maxStack = int(self.getNextToken())
+            elif token == '.entrypoint':
+                method.attributes.append(token)
+            elif token == '.locals':
+                method.locals = self.parseLocals()
+            else:
+                instruction = self.parseInstruction(token)
+                method.instructions.append(instruction)
+
+                if token == 'ret':
+                    break
+                
+            token = self.getNextToken()
+
+        return method
+
+
+    def parseInstruction(self, instructionName):
+        print instructionName
+        label = ''
+        if instructionName.endswith(':'):
+            label = instructionName #@UnusedVariable
+            instructionName = self.getNextToken()
+        
+        if instructionName == 'ldstr':
+            return ldstr()
+        elif instructionName == 'ret':
+            return Ret()
+
+def my_split(s, seps):
+    splitters = [' ', ',']
+    res = [s]
+    for sep in splitters:
+        s, res = res, []
+        for seq in s:
+            #res += seq.split(sep)
+            temp = seq.split(sep)
+            
+            for string in temp:
+                if len(string) == 0:
+                    continue
+                
+                if string[0] in seps:
+                    res += [string[0]]
+                    if len(string) > 1:
+                        res += [string[1:]]
+                elif string[-1] in seps:
+                    if len(string) > 1:
+                        res += [string[0:-1]]
+                    res += [string[-1]]
+                else:
+                    res += [string]
+    return res
+
+class parseTest(unittest.TestCase):
+
+    def test_get_next_token_multiple_lines(self):
+        str = ('hello\n'
+               'world\n'
+               'abc') 
+        
+        p = Parser(str);
+        self.assertEqual(p.getNextToken(), 'hello')
+        self.assertEqual(p.getNextToken(), 'world')
+        self.assertEqual(p.getNextToken(), 'abc')
+        
+    def test_my_split_chars_on_end_of_words(self):
+        str = 'hello (world abc)'
+        result = my_split(str, ['(', ')'])
+        
+        self.assertEqual(len(result), 5)
+        self.assertEqual(len(result), 5)
+        self.assertEqual(result[0], 'hello')
+        self.assertEqual(result[1], '(')
+        self.assertEqual(result[2], 'world')
+        self.assertEqual(result[3], 'abc')
+        self.assertEqual(result[4], ')')
+        
+    def test_my_split_locals_line(self):
+        str =  'init (int32 j)'
+        result = my_split(str, ['(', ')'])
+        
+        self.assertEqual(len(result), 5)
+        self.assertEqual(result[0], 'init')
+        self.assertEqual(result[1], '(')
+        self.assertEqual(result[2], 'int32')
+        self.assertEqual(result[3], 'j')
+        self.assertEqual(result[4], ')')
+        
+    def test_parse_single_local_with_alias(self):
+        s = 'init ([0] int32 j)'
+        p = Parser(s)
+
+        locals = p.parseLocals()
+        self.assertEqual(len(locals), 1)
+        self.assertEqual(locals[0].name, 'j')
+        self.assertEqual(locals[0].alias, '0')
+        self.assertEqual(locals[0].type, Types.Int32)
+        
+    def test_parse_single_local_with_no_alias(self):
+        s = 'init (int32 j)'
+        p = Parser(s)
+
+        locals = p.parseLocals()
+        self.assertEqual(len(locals), 1)
+        self.assertEqual(locals[0].name, 'j')
+        self.assertEqual(locals[0].alias, None)
+        self.assertEqual(locals[0].type, Types.Int32)
+        
+    def test_parse_multiple_local_with_no_alias(self):
+        s = ('init (int32 first,'
+             'int32 second,'
+             'int32 result)')
+        p = Parser(s)
+
+        locals = p.parseLocals()
+        self.assertEqual(len(locals), 3)
+        self.assertEqual(locals[0].name, 'first')
+        self.assertEqual(locals[0].alias, None)
+        self.assertEqual(locals[0].type, Types.Int32)
+        self.assertEqual(locals[1].name, 'second')
+        self.assertEqual(locals[1].alias, None)
+        self.assertEqual(locals[1].type, Types.Int32)   
+        self.assertEqual(locals[2].name, 'result')
+        self.assertEqual(locals[2].alias, None)
+        self.assertEqual(locals[2].type, Types.Int32)       
+
+#    def testParseMultipleMethods(self):
+#
+#        data = ('.method static void main()\n'
+#        '{\n'
+#        '    .entrypoint\n'
+#        '    .maxstack 1\n'
+#        '    ldstr "Hello world!"\n'
+#        '    ret\n'
+#        '}'
+#        '\n'
+#        '.method private hidebysig static void  Hello() cil managed\n'
+#        '{\n'
+#        '  .maxstack  8\n'
+#        ' .locals init ([0] int32 j)'
+#        'IL_0000:  ldarg.0'
+#        'IL_0001:  ldc.i4.2'
+#        'IL_0002:  mul'
+#        'IL_0003:  stloc.0'
+#        'IL_0004:  ldloc.0'
+#        'IL_0005:  ret'
+#        '}\n'
+#        )
+#
+#
+#        p = Parser()
+#        p.parse(data)
+#        self.assertEqual(len(p.methods), 2)
+#
+#        m = p.methods[0]
+#        self.assertEqual(m.name, 'main()')
+#        self.assertEqual(m.maxStack, 1)
+#        self.assertTrue('static' in m.attributes)
+#        self.assertTrue('.entrypoint' in m.attributes)
+#        self.assertTrue(len(m.instructions), 2)
+#
+#        m = p.methods[1]
+#        self.assertEqual(m.name, 'Hello()')
+#        self.assertEqual(m.maxStack, 8)
+#        self.assertTrue('static' in m.attributes)
+#        self.assertTrue('.entrypoint' not in m.attributes)
+#        self.assertTrue('cil' in m.attributes)
+#        self.assertTrue('managed' in m.attributes)
+#        self.assertTrue(len(m.instructions), 1)
+#
+#
+#  
