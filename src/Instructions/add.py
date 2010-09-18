@@ -1,6 +1,5 @@
 from Instruction import Instruction
 from Stack import Stack, StackStateException
-from VM import VM
 import unittest
 
 class add(Instruction):
@@ -22,6 +21,7 @@ class add(Instruction):
 class addTest(unittest.TestCase):
 
     def testExecute_notEnoughStackValues(self):
+        from VM import VM
         vm = VM()
         vm.stack.push(1)
         x = add()
@@ -29,6 +29,7 @@ class addTest(unittest.TestCase):
         self.assertRaises(StackStateException, x.execute, vm)
 
     def testExecute_ints(self):
+        from VM import VM
         vm = VM()
         vm.stack.push(5)
         vm.stack.push(999)
@@ -39,6 +40,7 @@ class addTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 999+5)
 
     def testExecute_floats(self):
+        from VM import VM
         vm = VM()
         vm.stack.push(123.4)
         vm.stack.push(0.01)

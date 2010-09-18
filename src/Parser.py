@@ -4,6 +4,9 @@ from Method import Method
 from Variable import Variable
 import Types
 import unittest
+from Instructions.ldc import ldc
+from Instructions import sub
+from Instructions.add import add
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -129,7 +132,13 @@ class Parser:
             return ldstr()
         elif instructionName == 'ret':
             return Ret()
-
+        elif instructionName.startswith('ldc.'):
+            return ldc(instructionName.rpartition('ldc.')[2])
+        elif instructionName == 'sub':
+            return sub()
+        elif instructionName == 'add':
+            return add()
+        
 def my_split(s, seps):
     splitters = [' ', ',']
     res = [s]

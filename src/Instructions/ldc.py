@@ -1,6 +1,5 @@
 from Instruction import Instruction
 from Types import Type, BuiltInTypes, InvalidTypeException
-from VM import VM
 import unittest
 
 class ldc(Instruction):
@@ -69,6 +68,7 @@ class ldc(Instruction):
 class ldcTest(unittest.TestCase):
 
     def testExecute_i4(self):
+        from VM import VM
         vm = VM()
         x = ldc('i4')
         x.value = 12345
@@ -78,6 +78,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 12345)
 
     def testExecute_i8(self):
+        from VM import VM
         vm = VM()
         x = ldc('i8')
         x.value = 999988887777
@@ -87,6 +88,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 999988887777)
 
     def testExecute_r4(self):
+        from VM import VM
         vm = VM()
         x = ldc('r4')
         x.value = 1.234
@@ -97,6 +99,7 @@ class ldcTest(unittest.TestCase):
 
 
     def testExecute_r8(self):
+        from VM import VM
         vm = VM()
         x = ldc('r8')
         x.value = 999988887777.111122223333
@@ -106,6 +109,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 999988887777.111122223333)
 
     def testExecute_i4dot0(self):
+        from VM import VM
         vm = VM()
 
         x = ldc('i4.0')
@@ -115,6 +119,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 0)
 
     def testExecute_i4dot1(self):
+        from VM import VM        
         vm = VM()
 
         x = ldc('i4.1')
@@ -124,6 +129,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 1)
 
     def testExecute_i4dot2(self):
+        from VM import VM        
         vm = VM()
 
         x = ldc('i4.2')
@@ -133,6 +139,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 2)
 
     def testExecute_i4dot3(self):
+        from VM import VM
         vm = VM()
 
         x = ldc('i4.3')
@@ -142,6 +149,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 3)
 
     def testExecute_i4dot4(self):
+        from VM import VM 
         vm = VM()
 
         x = ldc('i4.4')
@@ -151,6 +159,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 4)
 
     def testExecute_i4dot5(self):
+        from VM import VM 
         vm = VM()
 
         x = ldc('i4.5')
@@ -160,6 +169,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 5)
 
     def testExecute_i4dot6(self):
+        from VM import VM
         vm = VM()
 
         x = ldc('i4.6')
@@ -169,6 +179,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 6)
 
     def testExecute_i4dot7(self):
+        from VM import VM        
         vm = VM()
 
         x = ldc('i4.7')
@@ -178,6 +189,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 7)
 
     def testExecute_i4dot8(self):
+        from VM import VM
         vm = VM()
 
         x = ldc('i4.8')
@@ -187,6 +199,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), 8)
 
     def testExecute_i4dotm1(self):
+        from VM import VM
         vm = VM()
 
         x = ldc('i4.m1')
@@ -196,6 +209,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), -1)
 
     def testExecute_i4dotM1(self):
+        from VM import VM
         vm = VM()
 
         x = ldc('i4.M1')
@@ -205,6 +219,7 @@ class ldcTest(unittest.TestCase):
         self.assertEqual(vm.stack.pop(), -1)
 
     def testExecute_i4dots(self):
+        from VM import VM
         vm = VM()
 
         x = ldc('i4.s')

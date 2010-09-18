@@ -36,7 +36,9 @@ class VM:
     def execute_method(self, method):
         self.stack.beginFrame(method.maxStack, method)
         self.currentMethod = method
-
+        for instruction in method.instructions:
+            instruction.execute(self)
+        
 
 class VMTest(unittest.TestCase):
 
@@ -128,12 +130,13 @@ class VMTest(unittest.TestCase):
         self.assertEqual('ret', m.instructions[0].name)
 
     def test_execute_method_add(self):
-        s = ('.method public void main() {\n '
+        s = ('.method public int main() {\n '
+             '.maxstack 10\n'
              'ldc.i4.1\n'
              'ldc.i4.5\n'
              'add\n'
              'ret\n'
-             ' }')
+             '}')
         
         vm = VM()
         p = Parser(s)
@@ -141,3 +144,4 @@ class VMTest(unittest.TestCase):
         self.assertEqual(len(m.instructions), 4)
         
         vm.execute_method(m)
+        
