@@ -140,8 +140,8 @@ class VMTest(unittest.TestCase):
         
         vm = VM()
         p = Parser(s)
-        m = p.parseMethod()
-        self.assertEqual(len(m.instructions), 4)
-        
+        m = p.parseMethod()       
         vm.execute_method(m)
+        self.assertEqual(vm.stack.count(), 1)
+        self.assertEqual(vm.stack.pop(), 6)
         
