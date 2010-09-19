@@ -7,6 +7,9 @@ import unittest
 from Instructions.ldc import ldc
 from Instructions import sub
 from Instructions.add import add
+from Instructions.nop import nop
+from Instructions.ldloc import ldloc
+from Instructions.stloc import stloc
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -48,11 +51,15 @@ class Parser:
             if self.tokens is None or len(self.tokens) == 0:
                 if len(self.lines) == 0:
                     return ''
-                self.tokens = my_split(self.lines.pop(0).strip(), ['(', ')'])
-
-            token = self.tokens.pop(0).strip()
-            if len(token) > 0:
-                return token
+                line = self.lines.pop(0).strip()
+                if line.startswith('//'):
+                    continue
+                self.tokens = my_split(line, ['(', ')'])
+            
+            if len(self.tokens) > 0:                 
+                token = self.tokens.pop(0).strip()
+                if len(token) > 0:
+                    return token
 
     def parseLocals(self):
         locals = []
@@ -122,7 +129,7 @@ class Parser:
 
 
     def parseInstruction(self, instructionName):
-        print instructionName
+        
         label = ''
         if instructionName.endswith(':'):
             label = instructionName #@UnusedVariable
@@ -138,6 +145,14 @@ class Parser:
             return sub()
         elif instructionName == 'add':
             return add()
+        elif instructionName == 'nop':
+            return nop()
+        elif instructionName.startswith('ldloc'):
+            return ldloc(instructionName.rpartition('ldloc.')[2])
+        elif instructionName.startswith('stloc'):
+            return stloc(instructionName.rpartition('stloc')[2])
+        else:
+            raise ParseException('Unknown instruction ' + instructionName)
         
 def my_split(s, seps):
     splitters = [' ', ',']
@@ -166,6 +181,18 @@ def my_split(s, seps):
 
 class parseTest(unittest.TestCase):
 
+    def test_get_next_token_ignore_comments(self):
+        str = ('hello\n'
+               '// comment 1\n'
+               'world\n'
+               ' // comment 2\n'
+               'abc') 
+        
+        p = Parser(str);
+        self.assertEqual(p.getNextToken(), 'hello')
+        self.assertEqual(p.getNextToken(), 'world')
+        self.assertEqual(p.getNextToken(), 'abc')
+        
     def test_get_next_token_multiple_lines(self):
         str = ('hello\n'
                'world\n'

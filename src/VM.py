@@ -4,6 +4,8 @@ import unittest
 from Method import Method
 from Parser import Parser
 
+class DebugHooks:
+    PreMethod, PostMethod, PreInstruction, PostInstruction = range(4)
 
 class VM:
 
@@ -12,10 +14,20 @@ class VM:
         self.methods = []
         self.currentMethod = None
         self.stack = Stack(8)
-
+        self.hooks = [None, None, None, None] 
+                
     def start(self):
+        # fixme
+        self.execute_method(self.methods[0])
         pass
 
+    def load(self, fileName):
+        f = open(fileName, 'r')
+        s = f.read()
+        p = Parser()
+        p.parse(s)
+        self.methods = p.methods
+        
     def find_method_by_signature(self, name, returnType, params):
         for m in self.methods:
             if m.name == name and m.returnType == returnType and len(m.parameters) == len(params):
@@ -42,9 +54,19 @@ class VM:
     def execute_method(self, method):
         self.set_current_method(method)
         for instruction in method.instructions:
+            
+            if self.hooks[DebugHooks.PreInstruction] is not None:
+                self.hooks[DebugHooks.PreInstruction](instruction)
+                
             instruction.execute(self)
         
+            if self.hooks[DebugHooks.PostInstruction] is not None:
+                self.hooks[DebugHooks.PostInstruction](instruction)
 
+    def add_hook(self, hookType, method):
+        self.hooks[hookType] = method
+        
+        
 class VMTest(unittest.TestCase):
 
     def test_find_when_empty(self):
