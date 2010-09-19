@@ -148,7 +148,7 @@ class Parser:
         elif instructionName == 'nop':
             return nop()
         elif instructionName.startswith('ldloc'):
-            return ldloc(instructionName.rpartition('ldloc.')[2])
+            return ldloc(instructionName.rpartition('ldloc')[2])
         elif instructionName.startswith('stloc'):
             return stloc(instructionName.rpartition('stloc')[2])
         else:

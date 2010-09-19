@@ -24,7 +24,7 @@ class ldc(Instruction):
     }
 
     def __init__(self, suffix):
-        self.name = 'ldc'
+        self.name = 'ldc' + suffix
         self.suffix = suffix
         self.opcode = ldc.opcodePrefixTable[suffix]
         self.value = None

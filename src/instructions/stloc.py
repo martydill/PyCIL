@@ -17,7 +17,7 @@ class stloc(Instruction):
     }
 
     def __init__(self, suffix):
-        self.name = 'stloc'
+        self.name = 'stloc' + suffix
         self.suffix = suffix
         self.index = 0
         if(stloc.opcodePrefixTable.has_key(suffix)):

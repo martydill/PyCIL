@@ -7,7 +7,6 @@ from Method import Method
 class ldloc(Instruction):
 
     opcodePrefixTable = {
-                     
         '.0' : 0x06,
         '.1' : 0x07,
         '.2' : 0x08,
@@ -18,7 +17,7 @@ class ldloc(Instruction):
 
 
     def __init__(self, suffix):
-        self.name = 'ldloc'
+        self.name = 'ldloc' + suffix
         self.suffix = suffix
         self.index = 0
         if(ldloc.opcodePrefixTable.has_key(suffix)):
@@ -34,7 +33,7 @@ class ldloc(Instruction):
             self.index = 3
         elif self.suffix.startswith('.s '):
             self.index = int(self.suffix[3:])
-            self.op = ldloc.opcodePrefixTable['.s']
+            self.opcode = ldloc.opcodePrefixTable['.s']
             
     def execute(self, vm):
         stack = vm.stack
