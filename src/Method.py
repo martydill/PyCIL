@@ -11,7 +11,7 @@ class Method():
     def __init__(self):
         self.name = 'unnamed'
         self.attributes = []
-        self.maxStack = 0
+        self.maxStack = 1
         self.locals = []
         self.returnType = None
         self.instructions = []

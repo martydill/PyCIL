@@ -33,9 +33,14 @@ class VM:
     def current_method(self):
         return self.stack.currentFrame.method
     
-    def execute_method(self, method):
+
+    def set_current_method(self, method):
         self.stack.beginFrame(method.maxStack, method)
         self.currentMethod = method
+
+
+    def execute_method(self, method):
+        self.set_current_method(method)
         for instruction in method.instructions:
             instruction.execute(self)
         

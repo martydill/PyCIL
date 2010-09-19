@@ -10,7 +10,7 @@ class StackSizeException(Exception):
 class StackFrame:
     def __init__(self, frameSize):
         self.frameSize = frameSize
-        self.frameCount = 0
+        self.count = 0
         self.method = None
 
 class Stack ():
@@ -22,14 +22,14 @@ class Stack ():
         self.beginFrame(initialSize)
 
     def push(self, value):
-        if self.currentFrame.frameSize == self.currentFrame.frameCount:
+        if self.currentFrame.frameSize == self.currentFrame.count:
             raise StackSizeException('Stack size exceeded')
 
-        self.currentFrame.frameCount += 1
+        self.currentFrame.count += 1
         self.stack.append(value)
 
     def pop(self):
-        self.currentFrame.frameCount -=1
+        self.currentFrame.count -=1
         return self.stack.pop()
 
     def count(self):
@@ -48,7 +48,7 @@ class Stack ():
         if self.currentFrame is None:
             return 0
 
-        return self.currentFrame.frameCount
+        return self.currentFrame.count
 
     def beginFrame(self, frameSize, method = None):
         self.currentFrame = StackFrame(frameSize)
@@ -154,3 +154,9 @@ class StackTest(unittest.TestCase):
         
         s.endFrame()
         self.assertEqual(s.currentFrame.method, None)
+        
+    def test_push_creates_frame(self):
+        s = Stack(123);
+        s.push(444)
+        self.assertEqual(s.get_number_of_frames(), 1)
+        self.assertEqual(s.currentFrame, s.stackFrames[0])
