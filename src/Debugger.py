@@ -22,6 +22,8 @@ class Debugger():
             print 'Loaded ' + filename
             self.vm.start()
             print 'Execution finished'
+            if self.vm.stack.count() > 0:
+                print 'Return code: ' + str(self.vm.stack.pop())
 
     def start(self):
         while True:
