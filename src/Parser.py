@@ -139,8 +139,8 @@ class Parser:
             return ldstr()
         elif instructionName == 'ret':
             return Ret()
-        elif instructionName.startswith('ldc.'):
-            return ldc(instructionName.rpartition('ldc.')[2])
+        elif instructionName.startswith('ldc'):
+            return ldc(instructionName.rpartition('ldc')[2])
         elif instructionName == 'sub':
             return sub()
         elif instructionName == 'add':

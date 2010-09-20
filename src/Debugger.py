@@ -13,7 +13,8 @@ class Debugger():
     def handle_input(self):
         r = raw_input('> ')
         if r == 's':
-            print 'stack'
+            for item in reversed(self.vm.stack.stack):
+                print item
         elif r == 'q':
             exit()
         elif r == 'g':
@@ -29,8 +30,10 @@ class Debugger():
                 print 'Execution finished'
                 if self.vm.stack.count() > 0:
                     print 'Return code: ' + str(self.vm.stack.pop())
-            except:
+            except IOError:
                 print 'Unable to load file'
+            except Exception as e:
+                print 'Error: ' + str(e)
 
     def start(self):
         while True:

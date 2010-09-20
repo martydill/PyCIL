@@ -5,22 +5,22 @@ import unittest
 class ldc(Instruction):
 
     opcodePrefixTable = {
-        'i4' : 0x20,
-        'i8' : 0x21,
-        'r4' : 0x22,
-        'r8' : 0x23,
-        'i4.0' : 0x16,
-        'i4.1' : 0x17,
-        'i4.2' : 0x18,
-        'i4.3' : 0x19,
-        'i4.4' : 0x1A,
-        'i4.5' : 0x1B,
-        'i4.6' : 0x1C,
-        'i4.7' : 0x1D,
-        'i4.8' : 0x1E,
-        'i4.m1' : 0x15,
-        'i4.M1' : 0x15,
-        'i4.s' : 0x1F,
+        '.i4' : 0x20,
+        '.i8' : 0x21,
+        '.r4' : 0x22,
+        '.r8' : 0x23,
+        '.i4.0' : 0x16,
+        '.i4.1' : 0x17,
+        '.i4.2' : 0x18,
+        '.i4.3' : 0x19,
+        '.i4.4' : 0x1A,
+        '.i4.5' : 0x1B,
+        '.i4.6' : 0x1C,
+        '.i4.7' : 0x1D,
+        '.i4.8' : 0x1E,
+        '.i4.m1' : 0x15,
+        '.i4.M1' : 0x15,
+        '.i4.s' : 0x1F,
     }
 
     def __init__(self, suffix):
@@ -32,35 +32,35 @@ class ldc(Instruction):
     def execute(self, vm):
         stack = vm.stack
 
-        if self.suffix == 'i4':
+        if self.suffix == '.i4':
             stack.push(self.value)
-        elif self.suffix == 'i8':
+        elif self.suffix == '.i8':
             stack.push(self.value)
-        elif self.suffix == 'r4':
+        elif self.suffix == '.r4':
             stack.push(self.value)
-        elif self.suffix == 'r8':
+        elif self.suffix == '.r8':
             stack.push(self.value)
-        elif self.suffix == 'i4.0':
+        elif self.suffix == '.i4.0':
             stack.push(0)
-        elif self.suffix == 'i4.1':
+        elif self.suffix == '.i4.1':
             stack.push(1)
-        elif self.suffix == 'i4.2':
+        elif self.suffix == '.i4.2':
             stack.push(2)
-        elif self.suffix == 'i4.3':
+        elif self.suffix == '.i4.3':
             stack.push(3)
-        elif self.suffix == 'i4.4':
+        elif self.suffix == '.i4.4':
             stack.push(4)
-        elif self.suffix == 'i4.5':
+        elif self.suffix == '.i4.5':
             stack.push(5)
-        elif self.suffix == 'i4.6':
+        elif self.suffix == '.i4.6':
             stack.push(6)
-        elif self.suffix == 'i4.7':
+        elif self.suffix == '.i4.7':
             stack.push(7)
-        elif self.suffix == 'i4.8':
+        elif self.suffix == '.i4.8':
             stack.push(8)
-        elif self.suffix == 'i4.m1' or self.suffix == 'i4.M1':
+        elif self.suffix == '.i4.m1' or self.suffix == '.i4.M1':
             stack.push(-1)
-        elif self.suffix == 'i4.s':
+        elif self.suffix == '.i4.s':
             stack.push(self.value)
 
 
