@@ -65,7 +65,9 @@ class VM:
 
     def add_hook(self, hookType, method):
         self.hooks[hookType] = method
-        
+    
+    def remove_hook(self, hookType, method):
+        self.hooks[hookType] = None        
         
 class VMTest(unittest.TestCase):
 
