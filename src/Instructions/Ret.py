@@ -1,7 +1,7 @@
 from Instruction import Instruction
 import unittest
-from Method import Method
 import Types
+from Method import Method
 
 class Ret(Instruction):
   

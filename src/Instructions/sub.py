@@ -1,6 +1,6 @@
 from Instruction import Instruction
-from Stack import Stack, StackStateException
 import unittest
+from Stack import StackStateException
 
 class sub(Instruction):
 

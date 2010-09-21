@@ -12,7 +12,8 @@ class StackFrame:
         self.frameSize = frameSize
         self.count = 0
         self.method = None
-
+        self.instructionPointer = 0
+        
 class Stack ():
 
     def __init__(self, initialSize):

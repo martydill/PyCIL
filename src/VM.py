@@ -15,7 +15,8 @@ class VM:
         self.currentMethod = None
         self.stack = Stack(8)
         self.hooks = [None, None, None, None] 
-                
+        self.instructionPointer = 0
+        
     def start(self):
         # fixme
         self.execute_method(self.methods[0])
@@ -28,6 +29,14 @@ class VM:
         p.parse(s)
         self.methods = p.methods
         
+    def find_instruction_pointer_by_label(self, label):
+        for i in range(len(self.current_method().instructions)):
+            instruction = self.current_method().instructions[i]
+            if instruction.label == label:
+                return i
+            
+        return -1
+    
     def find_method_by_signature(self, name, returnType, params):
         for m in self.methods:
             if m.name == name and m.returnType == returnType and len(m.parameters) == len(params):
@@ -53,8 +62,10 @@ class VM:
 
     def execute_method(self, method):
         self.set_current_method(method)
-        for instruction in method.instructions:
+        for i in range(len(method.instructions)):
             
+            instruction = method.instructions[i]
+            self.stack.currentFrame.instructionPointer = instruction
             if self.hooks[DebugHooks.PreInstruction] is not None:
                 self.hooks[DebugHooks.PreInstruction](instruction)
                 
@@ -69,6 +80,9 @@ class VM:
     def remove_hook(self, hookType, method):
         self.hooks[hookType] = None        
         
+    def get_instruction_pointer(self):
+        return self.stack.currentFrame.instructionPointer
+    
 class VMTest(unittest.TestCase):
 
     def test_find_when_empty(self):

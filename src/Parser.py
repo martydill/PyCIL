@@ -10,6 +10,7 @@ from Instructions.add import add
 from Instructions.nop import nop
 from Instructions.ldloc import ldloc
 from Instructions.stloc import stloc
+from Instructions.br import br
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -136,24 +137,29 @@ class Parser:
             instructionName = self.getNextToken()
         
         if instructionName == 'ldstr':
-            return ldstr()
+            instruction = ldstr()
         elif instructionName == 'ret':
-            return Ret()
+            instruction = Ret()
         elif instructionName.startswith('ldc'):
-            return ldc(instructionName.rpartition('ldc')[2])
+            instruction = ldc(instructionName.rpartition('ldc')[2])
         elif instructionName == 'sub':
-            return sub()
+            instruction = sub()
         elif instructionName == 'add':
-            return add()
+            instruction = add()
         elif instructionName == 'nop':
-            return nop()
+            instruction = nop()
         elif instructionName.startswith('ldloc'):
-            return ldloc(instructionName.rpartition('ldloc')[2])
+            instruction = ldloc(instructionName.rpartition('ldloc')[2])
         elif instructionName.startswith('stloc'):
-            return stloc(instructionName.rpartition('stloc')[2])
+            instruction = stloc(instructionName.rpartition('stloc')[2])
+        elif instructionName.startswith('br'):
+            instruction = br(instructionName.rpartition('br')[2])
         else:
             raise ParseException('Unknown instruction ' + instructionName)
         
+        instruction.label = label
+        return instruction
+    
 def my_split(s, seps):
     splitters = [' ', ',']
     res = [s]

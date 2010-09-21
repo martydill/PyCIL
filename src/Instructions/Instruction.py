@@ -10,10 +10,12 @@ class InvalidOpCodeException(Exception):
 
 class Instruction:
 
+       
     def __init__(self, name, opcode):
         self.name = name
         self.opcode = opcode
-
+        self.label = ''
+        
     def execute(self, stack):
         pass
 

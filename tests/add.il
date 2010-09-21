@@ -15,7 +15,7 @@
   IL_0006:  ldloc.1
   IL_0007:  add
   IL_0008:  stloc.2
-  //IL_0009:  br.s       IL_000b
+  IL_0009:  br.s       IL_000b
   IL_000b:  ldloc.2
   IL_000c:  ret
 } // end of method Program::Main

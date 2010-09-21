@@ -1,5 +1,4 @@
 from Instruction import Instruction
-from Types import Type, BuiltInTypes, InvalidTypeException
 import unittest
 
 class ldc(Instruction):
@@ -24,11 +23,13 @@ class ldc(Instruction):
     }
 
     def __init__(self, suffix):
+        
         self.name = 'ldc' + suffix
         self.suffix = suffix
         self.opcode = ldc.opcodePrefixTable[suffix]
         self.value = None
-
+        self.label = '' # fixme
+        
     def execute(self, vm):
         stack = vm.stack
 
@@ -70,7 +71,7 @@ class ldcTest(unittest.TestCase):
     def testExecute_i4(self):
         from VM import VM
         vm = VM()
-        x = ldc('i4')
+        x = ldc('.i4')
         x.value = 12345
         x.execute(vm)
 
@@ -80,7 +81,7 @@ class ldcTest(unittest.TestCase):
     def testExecute_i8(self):
         from VM import VM
         vm = VM()
-        x = ldc('i8')
+        x = ldc('.i8')
         x.value = 999988887777
         x.execute(vm)
 
@@ -90,7 +91,7 @@ class ldcTest(unittest.TestCase):
     def testExecute_r4(self):
         from VM import VM
         vm = VM()
-        x = ldc('r4')
+        x = ldc('.r4')
         x.value = 1.234
         x.execute(vm)
 
@@ -101,7 +102,7 @@ class ldcTest(unittest.TestCase):
     def testExecute_r8(self):
         from VM import VM
         vm = VM()
-        x = ldc('r8')
+        x = ldc('.r8')
         x.value = 999988887777.111122223333
         x.execute(vm)
 
@@ -112,7 +113,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM
         vm = VM()
 
-        x = ldc('i4.0')
+        x = ldc('.i4.0')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -122,7 +123,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM        
         vm = VM()
 
-        x = ldc('i4.1')
+        x = ldc('.i4.1')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -132,7 +133,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM        
         vm = VM()
 
-        x = ldc('i4.2')
+        x = ldc('.i4.2')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -142,7 +143,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM
         vm = VM()
 
-        x = ldc('i4.3')
+        x = ldc('.i4.3')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -152,7 +153,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM 
         vm = VM()
 
-        x = ldc('i4.4')
+        x = ldc('.i4.4')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -162,7 +163,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM 
         vm = VM()
 
-        x = ldc('i4.5')
+        x = ldc('.i4.5')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -172,7 +173,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM
         vm = VM()
 
-        x = ldc('i4.6')
+        x = ldc('.i4.6')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -182,7 +183,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM        
         vm = VM()
 
-        x = ldc('i4.7')
+        x = ldc('.i4.7')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -192,7 +193,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM
         vm = VM()
 
-        x = ldc('i4.8')
+        x = ldc('.i4.8')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -202,7 +203,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM
         vm = VM()
 
-        x = ldc('i4.m1')
+        x = ldc('.i4.m1')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -212,7 +213,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM
         vm = VM()
 
-        x = ldc('i4.M1')
+        x = ldc('.i4.M1')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -222,7 +223,7 @@ class ldcTest(unittest.TestCase):
         from VM import VM
         vm = VM()
 
-        x = ldc('i4.s')
+        x = ldc('.i4.s')
         x.value = 123
         x.execute(vm)
 
