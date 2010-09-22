@@ -6,20 +6,19 @@ class br(Instruction):
 
     def __init__(self, suffix):
         self.name = 'br' + suffix
+        self.target = ''
         
         if suffix.startswith('.s'):
             self.suffix = '.s'
             self.opcode = 0x2b
-            self.target = suffix[3:].strip()
         else:
             self.opcode = 0x38
-            self.target = suffix.strip()
             self.suffix = ''
             
     def execute(self, vm):
         stack = vm.stack
         index = vm.find_instruction_pointer_by_label(self.target)
-        vm.stack.currentFrame.instructionPointer = index
+        stack.currentFrame.instructionPointer = index
 
 
 class brTest(unittest.TestCase):
@@ -39,7 +38,8 @@ class brTest(unittest.TestCase):
         m.instructions.append(dest)
         
         vm.set_current_method(m)
-        x = br('asdf')
+        x = br('') # fixme optional parameters
+        x.target = 'asdf'
         x.execute(vm)
 
         index = vm.get_instruction_pointer()
@@ -61,7 +61,8 @@ class brTest(unittest.TestCase):
         m.instructions.append(dest)
         
         vm.set_current_method(m)
-        x = br('.s zzz')
+        x = br('.s')
+        x.target = 'zzz'
         x.execute(vm)
 
         index = vm.get_instruction_pointer()

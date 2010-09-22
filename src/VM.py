@@ -62,10 +62,12 @@ class VM:
 
     def execute_method(self, method):
         self.set_current_method(method)
-        for i in range(len(method.instructions)):
+        frame = self.stack.currentFrame
+        frame.instructionPointer = 0
+        while frame == self.stack.currentFrame and frame.instructionPointer < len(method.instructions):
             
-            instruction = method.instructions[i]
-            self.stack.currentFrame.instructionPointer = instruction
+            instruction = method.instructions[self.stack.currentFrame.instructionPointer]
+            self.stack.currentFrame.instructionPointer += 1 
             if self.hooks[DebugHooks.PreInstruction] is not None:
                 self.hooks[DebugHooks.PreInstruction](instruction)
                 

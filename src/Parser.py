@@ -133,7 +133,7 @@ class Parser:
         
         label = ''
         if instructionName.endswith(':'):
-            label = instructionName #@UnusedVariable
+            label = instructionName[:-1]
             instructionName = self.getNextToken()
         
         if instructionName == 'ldstr':
@@ -154,6 +154,7 @@ class Parser:
             instruction = stloc(instructionName.rpartition('stloc')[2])
         elif instructionName.startswith('br'):
             instruction = br(instructionName.rpartition('br')[2])
+            instruction.target = self.getNextToken()
         else:
             raise ParseException('Unknown instruction ' + instructionName)
         
@@ -269,6 +270,19 @@ class parseTest(unittest.TestCase):
         self.assertEqual(locals[2].name, 'result')
         self.assertEqual(locals[2].alias, None)
         self.assertEqual(locals[2].type, Types.Int32)       
+
+    def test_parse_method_with_labels(self):
+        s = ('.method public void main() {\n '
+             'IL_0001:    ret\n'
+             ' }')
+        
+        p = Parser(s)
+        m = p.parseMethod()
+        
+        self.assertEqual(len(m.instructions), 1)
+        self.assertEqual('ret', m.instructions[0].name)
+        self.assertEqual('IL_0001', m.instructions[0].label)
+
 
 #    def testParseMultipleMethods(self):
 #
