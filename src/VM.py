@@ -37,9 +37,9 @@ class VM:
             
         return -1
     
-    def find_method_by_signature(self, name, returnType, params):
+    def find_method_by_signature(self, namespace, name, returnType, params):
         for m in self.methods:
-            if m.name == name and m.returnType == returnType and len(m.parameters) == len(params):
+            if m.namespace == namespace and m.name == name and m.returnType == returnType and len(m.parameters) == len(params):
                 equal = True
                 for i in range(len(params)):
                     if params[i] != m.parameters[i]:

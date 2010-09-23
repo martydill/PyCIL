@@ -11,6 +11,7 @@ from Instructions.nop import nop
 from Instructions.ldloc import ldloc
 from Instructions.stloc import stloc
 from Instructions.br import br
+from Instructions.call import call
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -62,6 +63,11 @@ class Parser:
                 if len(token) > 0:
                     return token
 
+    def read_to_end_of_line(self):
+        result = ' '.join(self.tokens)
+        self.tokens = None
+        return result
+        
     def parseLocals(self):
         locals = []
         token = self.getNextToken()
@@ -100,7 +106,9 @@ class Parser:
         while token != BlockStart:
 
             print '*' + token + '*'
-            if token in Method.AttributeTypes.keys():
+            if token == '(':
+                self.parse_parameters(method)
+            elif token in Method.AttributeTypes.keys():
                 method.attributes.append(token)
             elif token in Types.BuiltInTypes:
                 method.returnType = Types.BuiltInTypes[token]
@@ -111,6 +119,7 @@ class Parser:
 
         token = self.getNextToken()
         while token != BlockEnd:
+            print token
             if token == '.maxstack':
                 method.maxStack = int(self.getNextToken())
             elif token == '.entrypoint':
@@ -148,6 +157,8 @@ class Parser:
             instruction = add()
         elif instructionName == 'nop':
             instruction = nop()
+        elif instructionName.startswith('call'):
+            instruction = call(self.read_to_end_of_line())
         elif instructionName.startswith('ldloc'):
             instruction = ldloc(instructionName.rpartition('ldloc')[2])
         elif instructionName.startswith('stloc'):
@@ -161,6 +172,14 @@ class Parser:
         instruction.label = label
         return instruction
     
+    def parse_parameters(self, method):
+        token = self.getNextToken()
+        while token != ')':
+            
+            
+            token = self.getNextToken()
+        pass
+        
 def my_split(s, seps):
     splitters = [' ', ',']
     res = [s]
@@ -183,7 +202,17 @@ def my_split(s, seps):
                         res += [string[0:-1]]
                     res += [string[-1]]
                 else:
-                    res += [string]
+                    added = False
+                    for i in range(len(string)):
+                        c = string[i]
+                        if c in seps:
+                            res+= [string[0:i]]
+                            res += [string[i + 1:]]
+                            added = True
+                            break
+                    
+                    if not added:
+                        res += [string]
     return res
 
 class parseTest(unittest.TestCase):
@@ -283,6 +312,40 @@ class parseTest(unittest.TestCase):
         self.assertEqual('ret', m.instructions[0].name)
         self.assertEqual('IL_0001', m.instructions[0].label)
 
+    def test_parse_multiple_methods_with_parameters(self):
+        s = ('.method public void main(string[] args) {\n '
+             'IL_0001:    ret\n'
+             ' }\n'
+             '\n'
+             '.method public void main2(string[] args) {\n '
+             'IL_0001:    ret\n'
+             ' }\n')
+        
+        p = Parser(s)
+        p.parse(s) # fixme - don't pass s to both
+        
+        self.assertEqual(2, len(p.methods))
+        self.assertEqual('main', p.methods[0].name)
+        self.assertEqual(1, len(p.methods[0].parameters))
+        self.assertEqual('main2', p.methods[1].name)
+        self.assertEqual(1, len(p.methods[1].parameters))
+        
+        
+    def test_parse_multiple_methods_no_parameters(self):
+        s = ('.method public void main() {\n '
+             'IL_0001:    ret\n'
+             ' }\n'
+             '\n'
+             '.method public void main2() {\n '
+             'IL_0001:    ret\n'
+             ' }\n')
+        
+        p = Parser(s)
+        p.parse(s) # fixme - don't pass s to both
+        
+        self.assertEqual(2, len(p.methods))
+        self.assertEqual('main', p.methods[0].name)
+        self.assertEqual('main2', p.methods[1].name)
 
 #    def testParseMultipleMethods(self):
 #
