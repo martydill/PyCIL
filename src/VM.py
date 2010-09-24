@@ -18,8 +18,8 @@ class VM:
         self.instructionPointer = 0
         
     def start(self):
-        # fixme
-        self.execute_method(self.methods[0])
+        method = self.find_method_by_signature(None, 'Main', None, None)
+        self.execute_method(method)
         pass
 
     def load(self, fileName):
@@ -39,7 +39,16 @@ class VM:
     
     def find_method_by_signature(self, namespace, name, returnType, params):
         for m in self.methods:
-            if m.namespace == namespace and m.name == name and m.returnType == returnType and len(m.parameters) == len(params):
+            # fixme - namexpaces not parsed
+            #if namespace != None and m.namespace != namespace:
+            #    continue
+            if returnType != None and m.returnType != returnType:
+                continue
+            if name != None and m.name != name:
+                continue
+            if params == None:
+                return m # fixme - shoudl always do checks
+            if len(m.parameters) == len(params):
                 equal = True
                 for i in range(len(params)):
                     if params[i] != m.parameters[i]:
@@ -89,7 +98,7 @@ class VMTest(unittest.TestCase):
 
     def test_find_when_empty(self):
         vm = VM()
-        m = vm.find_method_by_signature('nonexistent', Types.Int8, [])
+        m = vm.find_method_by_signature(None, 'nonexistent', Types.Int8, [])
         self.assertEqual(m, None)
 
     def test_find_different_params(self):
@@ -99,7 +108,7 @@ class VMTest(unittest.TestCase):
         method.returnType = Types.Int8
         method.parameters = [Types.Int16, Types.Int32]
         vm.methods.append(method)
-        m = vm.find_method_by_signature('hello', Types.Int8, [Types.Int8, Types.Int32])
+        m = vm.find_method_by_signature(None, 'hello', Types.Int8, [Types.Int8, Types.Int32])
         self.assertEqual(m, None)
 
     def test_find_different_return_type(self):
@@ -109,7 +118,7 @@ class VMTest(unittest.TestCase):
         method.returnType = Types.Int8
         method.parameters = [Types.Int16, Types.Int32]
         vm.methods.append(method)
-        m = vm.find_method_by_signature('hello', Types.Int8, [])
+        m = vm.find_method_by_signature(None, 'hello', Types.Int8, [])
         self.assertEqual(m, None)
 
     def test_find_different_name(self):
@@ -119,7 +128,7 @@ class VMTest(unittest.TestCase):
         method.returnType = Types.Int8
         method.parameters = [Types.Int16]
         vm.methods.append(method)
-        m = vm.find_method_by_signature('hello2', Types.Int8, [Types.Int16])
+        m = vm.find_method_by_signature(None, 'hello2', Types.Int8, [Types.Int16])
         self.assertEqual(m, None)
 
     def test_find_match(self):
@@ -129,7 +138,7 @@ class VMTest(unittest.TestCase):
         method.returnType = Types.Int8
         method.parameters = [Types.Int16, Types.Int32]
         vm.methods.append(method)
-        m = vm.find_method_by_signature('hello', Types.Int8, [Types.Int16, Types.Int32])
+        m = vm.find_method_by_signature(None, 'hello', Types.Int8, [Types.Int16, Types.Int32])
         self.assertEqual(m, method)
         
     def test_execute_method(self):

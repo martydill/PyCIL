@@ -6,12 +6,15 @@ class Method():
         'static':0,
         'cil':1,
         'managed':2,
-        'public':3
+        'public':3,
+        'private':4,
+        'hidebysig':5,
+        'cil':6
     }
 
     def __init__(self):
         self.name = 'unnamed'
-        self.namespace = ''
+        self.namespace = None
         self.attributes = []
         self.maxStack = 1
         self.locals = []

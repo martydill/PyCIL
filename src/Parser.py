@@ -112,9 +112,12 @@ class Parser:
                 method.attributes.append(token)
             elif token in Types.BuiltInTypes:
                 method.returnType = Types.BuiltInTypes[token]
+            elif token == '.method':
+                pass
             else:
                 method.name = token
-
+                self.parse_parameters(method)
+                
             token = self.getNextToken()
 
         token = self.getNextToken()

@@ -21,6 +21,7 @@ class call(Instruction):
 
     def execute(self, vm):
         targetMethod = vm.find_method_by_signature(self.method_namespace, self.method_name, self.method_type, self.method_parameters)
+        #fixme throw exception
         vm.execute_method(targetMethod)
 
 
