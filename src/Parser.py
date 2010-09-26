@@ -168,11 +168,11 @@ class Parser:
             instruction = ldloc(instructionName.rpartition('ldloc')[2])
         elif instructionName.startswith('stloc'):
             instruction = stloc(instructionName.rpartition('stloc')[2])
-        elif instructionName.startswith('br'):
-            instruction = br(instructionName.rpartition('br')[2])
-            instruction.target = self.getNextToken()
         elif instructionName.startswith('brtrue'):
             instruction = brtrue(instructionName.rpartition('brtrue')[2])
+            instruction.target = self.getNextToken()
+        elif instructionName.startswith('br'):
+            instruction = br(instructionName.rpartition('br')[2])
             instruction.target = self.getNextToken()
         elif instructionName == 'clt':
             instruction = clt()
