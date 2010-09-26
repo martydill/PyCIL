@@ -72,6 +72,10 @@ class VM:
 
     def execute_method(self, method):
         self.set_current_method(method)
+        
+        if self.hooks[DebugHooks.PreMethod] is not None:
+            self.hooks[DebugHooks.PreMethod](method)
+        
         frame = self.current_stack_frame()
         frame.instructionPointer = 0
         while frame == self.current_stack_frame() and frame.instructionPointer < len(method.instructions):
@@ -86,6 +90,9 @@ class VM:
             if self.hooks[DebugHooks.PostInstruction] is not None:
                 self.hooks[DebugHooks.PostInstruction](instruction)
 
+        if self.hooks[DebugHooks.PostMethod] is not None:
+            self.hooks[DebugHooks.PostMethod](method)
+        
     def add_hook(self, hookType, method):
         self.hooks[hookType] = method
     

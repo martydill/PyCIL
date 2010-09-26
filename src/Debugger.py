@@ -5,11 +5,19 @@ class Debugger():
     def __init__(self):
         self.vm = VM()
         self.vm.add_hook(DebugHooks.PreInstruction, self.pre_instruction_hook)
-        
+        self.vm.add_hook(DebugHooks.PreMethod, self.pre_method_hook)
+        self.vm.add_hook(DebugHooks.PostMethod, self.post_method_hook)
+                
     def pre_instruction_hook(self, instruction):
         print 'Next: ' + instruction.name + ' ' + hex(instruction.opcode)
         self.handle_input()
-
+    
+    def pre_method_hook(self, method):
+        print 'Entered method ' + method.name
+        
+    def post_method_hook(self, method):
+        print 'Exited method ' + method.name
+        
     def handle_input(self):
         while True:
             r = raw_input('> ')
