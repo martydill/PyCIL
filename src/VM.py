@@ -61,22 +61,23 @@ class VM:
         return None
     
     def current_method(self):
-        return self.stack.currentFrame.method
+        return self.current_stack_frame().method
     
-
+    def current_stack_frame(self):
+        return self.stack.currentFrame;
+    
     def set_current_method(self, method):
         self.stack.beginFrame(method.maxStack, method)
         self.currentMethod = method
 
-
     def execute_method(self, method):
         self.set_current_method(method)
-        frame = self.stack.currentFrame
+        frame = self.current_stack_frame()
         frame.instructionPointer = 0
-        while frame == self.stack.currentFrame and frame.instructionPointer < len(method.instructions):
+        while frame == self.current_stack_frame() and frame.instructionPointer < len(method.instructions):
             
-            instruction = method.instructions[self.stack.currentFrame.instructionPointer]
-            self.stack.currentFrame.instructionPointer += 1 
+            instruction = method.instructions[self.current_stack_frame().instructionPointer]
+            self.current_stack_frame().instructionPointer += 1 
             if self.hooks[DebugHooks.PreInstruction] is not None:
                 self.hooks[DebugHooks.PreInstruction](instruction)
                 
@@ -92,7 +93,7 @@ class VM:
         self.hooks[hookType] = None        
         
     def get_instruction_pointer(self):
-        return self.stack.currentFrame.instructionPointer
+        return self.current_stack_frame().instructionPointer
     
 class VMTest(unittest.TestCase):
 

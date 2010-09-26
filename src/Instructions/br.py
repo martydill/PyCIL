@@ -18,7 +18,7 @@ class br(Instruction):
     def execute(self, vm):
         stack = vm.stack
         index = vm.find_instruction_pointer_by_label(self.target)
-        stack.currentFrame.instructionPointer = index
+        vm.current_stack_frame().instructionPointer = index
 
 
 class brTest(unittest.TestCase):
