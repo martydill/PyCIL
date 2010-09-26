@@ -7,7 +7,6 @@ class add(Instruction):
     def __init__(self):
         self.name = 'add'
         self.opcode = 0x58
-        x = 'sdf'
 
     def execute(self, vm):
         stack = vm.stack
