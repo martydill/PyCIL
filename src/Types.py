@@ -43,7 +43,8 @@ BuiltInTypes = {
     'F':Type('F', NativeFloatSize),
     'O':Type('O', NativePointerSize),
     '&':Type('&', NativePointerSize),
-    'void':Type('void', 0)
+    'void':Type('void', 0),
+    'bool':Type('bool', 4)
 }
 
 Int8 = BuiltInTypes['int8']
@@ -57,3 +58,4 @@ UInt64 = BuiltInTypes['uint64']
 Float32 = BuiltInTypes['float32']
 Float64 = BuiltInTypes['float64']
 Void = BuiltInTypes['void']
+Bool = BuiltInTypes['bool'] # CLR type, not VES type

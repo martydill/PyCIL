@@ -12,6 +12,8 @@ from Instructions.ldloc import ldloc
 from Instructions.stloc import stloc
 from Instructions.br import br
 from Instructions.call import call
+from Instructions.brtrue import brtrue
+from Instructions.clt import clt
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -169,6 +171,11 @@ class Parser:
         elif instructionName.startswith('br'):
             instruction = br(instructionName.rpartition('br')[2])
             instruction.target = self.getNextToken()
+        elif instructionName.startswith('brtrue'):
+            instruction = brtrue(instructionName.rpartition('brtrue')[2])
+            instruction.target = self.getNextToken()
+        elif instructionName == 'clt':
+            instruction = clt()
         else:
             raise ParseException('Unknown instruction ' + instructionName)
         
