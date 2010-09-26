@@ -48,22 +48,39 @@ class Parser:
 
             token = self.getNextToken()
 
-
+    def fill_token_buffer(self):
+        if len(self.lines) == 0:
+            return
+        while True:
+            line = self.lines.pop(0).strip()
+            if line.startswith('//'):
+                continue
+            self.tokens = my_split(line, ['(', ')'])
+            return
+        
     def getNextToken(self):
 
         while True:
             if self.tokens is None or len(self.tokens) == 0:
                 if len(self.lines) == 0:
                     return ''
-                line = self.lines.pop(0).strip()
-                if line.startswith('//'):
-                    continue
-                self.tokens = my_split(line, ['(', ')'])
-            
+                
+                self.fill_token_buffer()
+        
             if len(self.tokens) > 0:                 
                 token = self.tokens.pop(0).strip()
                 if len(token) > 0:
                     return token
+
+    def peek_next_token(self):
+        # fixme - won't work if token is on next line
+        if len(self.tokens) == 0:
+            self.fill_token_buffer()
+        
+        if len(self.tokens) == 0:
+                return ''
+            
+        return self.tokens[-1]
 
     def read_to_end_of_line(self):
         result = ' '.join(self.tokens)
@@ -155,7 +172,7 @@ class Parser:
         elif instructionName == 'ret':
             instruction = Ret()
         elif instructionName.startswith('ldc'):
-            instruction = ldc(instructionName.rpartition('ldc')[2])
+            instruction = ldc(instructionName.rpartition('ldc')[2], self.peek_next_token())
         elif instructionName == 'sub':
             instruction = sub()
         elif instructionName == 'add':
@@ -185,10 +202,8 @@ class Parser:
     def parse_parameters(self, method):
         token = self.getNextToken()
         while token != ')':
-            
-            
+            # fixme
             token = self.getNextToken()
-        pass
         
 def my_split(s, seps):
     splitters = [' ', ',']
@@ -357,6 +372,17 @@ class parseTest(unittest.TestCase):
         self.assertEqual('main', p.methods[0].name)
         self.assertEqual('main2', p.methods[1].name)
 
+    def test_peek_next_token(self):
+        str = ('hello\n'
+           'world\n'
+           'abc') 
+        
+        p = Parser(str);
+        self.assertEqual(p.getNextToken(), 'hello')
+        self.assertEqual(p.peek_next_token(), 'world')
+        self.assertEqual(p.getNextToken(), 'world')
+        self.assertEqual(p.getNextToken(), 'abc')
+        
 #    def testParseMultipleMethods(self):
 #
 #        data = ('.method static void main()\n'

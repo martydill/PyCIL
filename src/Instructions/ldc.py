@@ -22,25 +22,25 @@ class ldc(Instruction):
         '.i4.s' : 0x1F,
     }
 
-    def __init__(self, suffix):
+    def __init__(self, suffix, value = None):
         
         self.name = 'ldc' + suffix
         self.suffix = suffix
         self.opcode = ldc.opcodePrefixTable[suffix]
-        self.value = None
+        self.value = value
         self.label = '' # fixme
         
     def execute(self, vm):
         stack = vm.stack
 
         if self.suffix == '.i4':
-            stack.push(self.value)
+            stack.push(int(self.value))
         elif self.suffix == '.i8':
-            stack.push(self.value)
+            stack.push(long(self.value))
         elif self.suffix == '.r4':
-            stack.push(self.value)
+            stack.push(float(self.value))
         elif self.suffix == '.r8':
-            stack.push(self.value)
+            stack.push(float(self.value))
         elif self.suffix == '.i4.0':
             stack.push(0)
         elif self.suffix == '.i4.1':
@@ -71,8 +71,7 @@ class ldcTest(unittest.TestCase):
     def testExecute_i4(self):
         from VM import VM
         vm = VM()
-        x = ldc('.i4')
-        x.value = 12345
+        x = ldc('.i4', '12345')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -81,8 +80,7 @@ class ldcTest(unittest.TestCase):
     def testExecute_i8(self):
         from VM import VM
         vm = VM()
-        x = ldc('.i8')
-        x.value = 999988887777
+        x = ldc('.i8', '999988887777')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -91,8 +89,7 @@ class ldcTest(unittest.TestCase):
     def testExecute_r4(self):
         from VM import VM
         vm = VM()
-        x = ldc('.r4')
-        x.value = 1.234
+        x = ldc('.r4', '1.234')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
@@ -102,8 +99,7 @@ class ldcTest(unittest.TestCase):
     def testExecute_r8(self):
         from VM import VM
         vm = VM()
-        x = ldc('.r8')
-        x.value = 999988887777.111122223333
+        x = ldc('.r8', 999988887777.111122223333)
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
