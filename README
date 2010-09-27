@@ -1,2 +1,17 @@
 PyIL is an experimental project designed primarily as a learning exercise in both MSIL and Python.
 
+It currently provides at least partial support for the following instructions:
+
+add
+br
+brtrue
+call
+clt
+ldc
+ldloc
+ldstr
+nop
+ret
+stloc
+sub
+
