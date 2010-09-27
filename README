@@ -10,6 +10,7 @@ clt
 ldc
 ldloc
 ldstr
+mul
 nop
 ret
 stloc

@@ -27,7 +27,7 @@ class ldc(Instruction):
         self.name = 'ldc' + suffix
         self.suffix = suffix
         self.opcode = ldc.opcodePrefixTable[suffix]
-        if suffix == '.i4' or suffix == '.i8' or suffix == '.r4' or suffix == '.r8':
+        if suffix == '.i4.s' or suffix == '.i4' or suffix == '.i8' or suffix == '.r4' or suffix == '.r8':
             self.value = value
         else:
             self.value = None

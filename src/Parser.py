@@ -14,6 +14,7 @@ from Instructions.br import br
 from Instructions.call import call
 from Instructions.brtrue import brtrue
 from Instructions.clt import clt
+from Instructions.mul import mul
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -181,6 +182,8 @@ class Parser:
             instruction = sub()
         elif instructionName == 'add':
             instruction = add()
+        elif instructionName == 'mul':
+            instruction = mul()
         elif instructionName == 'nop':
             instruction = nop()
         elif instructionName.startswith('call'):
