@@ -27,7 +27,10 @@ class ldc(Instruction):
         self.name = 'ldc' + suffix
         self.suffix = suffix
         self.opcode = ldc.opcodePrefixTable[suffix]
-        self.value = value
+        if suffix == '.i4' or suffix == '.i8' or suffix == '.r4' or suffix == '.r8':
+            self.value = value
+        else:
+            self.value = None
         self.label = '' # fixme
         
     def execute(self, vm):
