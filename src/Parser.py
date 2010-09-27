@@ -173,6 +173,10 @@ class Parser:
             instruction = Ret()
         elif instructionName.startswith('ldc'):
             instruction = ldc(instructionName.rpartition('ldc')[2], self.peek_next_token())
+            # fixme this is ugly
+            # Eat up the next token if it was used by the ldc instruction 
+            if instruction.value != None:
+                self.getNextToken()
         elif instructionName == 'sub':
             instruction = sub()
         elif instructionName == 'add':
