@@ -62,7 +62,7 @@ class ldc(Instruction):
         elif self.suffix == '.i4.m1' or self.suffix == '.i4.M1':
             stack.push(-1)
         elif self.suffix == '.i4.s':
-            stack.push(self.value)
+            stack.push(int(self.value))
 
 
 
