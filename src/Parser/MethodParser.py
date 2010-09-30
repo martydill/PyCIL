@@ -1,11 +1,7 @@
 from Method import Method
 import Types
 from Variable import Variable
-from Parser.ParserContext import ParseException
 import unittest
-import Parser.ParserContext
-from Parser.ParserContext import ParserContext
-from Parser.InstructionParser import InstructionParser
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -16,7 +12,7 @@ class MethodParser(object):
         self.context = None
     
     def parse(self, parserContext):
-        context = parserContext
+        self.context = parserContext
         method = Method()
 
         token = self.context.get_next_token()
@@ -46,9 +42,10 @@ class MethodParser(object):
             elif token == '.entrypoint':
                 method.attributes.append(token)
             elif token == '.locals':
-                method.locals = self.parse_locals()
+                method.locals = self.parse_locals(self.context)
             else:
-                instruction = InstructionParser().parse_instruction(token)
+                from InstructionParser import InstructionParser
+                instruction = InstructionParser().parse_instruction(token, self.context)
                 method.instructions.append(instruction)
 
                 if token == 'ret':
@@ -66,6 +63,7 @@ class MethodParser(object):
             
                    
     def parse_locals(self, context):
+        from ParserContext import ParseException
         locals = []
         token = context.get_next_token()
         if token != 'init':
@@ -99,7 +97,7 @@ class MethodParser(object):
 class MethodParserTest(unittest.TestCase):
     
     def test_parse_single_local_with_alias(self):
-
+        from ParserContext import ParserContext
         s = 'init ([0] int32 j)'
         
         p = ParserContext()
@@ -113,6 +111,7 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual(locals[0].type, Types.Int32)
         
     def test_parse_single_local_with_no_alias(self):
+        from ParserContext import ParserContext
         s = 'init (int32 j)'
         p = ParserContext()
         p.set_parse_data(s);
@@ -125,6 +124,7 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual(locals[0].type, Types.Int32)
         
     def test_parse_multiple_local_with_no_alias(self):
+        from ParserContext import ParserContext
         s = ('init (int32 first,'
              'int32 second,'
              'int32 result)')
@@ -146,6 +146,7 @@ class MethodParserTest(unittest.TestCase):
         
     
     def test_parse_method_with_labels(self):
+        from ParserContext import ParserContext
         s = ('.method public void main() {\n '
              'IL_0001:    ret\n'
              ' }')
@@ -153,13 +154,14 @@ class MethodParserTest(unittest.TestCase):
         p = ParserContext()
         p.set_parse_data(s);
         mp = MethodParser()
-        m = mp.parse_method()
+        m = mp.parse(p)
         
         self.assertEqual(len(m.instructions), 1)
         self.assertEqual('ret', m.instructions[0].name)
         self.assertEqual('IL_0001', m.instructions[0].label)
 
     def test_parse_multiple_methods_with_parameters(self):
+        from ParserContext import ParserContext
         s = ('.method public void main(string[] args) {\n '
              'IL_0001:    ret\n'
              ' }\n'
@@ -179,6 +181,7 @@ class MethodParserTest(unittest.TestCase):
         
         
     def test_parse_multiple_methods_no_parameters(self):
+        from ParserContext import ParserContext
         s = ('.method public void main() {\n '
              'IL_0001:    ret\n'
              ' }\n'

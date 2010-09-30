@@ -1,8 +1,9 @@
 from Stack import Stack
 import Types
 import unittest
+from Parser.ParserContext import ParserContext
 from Method import Method
-from Parser import Parser
+from Parser.MethodParser import MethodParser
 
 class DebugHooks:
     PreMethod, PostMethod, PreInstruction, PostInstruction = range(4)
@@ -25,7 +26,7 @@ class VM:
     def load(self, fileName):
         f = open(fileName, 'r')
         s = f.read()
-        p = Parser()
+        p = ParserContext()
         p.parse(s)
         self.methods = p.methods
         
@@ -173,8 +174,9 @@ class VMTest(unittest.TestCase):
              ' }')
         
         vm = VM()
-        p = Parser(s)
-        m = p.parseMethod()
+        p = ParserContext(s)
+        mp = MethodParser()
+        m = mp.parse(p)
         
         locals = m.locals
         self.assertEqual(len(locals), 3)
@@ -201,8 +203,9 @@ class VMTest(unittest.TestCase):
              '}')
         
         vm = VM()
-        p = Parser(s)
-        m = p.parseMethod()       
+        p = ParserContext(s)
+        mp = MethodParser()
+        m = mp.parse(p)       
         vm.execute_method(m)
         self.assertEqual(vm.stack.count(), 1)
         self.assertEqual(vm.stack.pop(), 6)

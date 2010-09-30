@@ -15,6 +15,7 @@ from Instructions.brtrue import brtrue
 from Instructions.clt import clt
 from Instructions.mul import mul
 
+
 BlockStart = '{'
 BlockEnd = '}'
 
@@ -44,9 +45,8 @@ class ParserContext:
             #if line != '\n' and line != '\r':
 
             if token.startswith('.method'):
-                from Parser.MethodParser import MethodParser
+                from MethodParser import MethodParser
                 mp = MethodParser();
-                
                 self.methods.append(mp.parse(self))
 
             token = self.get_next_token()
