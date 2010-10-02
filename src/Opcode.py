@@ -9,5 +9,4 @@ class Opcode(object):
 
 Opcodes = [
            Opcode()
-
 ]
