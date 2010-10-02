@@ -8,5 +8,6 @@ class Assembly:
         self.extern = False
         self.version = '1.0.0.0'
         self.hashAlgorithm = None
+        self.customAttributes = []
         
 
