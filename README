@@ -1,4 +1,4 @@
-PyIL is an experimental project designed primarily as a learning exercise in both MSIL and Python.
+PyCIL is an experimental project designed primarily as a learning exercise in both MSIL and Python.
 
 It currently provides at least partial support for the following instructions:
 
