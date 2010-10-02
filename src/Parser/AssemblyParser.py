@@ -1,5 +1,6 @@
 import unittest
 from Assembly import Assembly
+from Parser.ParserContext import ParseException
 
 class AssemblyParser(object):
     
@@ -16,6 +17,10 @@ class AssemblyParser(object):
                 assembly.name = parserContext.get_next_token()
             elif token == '.ver':
                 assembly.version = parserContext.get_next_token()
+            elif token == '.hash':
+                if parserContext.get_next_token() != 'algorithm':
+                    raise ParseException('Expected token algorithm not found!')
+                assembly.hashAlgorithm = int(parserContext.get_next_token(), 16)
             elif token == '{':
                 pass
             elif token == '}':
@@ -31,8 +36,9 @@ class AssemblyParserTests(unittest.TestCase):
         s = ('// Metadata version: v2.0.50727\n'
             '.assembly extern mscorlib\n'
             '{\n'
-            ' .publickeytoken = (B7 7A 5C 56 19 34 E0 89 )                         // .z\V.4..\n'
-            ' .ver 2:0:0:0\n'
+            '.publickeytoken = (B7 7A 5C 56 19 34 E0 89 )                         // .z\V.4..\n'
+            '.hash algorithm 0x00008004\n'
+            '.ver 2:0:0:0\n'
             '}\n')
         
         ap = AssemblyParser()
@@ -43,3 +49,4 @@ class AssemblyParserTests(unittest.TestCase):
         self.assertEqual(a.extern, True)
         self.assertEqual(a.version, '2:0:0:0')
         self.assertEqual(a.extern, True)
+        self.assertEqual(a.hashAlgorithm, 0x8004)
