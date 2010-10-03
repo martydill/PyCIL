@@ -9,32 +9,32 @@ from Instructions.Instruction import register
 class stloc(Instruction):
 
     opcodePrefixTable = {
-        '.0' : 0x0A,
-        '.1' : 0x0B,
-        '.2' : 0x0C,
-        '.3' : 0x0D,
-        '.s' : 0x13
+        '0' : 0x0A,
+        '1' : 0x0B,
+        '2' : 0x0C,
+        '3' : 0x0D,
+        's' : 0x13
         # fixme - 16 bit index 
     }
 
     def __init__(self, suffix):
-        self.name = 'stloc' + suffix
+        self.name = 'stloc.' + suffix
         self.suffix = suffix
         self.index = 0
         if(stloc.opcodePrefixTable.has_key(suffix)):
             self.opcode = stloc.opcodePrefixTable[suffix]
         
-        if self.suffix == '.0':
+        if self.suffix == '0':
             self.index = 0
-        elif self.suffix == '.1':
+        elif self.suffix == '1':
             self.index = 1
-        elif self.suffix == '.2':
+        elif self.suffix == '2':
             self.index = 2
-        elif self.suffix == '.3':
+        elif self.suffix == '3':
             self.index = 3
-        elif self.suffix.startswith('.s '):
-            self.index = int(self.suffix[3:])
-            self.op = stloc.opcodePrefixTable['.s']
+        elif self.suffix.startswith('s '):
+            self.index = int(self.suffix[2:])
+            self.op = stloc.opcodePrefixTable['s']
             
     def execute(self, vm):
         stack = vm.stack
@@ -49,10 +49,10 @@ register('stloc', stloc)
 
 class stlocTest(unittest.TestCase):
 
-    def testExecute_0(self):
+    def test_execute_0(self):
         from VM import VM
         vm = VM()
-        x = stloc('.0')
+        x = stloc('0')
         m = Method()
         m.locals.append(Variable(0))
         vm.set_current_method(m)
@@ -62,10 +62,10 @@ class stlocTest(unittest.TestCase):
         self.assertEqual(vm.stack.count(), 0)
         self.assertEqual(m.locals[0].value, 987)
 
-    def testExecute_1(self):
+    def test_execute_1(self):
         from VM import VM
         vm = VM()
-        x = stloc('.1')
+        x = stloc('1')
         m = Method()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
@@ -77,10 +77,10 @@ class stlocTest(unittest.TestCase):
         self.assertEqual(m.locals[0].value, 0)
         self.assertEqual(m.locals[1].value, 987)
         
-    def testExecute_2(self):
+    def test_execute_2(self):
         from VM import VM
         vm = VM()
-        x = stloc('.2')
+        x = stloc('2')
         m = Method()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
@@ -94,10 +94,10 @@ class stlocTest(unittest.TestCase):
         self.assertEqual(m.locals[1].value, 0)
         self.assertEqual(m.locals[2].value, 987)
 
-    def testExecute_3(self):
+    def test_execute_3(self):
         from VM import VM
         vm = VM()
-        x = stloc('.3')
+        x = stloc('3')
         m = Method()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
@@ -113,10 +113,10 @@ class stlocTest(unittest.TestCase):
         self.assertEqual(m.locals[2].value, 0)
         self.assertEqual(m.locals[3].value, 987)
         
-    def testExecute_s(self):
+    def test_execute_s(self):
         from VM import VM
         vm = VM()
-        x = stloc('.s 2')
+        x = stloc('s 2')
         m = Method()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
