@@ -1,12 +1,11 @@
-'''
-Created on 2010-10-02
 
-@author: Marty
-'''
+ClassFlags = ['private', 'auto', 'ansi', 'beforefieldinit']
 
 class Class(object):
     
     def __init__(self):
-        self.name = ''
-        self.parentClass = None
+        self.namespace = None
+        self.name = None
+        self.baseClass = None
         self.methods = []
+        self.flags = []

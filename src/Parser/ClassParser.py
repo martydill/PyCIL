@@ -1,5 +1,5 @@
 import unittest
-from Class import Class
+from Class import Class, ClassFlags
 from Parser.MethodParser import MethodParser
 
 class ClassParser(object):
@@ -9,9 +9,19 @@ class ClassParser(object):
 
         while True:
             token = parserContext.get_next_token()
-            if token == '.method':
+            if token in ClassFlags:
+                c.flags.append(token)
+            elif token == 'extends':
+                c.base = parserContext.get_next_token()
+            elif token == '.method':
                 m = MethodParser().parse(parserContext)            
                 c.methods.append(m)
+            elif token == '}':
+                break
+            elif token != '{':
+                fullyQualifiedName = token.split('.')
+                c.name = fullyQualifiedName[-1]
+                c.namespace = '.'.join(fullyQualifiedName[:-1])
                 
         return c
         
@@ -38,6 +48,8 @@ class ClassParserTests(unittest.TestCase):
         c = cp.parse(p)
         
         self.assertEquals(c.name, 'foo')
+        self.assertEqual(c.namespace, 'ConsoleApplication1')
         self.assertEquals(len(c.methods), 1)
+        self.assertEqual(len(c.flags), 4)
         
         
