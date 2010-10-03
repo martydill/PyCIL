@@ -1,5 +1,5 @@
 
-class Variable:
+class Variable(object):
 
     def __init__(self, value = None, type = None, alias = None):
         self.name = 'unnamed'

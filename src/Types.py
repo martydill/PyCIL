@@ -8,6 +8,7 @@ NativePointerSize = 4
 def register_custom_type(c):
     t = Type(c.namespace + '.' + c.name)
     UserDefinedTypes.append(t)
+    return t
 
 def resolve_type(typename):
     for type in UserDefinedTypes:
