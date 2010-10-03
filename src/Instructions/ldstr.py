@@ -1,11 +1,12 @@
 from Instruction import Instruction
 
 import unittest
+from Instructions.Instruction import register
 
 
 class ldstr(Instruction):
 
-    def __init__(self):
+    def __init__(self, arguments):
         self.name = 'ldstr'
         self.opcode = 72
         self.value = None
@@ -14,7 +15,7 @@ class ldstr(Instruction):
         stack = vm.stack
         stack.push(self.value)
 
-
+register('ldstr', ldstr)
 
 class ldstrTest(unittest.TestCase):
         

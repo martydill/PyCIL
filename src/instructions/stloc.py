@@ -3,6 +3,7 @@ from Stack import Stack, StackStateException
 import unittest
 from Variable import Variable
 from Method import Method
+from Instructions.Instruction import register
 
 
 class stloc(Instruction):
@@ -43,6 +44,8 @@ class stloc(Instruction):
         
         variable = m.locals[self.index]
         variable.value = stack.pop()
+
+register('stloc', stloc)
 
 class stlocTest(unittest.TestCase):
 

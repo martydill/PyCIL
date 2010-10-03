@@ -1,5 +1,10 @@
 
+Instructions = {}
 
+def register(name, type):
+    Instructions[name] = type
+    
+    
 class InvalidOpCodeException(Exception):
     def __init__(self, value):
         self.value = value

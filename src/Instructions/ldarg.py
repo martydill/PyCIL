@@ -3,6 +3,7 @@ from Stack import Stack, StackStateException
 import unittest
 from Variable import Variable
 from Method import Method
+from Instructions.Instruction import register
 
 class ldarg(Instruction):
 
@@ -44,6 +45,8 @@ class ldarg(Instruction):
         
         variable = m.parameters[self.index]
         stack.push(variable.value) # fixme - value? or variable?
+
+register('ldarg', ldarg)
 
 class LdargTest(unittest.TestCase):
 

@@ -1,10 +1,11 @@
 from Instruction import Instruction
 import unittest
 from Stack import StackStateException
+from Instructions.Instruction import register
 
 class clt(Instruction):
 
-    def __init__(self):
+    def __init__(self, arguments):
         self.name = 'clt'
         self.opcode = 0x58
 
@@ -22,7 +23,9 @@ class clt(Instruction):
         
         # fixme - floats?
 
-class addTest(unittest.TestCase):
+register('clt', clt)
+
+class cltTest(unittest.TestCase):
 
     def test_execute_not_enough_stack_values(self):
         from VM import VM

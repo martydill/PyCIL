@@ -1,6 +1,7 @@
 from Instruction import Instruction
 import unittest
 from Instructions.ldc import ldc
+from Instructions.Instruction import register
 
 class br(Instruction):
 
@@ -20,6 +21,7 @@ class br(Instruction):
         index = vm.find_instruction_pointer_by_label(self.target)
         vm.current_stack_frame().instructionPointer = index
 
+register('br', br)
 
 class brTest(unittest.TestCase):
 

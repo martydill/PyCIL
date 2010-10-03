@@ -2,10 +2,11 @@ from Instruction import Instruction
 import unittest
 import Types
 from Method import Method
+from Instructions.Instruction import register
 
 class Ret(Instruction):
   
-    def __init__(self):
+    def __init__(self, arguments):
         self.name = 'ret'
         self.opcode = 0x2A
         self.value = None
@@ -19,6 +20,7 @@ class Ret(Instruction):
         # fixme - return value?
         pass
 
+register('ret', Ret)
 
 class RetTest(unittest.TestCase):
 

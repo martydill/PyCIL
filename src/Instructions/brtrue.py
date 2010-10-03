@@ -1,6 +1,7 @@
 from Instruction import Instruction
 import unittest
 from Instructions.ldc import ldc
+from Instructions.Instruction import register
 
 class brtrue(Instruction):
 
@@ -22,6 +23,8 @@ class brtrue(Instruction):
             index = vm.find_instruction_pointer_by_label(self.target)
             vm.current_stack_frame().instructionPointer = index
         # fixme - check for null objects
+
+register('brtrue', brtrue)
 
 class brtrueTest(unittest.TestCase):
 

@@ -1,10 +1,11 @@
 from Instruction import Instruction
 import unittest
 from Stack import StackStateException
+from Instructions.Instruction import register
 
 class sub(Instruction):
 
-    def __init__(self):
+    def __init__(self, arguments):
         self.name = 'sub'
         self.opcode = 0x59
 
@@ -17,6 +18,7 @@ class sub(Instruction):
         lhs = stack.pop()
         stack.push(lhs - rhs)
 
+register('sub', sub)
 
 class subTest(unittest.TestCase):
 

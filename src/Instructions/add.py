@@ -1,10 +1,12 @@
 from Instruction import Instruction
 import unittest
 from Stack import StackStateException
+from Instructions.Instruction import register
+
 
 class add(Instruction):
 
-    def __init__(self):
+    def __init__(self, arguments):
         self.name = 'add'
         self.opcode = 0x58
 
@@ -16,6 +18,8 @@ class add(Instruction):
         rhs = stack.pop()
         lhs = stack.pop()
         stack.push(lhs + rhs)
+
+register('add', add)
 
 
 class addTest(unittest.TestCase):

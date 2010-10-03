@@ -3,6 +3,7 @@ from Instruction import Instruction
 import unittest
 import Types
 from Variable import Variable
+from Instructions.Instruction import register
 
 
 class call(Instruction):
@@ -30,6 +31,7 @@ class call(Instruction):
         #fixme throw exception
         vm.execute_method(targetMethod)
 
+register('call', call)
 
 class callTest(unittest.TestCase):
 

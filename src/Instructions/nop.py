@@ -2,16 +2,18 @@ from Instruction import Instruction
 import unittest
 import Types
 from Method import Method
+from Instructions.Instruction import register
 
 class nop(Instruction):
 
-    def __init__(self):
+    def __init__(self, arguments):
         self.name = 'nop'
         self.opcode = 0x28
 
     def execute(self, vm):
         pass
 
+register('nop', nop)
 
 class nopTes(unittest.TestCase):
 

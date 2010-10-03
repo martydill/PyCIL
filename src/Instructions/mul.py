@@ -1,10 +1,11 @@
 from Instruction import Instruction
 import unittest
 from Stack import StackStateException
+from Instructions.Instruction import register
 
 class mul(Instruction):
 
-    def __init__(self):
+    def __init__(self, arguments):
         self.name = 'mul'
         self.opcode = 0x5A
 
@@ -17,6 +18,8 @@ class mul(Instruction):
         lhs = stack.pop()
         stack.push(lhs * rhs)
         # fixme - overflow
+
+register('mul', mul)
 
 class addTest(unittest.TestCase):
 

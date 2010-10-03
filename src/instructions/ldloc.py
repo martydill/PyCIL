@@ -3,6 +3,7 @@ from Stack import Stack, StackStateException
 import unittest
 from Variable import Variable
 from Method import Method
+from Instructions.Instruction import register
 
 class ldloc(Instruction):
 
@@ -41,6 +42,8 @@ class ldloc(Instruction):
         
         variable = m.locals[self.index]
         stack.push(variable.value) # fixme - value? or variable?
+
+register('ldloc', ldloc)
 
 class ldlocTest(unittest.TestCase):
 
