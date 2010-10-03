@@ -64,7 +64,7 @@ class ParserContext:
     def get_next_token(self):
 
         while True:
-            if self.tokens is None or len(self.tokens) == 0:
+            if self.tokens is None or len(self.tokens) == 0 or self.tokens[0].startswith('//'):
                 if len(self.lines) == 0:
                     return ''
                 
@@ -128,6 +128,18 @@ def my_split(s, seps):
 
 class parseTest(unittest.TestCase):
 
+    def test_get_next_token_ignore_comments_after_statements(self):
+        str = ('hello // comment 1 \n'
+               '// comment 1\n'
+               'world // comment 3\n'
+               ' // comment 2\n'
+               'abc // comment z') 
+        
+        p = ParserContext(str);
+        self.assertEqual(p.get_next_token(), 'hello')
+        self.assertEqual(p.get_next_token(), 'world')
+        self.assertEqual(p.get_next_token(), 'abc')
+        
     def test_get_next_token_ignore_comments(self):
         str = ('hello\n'
                '// comment 1\n'
