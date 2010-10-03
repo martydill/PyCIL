@@ -5,16 +5,18 @@ from Instructions.Instruction import register
 
 class br(Instruction):
 
-    def __init__(self, suffix):
-        self.name = 'br' + suffix
+    def __init__(self, arguments):
+        self.name = 'br'
         self.target = ''
         
-        if suffix.startswith('.s'):
+        if arguments.startswith('s '):
             self.suffix = '.s'
             self.opcode = 0x2b
+            self.target = arguments[2:]
         else:
             self.opcode = 0x38
             self.suffix = ''
+            self.target = arguments
             
     def execute(self, vm):
         stack = vm.stack
@@ -25,46 +27,44 @@ register('br', br)
 
 class brTest(unittest.TestCase):
 
-    def testExecute(self):
+    def test_br(self):
         from VM import VM
         from Method import Method
 
         vm = VM()
         m = Method()
-        x = ldc('.i4.1')
+        x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
         m.instructions.append(x)
-        dest = ldc('.i4.3')
+        dest = ldc('i4.3')
         dest.label = 'asdf'
         m.instructions.append(dest)
         
         vm.set_current_method(m)
-        x = br('') # fixme optional parameters
-        x.target = 'asdf'
+        x = br('asdf') # fixme optional parameters
         x.execute(vm)
 
         index = vm.get_instruction_pointer()
         self.assertEqual(3, index);
         
         
-    def testExecute_s(self):
+    def test_br_s(self):
         from VM import VM
         from Method import Method
 
         vm = VM()
         m = Method()
-        x = ldc('.i4.1')
+        x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
         m.instructions.append(x)
-        dest = ldc('.i4.3')
+        dest = ldc('i4.3')
         dest.label = 'zzz'
         m.instructions.append(dest)
         
         vm.set_current_method(m)
-        x = br('.s')
-        x.target = 'zzz'
+        x = br('s zzz')
         x.execute(vm)
 
         index = vm.get_instruction_pointer()

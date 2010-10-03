@@ -32,10 +32,10 @@ class InstructionParser(object):
             instructionName = parts[0]
             instructionArguments = parts[2]
         else:
-            instructionArguments = None
+            instructionArguments = ''
             
         if Instructions.has_key(instructionName):
-            instruction  = Instructions[instructionName](instructionArguments)
+            instruction  = Instructions[instructionName](instructionArguments + ' ' + parserContext.read_to_end_of_line())
         #=======================================================================
         #    
         # if instructionName == 'ldstr':
