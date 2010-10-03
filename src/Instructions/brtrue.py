@@ -5,16 +5,17 @@ from Instructions.Instruction import register
 
 class brtrue(Instruction):
 
-    def __init__(self, suffix):
-        self.name = 'brtrue' + suffix
-        self.target = ''
+    def __init__(self, args):
+        self.name = 'brtrue.' + args
         
-        if suffix.startswith('s'):
+        if args.startswith('s'):
             self.suffix = '.s'
+            self.target = args[2:]
             self.opcode = 0x2D
         else:
             self.opcode = 0x3A
-            self.suffix = ''
+            self.suffix = '' 
+            self.target = args
             
     def execute(self, vm):
         # fixme check if there aren't enough stack values
@@ -44,8 +45,7 @@ class brtrueTest(unittest.TestCase):
         
         vm.set_current_method(m)
         vm.stack.push(1)
-        x = brtrue('') # fixme optional parameters
-        x.target = 'asdf'
+        x = brtrue('asdf') # fixme optional parameters
         x.execute(vm)
 
         index = vm.get_instruction_pointer()
@@ -68,8 +68,7 @@ class brtrueTest(unittest.TestCase):
         
         vm.set_current_method(m)
         vm.stack.push(0)
-        x = brtrue('') # fixme optional parameters
-        x.target = 'asdf'
+        x = brtrue('asdf') # fixme optional parameters
         x.execute(vm)
 
         index = vm.get_instruction_pointer()
@@ -93,8 +92,7 @@ class brtrueTest(unittest.TestCase):
         
         vm.set_current_method(m)
         vm.stack.push(1)
-        x = brtrue('s') # fixme optional parameters
-        x.target = 'asdf'
+        x = brtrue('s asdf') # fixme optional parameters
         x.execute(vm)
 
         index = vm.get_instruction_pointer()
@@ -117,8 +115,7 @@ class brtrueTest(unittest.TestCase):
         
         vm.set_current_method(m)
         vm.stack.push(0)
-        x = brtrue('s') # fixme optional parameters
-        x.target = 'asdf'
+        x = brtrue('s asdf') # fixme optional parameters
         x.execute(vm)
 
         index = vm.get_instruction_pointer()
