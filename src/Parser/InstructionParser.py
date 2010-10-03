@@ -11,6 +11,7 @@ from Instructions.stloc import stloc
 from Instructions.brtrue import brtrue
 from Instructions.br import br
 from Instructions.clt import clt
+from Instructions.ldarg import ldarg
 
 class InstructionParser(object):
     
@@ -46,6 +47,8 @@ class InstructionParser(object):
             instruction = call(parserContext.read_to_end_of_line())
         elif instructionName.startswith('ldloc'):
             instruction = ldloc(instructionName.rpartition('ldloc')[2])
+        elif instructionName.startswith('ldarg'):
+            instruction = ldarg(instructionName.rpartition('ldarg')[2])
         elif instructionName.startswith('stloc'):
             instruction = stloc(instructionName.rpartition('stloc')[2])
         elif instructionName.startswith('brtrue'):

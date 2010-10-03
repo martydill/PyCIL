@@ -37,7 +37,7 @@ class VM:
                 return i
             
         return -1
-    
+    #fixme - check for instance/static
     def find_method_by_signature(self, namespace, name, returnType, params):
         for m in self.methods:
             # fixme - namexpaces not parsed

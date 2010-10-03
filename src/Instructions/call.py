@@ -10,6 +10,12 @@ class call(Instruction):
     def __init__(self, method):
         self.name = 'call'
         parts = method.split()
+        if parts[0] == 'instance':
+            self.instance = True
+            parts.pop(0)
+        else:
+            self.instance = False
+            
         self.method_type = Types.BuiltInTypes[parts[0]]
         self.method_namespace, self.method_name = parts[1].split('::')
         
@@ -27,7 +33,7 @@ class call(Instruction):
 
 class callTest(unittest.TestCase):
 
-    def test_call_no_parameters(self):
+    def test_call_no_parameters_int(self):
         from VM import VM
         from Method import Method
         vm = VM()
@@ -48,14 +54,14 @@ class callTest(unittest.TestCase):
         self.assertEqual(vm.currentMethod, m)
         self.assertEqual(vm.stack.get_number_of_frames(), 2)
         
-    def test_call_one_parameter(self):
+    def test_call_one_parameter_int(self):
         from VM import VM
         from Method import Method
         vm = VM()
 
         m = Method()
-        m.name = 'TestMethod'
-        m.returnType = Types.Void
+        m.name = 'TestMethod()' # fixme - name shouldn't have brackets
+        m.returnType = Types.Int32
         m.parameters = [Types.Int32]
         vm.methods.append(m)
         
@@ -64,11 +70,30 @@ class callTest(unittest.TestCase):
         param.type = Types.Int32
         vm.stack.push(param)
         
-        c = call('int32 A.B::testmethod()')
+        c = call('int32 A.B::TestMethod()')
         c.execute(vm)
         
         self.assertEqual(vm.currentMethod, m)
         self.assertEqual(vm.stack.get_number_of_frames(), 2)
         self.assertEqual(vm.stack.pop(), param)
         
-        
+    def test_call_no_parameters_instance_int(self):
+        from VM import VM
+        from Method import Method
+        vm = VM()
+
+        m = Method()
+        m.name = 'TestMethod()'
+        m.namespace = 'A.B'
+        m.returnType = Types.Int32
+        m.parameters = []
+        m.names = 'A.B'
+        vm.methods.append(m)
+
+        self.assertEqual(vm.currentMethod, None)
+
+        c = call('instance int32 A.B::TestMethod()')
+        c.execute(vm)
+
+        self.assertEqual(vm.currentMethod, m)
+        self.assertEqual(vm.stack.get_number_of_frames(), 2)
