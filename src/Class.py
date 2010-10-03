@@ -9,3 +9,4 @@ class Class(object):
         self.baseClass = None
         self.methods = []
         self.flags = []
+        self.fields = []

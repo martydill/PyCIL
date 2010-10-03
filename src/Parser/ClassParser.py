@@ -1,6 +1,9 @@
 import unittest
 from Class import Class, ClassFlags
 from Parser.MethodParser import MethodParser
+from Variable import Variable
+from Types import Type
+import Types
 
 class ClassParser(object):
 
@@ -16,6 +19,16 @@ class ClassParser(object):
             elif token == '.method':
                 m = MethodParser().parse(parserContext)            
                 c.methods.append(m)
+            elif token == '.field':
+                v = Variable()
+                visibility = parserContext.get_next_token()
+                type = parserContext.get_next_token() # fixme - type, visibility
+                if Types.BuiltInTypes.has_key(type):
+                    v.type = Types.BuiltInTypes[type]
+                name = parserContext.get_next_token()
+               
+                v.name = name
+                c.fields.append(v)
             elif token == '}':
                 break
             elif token != '{':
@@ -52,4 +65,21 @@ class ClassParserTests(unittest.TestCase):
         self.assertEquals(len(c.methods), 1)
         self.assertEqual(len(c.flags), 4)
         
+    def test_parse_class_with_field(self):
+        from ParserContext import ParserContext
+        s = ('.class private auto ansi beforefieldinit ConsoleApplication1.foo\n'
+        '   extends [mscorlib]System.Object\n'
+        '{\n'
+        '  .field public int32 z\n'
+        '} // end of class ConsoleApplication1.foo\n')
+
+        p = ParserContext(s)
+        cp = ClassParser()
+        c = cp.parse(p)
         
+        self.assertEquals(c.name, 'foo')
+        self.assertEqual(c.namespace, 'ConsoleApplication1')
+        self.assertEquals(len(c.fields), 1)
+        f = c.fields[0]
+        self.assertEqual(f.name, 'z')
+        self.assertEqual(f.type, Types.Int32)    

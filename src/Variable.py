@@ -6,5 +6,6 @@ class Variable:
         self.value = value
         self.type = type
         self.alias = alias
+        
 
 
