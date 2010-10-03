@@ -5,7 +5,7 @@ from Instructions.Instruction import register
 
 class mul(Instruction):
 
-    def __init__(self, arguments):
+    def __init__(self, arguments = None):
         self.name = 'mul'
         self.opcode = 0x5A
 

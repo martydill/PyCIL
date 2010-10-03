@@ -6,7 +6,7 @@ from Instructions.Instruction import register
 
 class nop(Instruction):
 
-    def __init__(self, arguments):
+    def __init__(self, arguments = None):
         self.name = 'nop'
         self.opcode = 0x28
 

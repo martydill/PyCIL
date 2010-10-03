@@ -8,11 +8,11 @@ from Instructions.Instruction import register
 class ldarg(Instruction):
 
     opcodePrefixTable = {
-        '.0' : 0x02,
-        '.1' : 0x03,
-        '.2' : 0x04,
-        '.3' : 0x05,
-        '.s' : 0x0E
+        '0' : 0x02,
+        '1' : 0x03,
+        '2' : 0x04,
+        '3' : 0x05,
+        's' : 0x0E
         # fixme - 16 bit index 
     }
 
@@ -24,17 +24,17 @@ class ldarg(Instruction):
         if ldarg.opcodePrefixTable.has_key(suffix):
             self.opcode = ldarg.opcodePrefixTable[suffix]
         
-        if self.suffix == '.0':
+        if self.suffix == '0':
             self.index = 0
-        elif self.suffix == '.1':
+        elif self.suffix == '1':
             self.index = 1
-        elif self.suffix == '.2':
+        elif self.suffix == '2':
             self.index = 2
-        elif self.suffix == '.3':
+        elif self.suffix == '3':
             self.index = 3
-        elif self.suffix.startswith('.s '):
-            self.index = int(self.suffix[3:])
-            self.opcode = ldarg.opcodePrefixTable['.s']
+        elif self.suffix.startswith('s '):
+            self.index = int(self.suffix[2:])
+            self.opcode = ldarg.opcodePrefixTable['s']
         else:
             self.index = int(self.suffix)
             self.opcode = 0xFE09
@@ -53,7 +53,7 @@ class LdargTest(unittest.TestCase):
     def test_execute_0(self):
         from VM import VM
         vm = VM()
-        x = ldarg('.0')
+        x = ldarg('0')
         m = Method()
         m.parameters.append(Variable(987))
         vm.set_current_method(m)
@@ -65,7 +65,7 @@ class LdargTest(unittest.TestCase):
     def test_execute_1(self):
         from VM import VM
         vm = VM()
-        x = ldarg('.1')
+        x = ldarg('1')
         m = Method()
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(987))
@@ -78,7 +78,7 @@ class LdargTest(unittest.TestCase):
     def test_execute_2(self):
         from VM import VM
         vm = VM()
-        x = ldarg('.2')
+        x = ldarg('2')
         m = Method()
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(0))
@@ -92,7 +92,7 @@ class LdargTest(unittest.TestCase):
     def test_execute_3(self):
         from VM import VM
         vm = VM()
-        x = ldarg('.3')
+        x = ldarg('3')
         m = Method()
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(0))
@@ -107,7 +107,7 @@ class LdargTest(unittest.TestCase):
     def test_execute_s(self):
         from VM import VM
         vm = VM()
-        x = ldarg('.s 2')
+        x = ldarg('s 2')
         m = Method()
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(0))

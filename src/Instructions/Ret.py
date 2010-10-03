@@ -6,7 +6,7 @@ from Instructions.Instruction import register
 
 class Ret(Instruction):
   
-    def __init__(self, arguments):
+    def __init__(self, arguments = None):
         self.name = 'ret'
         self.opcode = 0x2A
         self.value = None

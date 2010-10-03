@@ -9,7 +9,7 @@ class brtrue(Instruction):
         self.name = 'brtrue' + suffix
         self.target = ''
         
-        if suffix.startswith('.s'):
+        if suffix.startswith('s'):
             self.suffix = '.s'
             self.opcode = 0x2D
         else:
@@ -34,11 +34,11 @@ class brtrueTest(unittest.TestCase):
 
         vm = VM()
         m = Method()
-        x = ldc('.i4.1')
+        x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
         m.instructions.append(x)
-        dest = ldc('.i4.3')
+        dest = ldc('i4.3')
         dest.label = 'asdf'
         m.instructions.append(dest)
         
@@ -58,11 +58,11 @@ class brtrueTest(unittest.TestCase):
 
         vm = VM()
         m = Method()
-        x = ldc('.i4.1')
+        x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
         m.instructions.append(x)
-        dest = ldc('.i4.3')
+        dest = ldc('i4.3')
         dest.label = 'asdf'
         m.instructions.append(dest)
         
@@ -83,17 +83,17 @@ class brtrueTest(unittest.TestCase):
 
         vm = VM()
         m = Method()
-        x = ldc('.i4.1')
+        x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
         m.instructions.append(x)
-        dest = ldc('.i4.3')
+        dest = ldc('i4.3')
         dest.label = 'asdf'
         m.instructions.append(dest)
         
         vm.set_current_method(m)
         vm.stack.push(1)
-        x = brtrue('.s') # fixme optional parameters
+        x = brtrue('s') # fixme optional parameters
         x.target = 'asdf'
         x.execute(vm)
 
@@ -107,17 +107,17 @@ class brtrueTest(unittest.TestCase):
 
         vm = VM()
         m = Method()
-        x = ldc('.i4.1')
+        x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
         m.instructions.append(x)
-        dest = ldc('.i4.3')
+        dest = ldc('i4.3')
         dest.label = 'asdf'
         m.instructions.append(dest)
         
         vm.set_current_method(m)
         vm.stack.push(0)
-        x = brtrue('.s') # fixme optional parameters
+        x = brtrue('s') # fixme optional parameters
         x.target = 'asdf'
         x.execute(vm)
 

@@ -24,31 +24,31 @@ register('add', add)
 
 class addTest(unittest.TestCase):
 
-    def testExecute_notEnoughStackValues(self):
+    def test_execute_notEnoughStackValues(self):
         from VM import VM
         vm = VM()
         vm.stack.push(1)
-        x = add()
+        x = add('')
 
         self.assertRaises(StackStateException, x.execute, vm)
 
-    def testExecute_ints(self):
+    def test_execute_ints(self):
         from VM import VM
         vm = VM()
         vm.stack.push(5)
         vm.stack.push(999)
-        x = add()
+        x = add('')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
         self.assertEqual(vm.stack.pop(), 999+5)
 
-    def testExecute_floats(self):
+    def test_execute_floats(self):
         from VM import VM
         vm = VM()
         vm.stack.push(123.4)
         vm.stack.push(0.01)
-        x = add()
+        x = add('')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)

@@ -5,7 +5,7 @@ from Instructions.Instruction import register
 
 class clt(Instruction):
 
-    def __init__(self, arguments):
+    def __init__(self, arguments = None):
         self.name = 'clt'
         self.opcode = 0x58
 

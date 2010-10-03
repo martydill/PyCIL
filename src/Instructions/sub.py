@@ -5,7 +5,7 @@ from Instructions.Instruction import register
 
 class sub(Instruction):
 
-    def __init__(self, arguments):
+    def __init__(self, arguments = None):
         self.name = 'sub'
         self.opcode = 0x59
 
