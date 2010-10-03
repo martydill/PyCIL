@@ -1,4 +1,6 @@
 from VM import VM, DebugHooks
+import traceback
+import sys
 
 class Debugger():
     
@@ -45,6 +47,8 @@ class Debugger():
                     print 'Unable to load file'
                 except Exception as e:
                     print 'Error: ' + str(e)
+                    traceback.print_exc(file=sys.stdout)
+
             else:
                 return
             

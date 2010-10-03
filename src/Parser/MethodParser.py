@@ -2,6 +2,7 @@ from Method import Method
 import Types
 from Variable import Variable
 import unittest
+from Class import Class
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -80,7 +81,10 @@ class MethodParser(object):
                 v.alias = token[1:-1]
                 lastToken = token
                 token = context.get_next_token()
-            v.type = Types.BuiltInTypes[token] # fixme - non-builtin types
+            if token == 'class':
+                v.type = Types.resolve_type(context.get_next_token())
+            else:
+                v.type = Types.BuiltInTypes[token] # fixme - non-builtin types
             lastToken = token
             token = context.get_next_token()
             #if token.endswith(')'):
@@ -95,6 +99,26 @@ class MethodParser(object):
     
     
 class MethodParserTest(unittest.TestCase):
+
+    def test_parse_class_local_with_alias(self):
+        from ParserContext import ParserContext
+        s = 'init ([0] class NS.C f)'
+        
+        p = ParserContext()
+        p.set_parse_data(s);
+        mp = MethodParser()
+
+        c = Class()
+        c.name = 'C'
+        c.namespace = 'NS'
+        Types.register_custom_type(c)
+        
+        locals = mp.parse_locals(p)
+        self.assertEqual(len(locals), 1)
+        self.assertEqual(locals[0].name, 'f')
+        self.assertEqual(locals[0].alias, '0')
+        self.assertEqual(locals[0].type.name, 'NS.C')
+        
     
     def test_parse_single_local_with_alias(self):
         from ParserContext import ParserContext

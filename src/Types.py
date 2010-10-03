@@ -1,8 +1,20 @@
 
+UserDefinedTypes = []
+
 NativeIntSize = 4
 NativeFloatSize = 4
 NativePointerSize = 4
 
+def register_custom_type(c):
+    t = Type(c.namespace + '.' + c.name)
+    UserDefinedTypes.append(t)
+
+def resolve_type(typename):
+    for type in UserDefinedTypes:
+        if type.name == typename:
+            return type
+        
+    return None
 
 class InvalidTypeException(Exception):
 
@@ -15,12 +27,12 @@ class InvalidTypeException(Exception):
 
 class Type():
 
-    def __init__(self, typeName, dataSize):
-        self.typeName = typeName
+    def __init__(self, typeName, dataSize = 0):
+        self.name = typeName
         self.dataSize = dataSize
 
     def __str__(self):
-        return self.typeName + ' (' + str(self.dataSize) + ' B)'
+        return self.name + ' (' + str(self.dataSize) + ' B)'
 
 
 
