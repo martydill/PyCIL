@@ -10,9 +10,12 @@ def register_custom_type(c):
     UserDefinedTypes.append(t)
     return t
 
+def unregister_custom_type(t):
+    UserDefinedTypes.remove(t)
+    
 def resolve_type(typename):
     for type in UserDefinedTypes:
-        if type.name == typename:
+        if type.namespace + '.' + type.name == typename:
             return type
         
     return None
@@ -29,9 +32,11 @@ class InvalidTypeException(Exception):
 class Type():
 
     def __init__(self, typeName, dataSize = 0):
-        self.name = typeName
+        parts = typeName.rpartition('.')
+        self.namespace = parts[0]
+        self.name = parts[2]
         self.dataSize = dataSize
-
+        
     def __str__(self):
         return self.name + ' (' + str(self.dataSize) + ' B)'
 
