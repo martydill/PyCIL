@@ -12,8 +12,10 @@ ldc
 ldloc
 ldstr
 mul
+newobj
 nop
 ret
+stfld
 stloc
 sub
 
