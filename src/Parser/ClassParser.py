@@ -36,6 +36,7 @@ class ClassParser(object):
                 c.name = fullyQualifiedName[-1]
                 c.namespace = '.'.join(fullyQualifiedName[:-1])
                 
+        Types.register_custom_type(c)
         return c
         
 class ClassParserTests(unittest.TestCase):
@@ -82,4 +83,28 @@ class ClassParserTests(unittest.TestCase):
         self.assertEquals(len(c.fieldDefinitions), 1)
         f = c.fieldDefinitions[0]
         self.assertEqual(f.name, 'z')
-        self.assertEqual(f.type, Types.Int32)    
+        self.assertEqual(f.type, Types.Int32)
+        
+    def test_parse_class_registers_type(self):
+        from ParserContext import ParserContext
+        s = ('.class private auto ansi beforefieldinit ConsoleApplication1.bar\n'
+        '   extends [mscorlib]System.Object\n'
+        '{\n'
+        '.method public hidebysig specialname rtspecialname\n' 
+        '        instance void  .ctor() cil managed\n'
+        '{\n'
+        '  // Code size       7 (0x7)\n'
+        '  .maxstack  8\n'
+        '  IL_0000:  ldarg.0\n'
+        '  IL_0001:  call       instance void [mscorlib]System.Object::.ctor()\n'
+        '  IL_0006:  ret\n'
+        '} // end of method foo::.ctor\n'
+     '} // end of class ConsoleApplication1.bar\n')
+
+        p = ParserContext(s)
+        cp = ClassParser()
+        c = cp.parse(p)
+        
+        self.assertEqual(Types.resolve_type('ConsoleApplication1.bar').classRef, c)
+        
+        
