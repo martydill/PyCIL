@@ -14,7 +14,8 @@ from Instructions.call import call
 from Instructions.brtrue import brtrue
 from Instructions.clt import clt
 from Instructions.mul import mul
-
+from Instructions.stfld import stfld
+from Instructions.ldfld import ldfld
 
 BlockStart = '{'
 BlockEnd = '}'
