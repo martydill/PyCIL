@@ -19,6 +19,8 @@ class ClassParser(object):
             elif token == '.method':
                 m = MethodParser().parse(parserContext)            
                 c.methods.append(m)
+                parserContext.methods.append(m)
+                # fixme - should i add to both?
             elif token == '.field':
                 v = Variable()
                 visibility = parserContext.get_next_token()

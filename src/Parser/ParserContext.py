@@ -28,6 +28,7 @@ class ParserContext:
     def __init__(self, data = None):
         self.methods = []
         self.tokens = []
+        self.classes = []
         
         if data != None:
             self.set_parse_data(data)
@@ -49,7 +50,10 @@ class ParserContext:
                 from MethodParser import MethodParser
                 mp = MethodParser();
                 self.methods.append(mp.parse(self))
-
+            elif token.startswith('.class'):
+                from ClassParser import ClassParser
+                cp = ClassParser()
+                self.classes.append(cp.parse(self))
             token = self.get_next_token()
 
     def fill_token_buffer(self):

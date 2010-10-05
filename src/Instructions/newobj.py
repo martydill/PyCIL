@@ -35,7 +35,7 @@ class newobj(Instruction):
         
         vm.stack.push(r)
         
-        m = vm.find_method_by_signature(t.namespace + '.' + t.name, '.ctor()', None, None)
+        m = vm.find_method_by_signature(t.namespace + '.' + t.name, '.ctor', None, None)
         vm.execute_method(m)
         
         
@@ -49,7 +49,7 @@ class newobjTest(unittest.TestCase):
         vm = VM()
 
         m = Method()
-        m.name = '.ctor()'
+        m.name = '.ctor'
         m.namespace = 'testnamespace.testclass'
         vm.methods.append(m)
         
@@ -74,7 +74,7 @@ class newobjTest(unittest.TestCase):
         vm = VM()
 
         m = Method()
-        m.name = '.ctor()'
+        m.name = '.ctor'
         m.namespace = 'testnamespace.testclass'
         vm.methods.append(m)
         

@@ -9,7 +9,10 @@ class Method():
         'public':3,
         'private':4,
         'hidebysig':5,
-        'cil':6
+        'cil':6,
+        'specialname':7,
+        'rtspecialname':8,
+        'instance':9
     }
 
     def __init__(self):
