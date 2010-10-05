@@ -36,6 +36,10 @@ class newobj(Instruction):
         vm.stack.push(r)
         
         m = vm.find_method_by_signature(t.namespace + '.' + t.name, '.ctor', None, None)
+        parameter = Variable()
+        parameter.value = r
+        m.parameters = [parameter] # fixme - create a new method object so we don't overwrite the parameters?
+        #fixme - should we even use parameters? or just the stack?
         vm.execute_method(m)
         
         
@@ -67,7 +71,29 @@ class newobjTest(unittest.TestCase):
         o = vm.stack.pop()
         self.assertEqual(o.type, t)
         self.assertEquals(vm.current_method(), m)
+        
+    def test_newobj_no_parameters_adds_this_pointer_to_parameters(self):
+        from VM import VM
 
+        vm = VM()
+
+        m = Method()
+        m.name = '.ctor'
+        m.namespace = 'testnamespace.testclass'
+        vm.methods.append(m)
+        
+        c = Class()
+        c.name = 'testclass'
+        c.namespace = 'testnamespace'
+        c.methods.append(m)
+        
+        t = Types.register_custom_type(c)
+
+        n = newobj('instance void testnamespace.testclass::.ctor()')
+        n.execute(vm)
+        self.assertEqual(len(vm.current_method().parameters), 1)
+        Types.unregister_custom_type(t)
+        
     def test_newobj_no_parameters_initializes_int_field_to_zero(self):
         from VM import VM
 
