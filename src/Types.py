@@ -6,7 +6,7 @@ NativeFloatSize = 4
 NativePointerSize = 4
 
 def register_custom_type(c):
-    t = Type(c.namespace + '.' + c.name)
+    t = Type(c.namespace + '.' + c.name, c)
     UserDefinedTypes.append(t)
     return t
 
@@ -31,11 +31,12 @@ class InvalidTypeException(Exception):
 
 class Type():
 
-    def __init__(self, typeName, dataSize = 0):
+    def __init__(self, typeName, classRef, dataSize = 0):
         parts = typeName.rpartition('.')
         self.namespace = parts[0]
         self.name = parts[2]
         self.dataSize = dataSize
+        self.classRef = classRef
         
     def __str__(self):
         return self.name + ' (' + str(self.dataSize) + ' B)'

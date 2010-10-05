@@ -28,7 +28,7 @@ class ClassParser(object):
                 name = parserContext.get_next_token()
                
                 v.name = name
-                c.fields.append(v)
+                c.fieldDefinitions.append(v)
             elif token == '}':
                 break
             elif token != '{':
@@ -79,7 +79,7 @@ class ClassParserTests(unittest.TestCase):
         
         self.assertEquals(c.name, 'foo')
         self.assertEqual(c.namespace, 'ConsoleApplication1')
-        self.assertEquals(len(c.fields), 1)
-        f = c.fields[0]
+        self.assertEquals(len(c.fieldDefinitions), 1)
+        f = c.fieldDefinitions[0]
         self.assertEqual(f.name, 'z')
         self.assertEqual(f.type, Types.Int32)    
