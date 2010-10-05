@@ -53,9 +53,9 @@ class ParserContext:
             token = self.get_next_token()
 
     def fill_token_buffer(self):
-        if len(self.lines) == 0:
-            return
         while True:
+            if len(self.lines) == 0:
+                return
             line = self.lines.pop(0).strip()
             if line.startswith('//'):
                 continue
@@ -129,6 +129,13 @@ def my_split(s, seps):
 
 class parseTest(unittest.TestCase):
 
+    def test_fill_token_buffer_with_comment_on_last_line(self):
+        str = """ // this is a comment """
+        
+        p = ParserContext(str)
+        p.fill_token_buffer()
+        self.assertEqual(p.get_next_token(), '')
+        
     def test_get_next_token_ignore_comments_after_statements(self):
         str = ('hello // comment 1 \n'
                '// comment 1\n'
