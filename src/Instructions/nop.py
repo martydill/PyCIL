@@ -1,7 +1,7 @@
 from Instruction import Instruction
 import unittest
 import Types
-from Method import Method
+from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
 
 class nop(Instruction):
@@ -22,7 +22,7 @@ class nopTes(unittest.TestCase):
 
         vm = VM()
 
-        m = Method()
+        m = MethodDefinition()
         m.name = 'TestMethod'
         m.returnType = Types.Void
         m.parameters = []

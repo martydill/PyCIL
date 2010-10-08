@@ -2,9 +2,9 @@ from Instruction import Instruction
 from Stack import Stack, StackStateException
 import unittest
 from Variable import Variable
-from Method import Method
+from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
-from Class import Class
+from ClassDefinition import ClassDefinition
 import Types
 from ReferenceType import ReferenceType
 
@@ -38,7 +38,7 @@ class stfldTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         
-        c = Class()
+        c = ClassDefinition()
         c.namespace = 'a'
         c.name = 'b'
         v = Variable()

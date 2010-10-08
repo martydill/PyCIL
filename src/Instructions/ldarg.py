@@ -2,7 +2,7 @@ from Instruction import Instruction
 from Stack import Stack, StackStateException
 import unittest
 from Variable import Variable
-from Method import Method
+from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
 
 class ldarg(Instruction):
@@ -54,7 +54,7 @@ class LdargTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldarg('0')
-        m = Method()
+        m = MethodDefinition()
         m.parameters.append(Variable(987))
         vm.set_current_method(m)
         x.execute(vm)
@@ -66,7 +66,7 @@ class LdargTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldarg('1')
-        m = Method()
+        m = MethodDefinition()
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(987))
         vm.set_current_method(m)
@@ -79,7 +79,7 @@ class LdargTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldarg('2')
-        m = Method()
+        m = MethodDefinition()
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(8888))
@@ -93,7 +93,7 @@ class LdargTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldarg('3')
-        m = Method()
+        m = MethodDefinition()
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(0))
@@ -108,7 +108,7 @@ class LdargTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldarg('s 2')
-        m = Method()
+        m = MethodDefinition()
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(0))
         m.parameters.append(Variable(987))

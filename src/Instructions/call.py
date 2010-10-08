@@ -37,10 +37,10 @@ class callTest(unittest.TestCase):
 
     def test_call_no_parameters_int(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
         vm = VM()
 
-        m = Method()
+        m = MethodDefinition()
         m.name = 'TestMethod()'
         m.namespace = 'A.B'
         m.returnType = Types.Int32
@@ -58,10 +58,10 @@ class callTest(unittest.TestCase):
         
     def test_call_one_parameter_int(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
         vm = VM()
 
-        m = Method()
+        m = MethodDefinition()
         m.name = 'TestMethod()' # fixme - name shouldn't have brackets
         m.returnType = Types.Int32
         m.parameters = [Types.Int32]
@@ -81,10 +81,10 @@ class callTest(unittest.TestCase):
         
     def test_call_no_parameters_instance_int(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
         vm = VM()
 
-        m = Method()
+        m = MethodDefinition()
         m.name = 'TestMethod()'
         m.namespace = 'A.B'
         m.returnType = Types.Int32

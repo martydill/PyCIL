@@ -2,7 +2,7 @@ from Instruction import Instruction
 from Stack import Stack, StackStateException
 import unittest
 from Variable import Variable
-from Method import Method
+from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
 
 class ldloc(Instruction):
@@ -51,7 +51,7 @@ class ldlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldloc('0')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(987))
         vm.set_current_method(m)
         x.execute(vm)
@@ -63,7 +63,7 @@ class ldlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldloc('1')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         m.locals.append(Variable(987))
         vm.set_current_method(m)
@@ -76,7 +76,7 @@ class ldlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldloc('2')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         m.locals.append(Variable(8888))
@@ -90,7 +90,7 @@ class ldlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldloc('3')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
@@ -105,7 +105,7 @@ class ldlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = ldloc('s 2')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         m.locals.append(Variable(987))

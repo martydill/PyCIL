@@ -1,5 +1,5 @@
 import unittest
-from Class import Class, ClassFlags
+from ClassDefinition import ClassDefinition, ClassFlags
 from Parser.MethodParser import MethodParser
 from Variable import Variable
 from Types import Type
@@ -8,7 +8,7 @@ import Types
 class ClassParser(object):
 
     def parse(self, parserContext):
-        c = Class()
+        c = ClassDefinition()
 
         while True:
             token = parserContext.get_next_token()

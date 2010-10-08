@@ -1,6 +1,6 @@
 
 
-class Method():
+class MethodDefinition():
 
     AttributeTypes = {
         'static':0,

@@ -1,7 +1,7 @@
 from Instruction import Instruction
 import unittest
 import Types
-from Method import Method
+from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
 
 class Ret(Instruction):
@@ -27,7 +27,7 @@ class RetTest(unittest.TestCase):
     def test_execute_void_no_parameters(self):
         from VM import VM
         vm = VM()
-        m = Method()
+        m = MethodDefinition()
         m.name = 'TestMethod'
         m.returnType = Types.Void
         m.parameters = []
@@ -44,7 +44,7 @@ class RetTest(unittest.TestCase):
     def test_execute_int_no_parameters_increments_return_frame_count(self):
         from VM import VM
         vm = VM()
-        m = Method()
+        m = MethodDefinition()
         m.name = 'TestMethod'
         m.returnType = Types.Int32
         m.parameters = []

@@ -31,10 +31,10 @@ class brtrueTest(unittest.TestCase):
 
     def test_execute_true(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
 
         vm = VM()
-        m = Method()
+        m = MethodDefinition()
         x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
@@ -54,10 +54,10 @@ class brtrueTest(unittest.TestCase):
 
     def test_execute_false(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
 
         vm = VM()
-        m = Method()
+        m = MethodDefinition()
         x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
@@ -78,10 +78,10 @@ class brtrueTest(unittest.TestCase):
         
     def test_execute_true_s(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
 
         vm = VM()
-        m = Method()
+        m = MethodDefinition()
         x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
@@ -101,10 +101,10 @@ class brtrueTest(unittest.TestCase):
 
     def test_execute_false_s(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
 
         vm = VM()
-        m = Method()
+        m = MethodDefinition()
         x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)

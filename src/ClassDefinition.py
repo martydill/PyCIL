@@ -1,7 +1,7 @@
 
 ClassFlags = ['private', 'auto', 'ansi', 'beforefieldinit']
 
-class Class(object):
+class ClassDefinition(object):
     
     def __init__(self):
         self.namespace = None

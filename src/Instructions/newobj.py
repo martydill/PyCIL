@@ -1,9 +1,9 @@
 from Instruction import Instruction
 import unittest
 import Types
-from Method import Method
+from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
-from Class import Class
+from ClassDefinition import ClassDefinition
 from ReferenceType import ReferenceType
 from Variable import Variable
 
@@ -52,12 +52,12 @@ class newobjTest(unittest.TestCase):
 
         vm = VM()
 
-        m = Method()
+        m = MethodDefinition()
         m.name = '.ctor'
         m.namespace = 'testnamespace.testclass'
         vm.methods.append(m)
         
-        c = Class()
+        c = ClassDefinition()
         c.name = 'testclass'
         c.namespace = 'testnamespace'
         c.methods.append(m)
@@ -77,12 +77,12 @@ class newobjTest(unittest.TestCase):
 
         vm = VM()
 
-        m = Method()
+        m = MethodDefinition()
         m.name = '.ctor'
         m.namespace = 'testnamespace.testclass'
         vm.methods.append(m)
         
-        c = Class()
+        c = ClassDefinition()
         c.name = 'testclass'
         c.namespace = 'testnamespace'
         c.methods.append(m)
@@ -99,12 +99,12 @@ class newobjTest(unittest.TestCase):
 
         vm = VM()
 
-        m = Method()
+        m = MethodDefinition()
         m.name = '.ctor'
         m.namespace = 'testnamespace.testclass'
         vm.methods.append(m)
         
-        c = Class()
+        c = ClassDefinition()
         c.name = 'testclass'
         c.namespace = 'testnamespace'
         c.methods.append(m)

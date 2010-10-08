@@ -29,10 +29,10 @@ class brTest(unittest.TestCase):
 
     def test_br(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
 
         vm = VM()
-        m = Method()
+        m = MethodDefinition()
         x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)
@@ -51,10 +51,10 @@ class brTest(unittest.TestCase):
         
     def test_br_s(self):
         from VM import VM
-        from Method import Method
+        from MethodDefinition import MethodDefinition
 
         vm = VM()
-        m = Method()
+        m = MethodDefinition()
         x = ldc('i4.1')
         m.instructions.append(x)
         m.instructions.append(x)

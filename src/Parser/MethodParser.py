@@ -1,8 +1,8 @@
-from Method import Method
+from MethodDefinition import MethodDefinition
 import Types
 from Variable import Variable
 import unittest
-from Class import Class
+from ClassDefinition import ClassDefinition
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -14,7 +14,7 @@ class MethodParser(object):
     
     def parse(self, parserContext):
         self.context = parserContext
-        method = Method()
+        method = MethodDefinition()
 
         token = self.context.get_next_token()
 
@@ -23,7 +23,7 @@ class MethodParser(object):
             print '*' + token + '*'
             if token == '(':
                 self.parse_parameters(method)
-            elif token in Method.AttributeTypes.keys():
+            elif token in MethodDefinition.AttributeTypes.keys():
                 method.attributes.append(token)
             elif token in Types.BuiltInTypes:
                 method.returnType = Types.BuiltInTypes[token]
@@ -108,7 +108,7 @@ class MethodParserTest(unittest.TestCase):
         p.set_parse_data(s);
         mp = MethodParser()
 
-        c = Class()
+        c = ClassDefinition()
         c.name = 'C'
         c.namespace = 'NS'
         Types.register_custom_type(c)

@@ -2,7 +2,7 @@ from Stack import Stack
 import Types
 import unittest
 from Parser.ParserContext import ParserContext
-from Method import Method
+from MethodDefinition import MethodDefinition
 from Parser.MethodParser import MethodParser
 
 class DebugHooks:
@@ -112,7 +112,7 @@ class VMTest(unittest.TestCase):
 
     def test_find_different_params(self):
         vm = VM()
-        method = Method()
+        method = MethodDefinition()
         method.name = 'hello'
         method.returnType = Types.Int8
         method.parameters = [Types.Int16, Types.Int32]
@@ -122,7 +122,7 @@ class VMTest(unittest.TestCase):
 
     def test_find_different_return_type(self):
         vm = VM()
-        method = Method()
+        method = MethodDefinition()
         method.name = 'hello'
         method.returnType = Types.Int8
         method.parameters = [Types.Int16, Types.Int32]
@@ -132,7 +132,7 @@ class VMTest(unittest.TestCase):
 
     def test_find_different_name(self):
         vm = VM()
-        method = Method()
+        method = MethodDefinition()
         method.name = 'hello'
         method.returnType = Types.Int8
         method.parameters = [Types.Int16]
@@ -142,7 +142,7 @@ class VMTest(unittest.TestCase):
 
     def test_find_match(self):
         vm = VM()
-        method = Method()
+        method = MethodDefinition()
         method.name = 'hello'
         method.returnType = Types.Int8
         method.parameters = [Types.Int16, Types.Int32]
@@ -152,7 +152,7 @@ class VMTest(unittest.TestCase):
         
     def test_execute_method(self):
         vm = VM()
-        method = Method()
+        method = MethodDefinition()
         method.name = 'hello'
         method.returnType = Types.Int8
         method.parameters = [Types.Int16, Types.Int32]

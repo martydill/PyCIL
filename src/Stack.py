@@ -1,5 +1,5 @@
 import unittest
-from Method import Method
+from MethodDefinition import MethodDefinition
 
 class StackStateException(Exception):
     pass
@@ -142,11 +142,11 @@ class StackTest(unittest.TestCase):
     def test_frame_methods(self):
         s = Stack(5)
         
-        m1 = Method()
+        m1 = MethodDefinition()
         s.beginFrame(5, m1)
         self.assertEqual(s.currentFrame.method, m1)
         
-        m2 = Method()
+        m2 = MethodDefinition()
         s.beginFrame(999, m2)
         self.assertEqual(s.currentFrame.method, m2)
         

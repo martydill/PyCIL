@@ -2,7 +2,7 @@ from Instruction import Instruction
 from Stack import Stack, StackStateException
 import unittest
 from Variable import Variable
-from Method import Method
+from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
 
 
@@ -53,7 +53,7 @@ class stlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = stloc('0')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         vm.set_current_method(m)
         vm.stack.push(987)
@@ -66,7 +66,7 @@ class stlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = stloc('1')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         vm.set_current_method(m)
@@ -81,7 +81,7 @@ class stlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = stloc('2')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
@@ -98,7 +98,7 @@ class stlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = stloc('3')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
@@ -117,7 +117,7 @@ class stlocTest(unittest.TestCase):
         from VM import VM
         vm = VM()
         x = stloc('s 2')
-        m = Method()
+        m = MethodDefinition()
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
