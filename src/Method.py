@@ -7,3 +7,4 @@ class Method():
         self.instructions = []
         self.maxStack = -1
         self.returnType = None
+        self.parameters = []
