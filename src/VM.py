@@ -164,6 +164,21 @@ class VMTest(unittest.TestCase):
         self.assertEqual(vm.current_method(), method)
         self.assertEqual(vm.stack.get_frame_size(), 77)
         
+    def test_recursive_execute_method_each_instance_has_new_instance_variables(self):
+        vm = VM()
+        method = MethodDefinition()
+        method.name = 'hello'
+        method.returnType = Types.Int8
+        method.parameters = [Types.Int16, Types.Int32]
+        method.maxStack = 77
+        
+        self.assertEqual(vm.current_method(), None)
+        
+        vm.execute_method(method)
+        self.assertEqual(vm.current_method(), method)
+        self.assertEqual(vm.stack.get_frame_size(), 77)
+        
+        
         
     def test_parse_method_ret(self):
         s = ('.method public void main() {\n '

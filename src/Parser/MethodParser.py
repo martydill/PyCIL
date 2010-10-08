@@ -20,7 +20,6 @@ class MethodParser(object):
 
         while token != BlockStart:
 
-            print '*' + token + '*'
             if token == '(':
                 self.parse_parameters(method)
             elif token in MethodDefinition.AttributeTypes.keys():
