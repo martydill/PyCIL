@@ -116,8 +116,8 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual(len(locals), 1)
         self.assertEqual(locals[0].name, 'f')
         self.assertEqual(locals[0].alias, '0')
-        self.assertEqual(locals[0].type.name, 'NS.C')
-        
+        self.assertEqual(locals[0].type.name, 'C')
+        self.assertEqual(locals[0].type.namespace, 'NS')
     
     def test_parse_single_local_with_alias(self):
         from ParserContext import ParserContext

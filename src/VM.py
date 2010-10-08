@@ -4,6 +4,7 @@ import unittest
 from Parser.ParserContext import ParserContext
 from MethodDefinition import MethodDefinition
 from Parser.MethodParser import MethodParser
+from Method import Method
 
 class DebugHooks:
     PreMethod, PostMethod, PreInstruction, PostInstruction = range(4)
@@ -152,30 +153,33 @@ class VMTest(unittest.TestCase):
         
     def test_execute_method(self):
         vm = VM()
-        method = MethodDefinition()
-        method.name = 'hello'
-        method.returnType = Types.Int8
-        method.parameters = [Types.Int16, Types.Int32]
-        method.maxStack = 77
+        md = MethodDefinition()
+        md.name = 'hello'
+        md.returnType = Types.Int8
+        md.parameters = [Types.Int16, Types.Int32]
+        md.maxStack = 77
         
+        m = md.get_method()
         self.assertEqual(vm.current_method(), None)
         
-        vm.execute_method(method)
-        self.assertEqual(vm.current_method(), method)
+        vm.execute_method(m)
+        self.assertEqual(vm.current_method(), m)
         self.assertEqual(vm.stack.get_frame_size(), 77)
         
     def test_recursive_execute_method_each_instance_has_new_instance_variables(self):
         vm = VM()
-        method = MethodDefinition()
-        method.name = 'hello'
-        method.returnType = Types.Int8
-        method.parameters = [Types.Int16, Types.Int32]
-        method.maxStack = 77
+        md = MethodDefinition()
+        md.name = 'hello'
+        md.returnType = Types.Int8
+        md.parameters = [Types.Int16, Types.Int32]
+        md.maxStack = 77
         
         self.assertEqual(vm.current_method(), None)
         
-        vm.execute_method(method)
-        self.assertEqual(vm.current_method(), method)
+        m = md.get_method()
+     
+        vm.execute_method(m)
+        self.assertEqual(vm.current_method(), m)
         self.assertEqual(vm.stack.get_frame_size(), 77)
         
         
@@ -221,7 +225,7 @@ class VMTest(unittest.TestCase):
         p = ParserContext(s)
         mp = MethodParser()
         m = mp.parse(p)       
-        vm.execute_method(m)
+        vm.execute_method(m.get_method())
         self.assertEqual(vm.stack.count(), 1)
         self.assertEqual(vm.stack.pop(), 6)
         

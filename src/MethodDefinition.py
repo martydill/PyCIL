@@ -34,6 +34,9 @@ class MethodDefinition():
         m = Method()
         m.methodDefinition = self;
         m.locals = copy.deepcopy(self.locals)
+        m.instructions = self.instructions
+        m.maxStack = self.maxStack
+        m.returnType = self.returnType
         return m
     
     
@@ -63,3 +66,17 @@ class MethodDefinitionTests(unittest.TestCase):
         m = md.get_method()
         self.assertEqual(len(m.locals), 1)
         self.assertNotEqual(v, m.locals[0])
+        
+    def test_create_method_has_pointer_to_instructions(self):
+        from Instructions.Ret import Ret
+        md = MethodDefinition()
+        md.name = 'foobar'
+        v = Variable()
+        v.name = 'asdf'
+        v.type = Types.Int32
+        md.instructions.append(Ret())
+        md.instructions.append(Ret())
+        md.instructions.append(Ret())
+        
+        m = md.get_method()
+        self.assertEqual(m.instructions, md.instructions)
