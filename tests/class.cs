@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +11,7 @@ namespace ConsoleApplication1
 
     class Program
     {
-        // returns 4
+        // returns 1234
         static int Main(string[] args)
         {
             foo f = new foo();

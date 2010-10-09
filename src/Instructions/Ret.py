@@ -21,7 +21,6 @@ class Ret(Instruction):
             vm.current_stack_frame().count += 1
         
         # fixme - return value?
-        pass
 
 
 register('ret', Ret)

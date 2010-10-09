@@ -21,7 +21,8 @@ class Stack ():
         self.stackFrames = []
         self.currentFrame = None
         self.beginFrame(initialSize)
-
+        self.lastFrameReturnValue = None
+        
     def push(self, value):
         if self.currentFrame.frameSize == self.currentFrame.count:
             raise StackSizeException('Stack size exceeded, size ' + str(self.currentFrame.count) + ', limit ' + str(self.currentFrame.frameSize))
@@ -44,7 +45,7 @@ class Stack ():
             return 0
 
         return self.currentFrame.frameSize
-
+   
     def get_frame_count(self):
         if self.currentFrame is None:
             return 0
@@ -60,6 +61,9 @@ class Stack ():
         frame = self.stackFrames.pop();
         
         i = frame.count
+        if i > 0:
+            self.lastFrameReturnValue = self.stack.pop()
+            i -= 1
         while i > 0:
             i -= 1
             self.stack.pop()
@@ -178,3 +182,17 @@ class StackTest(unittest.TestCase):
         s.endFrame()
         self.assertEqual(s.currentFrame.method, None)
         self.assertEqual(s.count(), 1)
+    
+    def test_end_frame_saves_return_value(self):
+        s = Stack(5)
+        s.push(987)
+        m1 = MethodDefinition()
+        s.beginFrame(5, m1)
+        s.push(123)
+        s.push(456)
+        s.push(99999)
+        s.endFrame()
+        self.assertEqual(s.currentFrame.method, None)
+        self.assertEqual(s.count(), 1)
+        self.assertEqual(s.lastFrameReturnValue, 99999)
+            

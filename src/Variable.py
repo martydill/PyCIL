@@ -7,5 +7,7 @@ class Variable(object):
         self.type = type
         self.alias = alias
         
+    def __str__(self):
+        return str(self.value) + ' - ' + str(self.type)
 
 
