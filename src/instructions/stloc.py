@@ -4,6 +4,7 @@ import unittest
 from Variable import Variable
 from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
+from Utility import is_number
 
 
 class stloc(Instruction):
@@ -21,6 +22,7 @@ class stloc(Instruction):
         self.name = 'stloc.' + suffix
         self.suffix = suffix
         self.index = 0
+        self.label = None
         if(stloc.opcodePrefixTable.has_key(suffix)):
             self.opcode = stloc.opcodePrefixTable[suffix]
         
@@ -33,17 +35,27 @@ class stloc(Instruction):
         elif self.suffix == '3':
             self.index = 3
         elif self.suffix.startswith('s '):
-            self.index = int(self.suffix[2:])
-            self.op = stloc.opcodePrefixTable['s']
-            
+            if is_number(self.suffix[2:]): #index
+                self.index = int(self.suffix[2:])
+                self.op = stloc.opcodePrefixTable['s']
+            else:   # label
+                self.op = stloc.opcodePrefixTable['s']
+                self.label = self.suffix[2:]
+                
     def execute(self, vm):
         stack = vm.stack
         m = vm.current_method()
         if stack.get_frame_count() < 1:
             raise StackStateException('Not enough values on the stack')
         
-        variable = m.locals[self.index]
-        variable.value = stack.pop()
+        if self.label is None:
+            variable = m.locals[self.index]
+        else:
+            for x in m.locals:
+                if x.alias == self.label:
+                    variable = x
+            
+        variable.value = stack.pop()            
 
 register('stloc', stloc)
 
@@ -113,7 +125,7 @@ class stlocTest(unittest.TestCase):
         self.assertEqual(m.locals[2].value, 0)
         self.assertEqual(m.locals[3].value, 987)
         
-    def test_execute_s(self):
+    def test_execute_s_index(self):
         from VM import VM
         vm = VM()
         x = stloc('s 2')
@@ -122,6 +134,25 @@ class stlocTest(unittest.TestCase):
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
+        vm.set_current_method(m)
+        vm.stack.push(987)
+        x.execute(vm)
+        
+        self.assertEqual(vm.stack.count(), 0)
+        self.assertEqual(m.locals[0].value, 0)
+        self.assertEqual(m.locals[1].value, 0)
+        self.assertEqual(m.locals[2].value, 987)
+        self.assertEqual(m.locals[3].value, 0)
+        
+    def test_execute_s_label(self):
+        from VM import VM
+        vm = VM()
+        x = stloc('s def')
+        m = MethodDefinition()
+        m.locals.append(Variable(0, alias='xyz'))
+        m.locals.append(Variable(0, alias='abc'))
+        m.locals.append(Variable(0, alias='def'))
+        m.locals.append(Variable(0, alias='ghi'))
         vm.set_current_method(m)
         vm.stack.push(987)
         x.execute(vm)

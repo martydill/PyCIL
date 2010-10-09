@@ -4,6 +4,7 @@ import unittest
 from Variable import Variable
 from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
+from Utility import is_number
 
 class ldloc(Instruction):
 
@@ -21,6 +22,8 @@ class ldloc(Instruction):
         self.name = 'ldloc.' + suffix
         self.suffix = suffix
         self.index = 0
+        self.label = None
+        
         if(ldloc.opcodePrefixTable.has_key(suffix)):
             self.opcode = ldloc.opcodePrefixTable[suffix]
         
@@ -33,14 +36,24 @@ class ldloc(Instruction):
         elif self.suffix == '3':
             self.index = 3
         elif self.suffix.startswith('s '):
-            self.index = int(self.suffix[2:])
-            self.opcode = ldloc.opcodePrefixTable['s']
-            
+            if is_number(self.suffix[2:]): #index
+                self.index = int(self.suffix[2:])
+                self.op = ldloc.opcodePrefixTable['s']
+            else:   # label
+                self.op = ldloc.opcodePrefixTable['s']
+                self.label = self.suffix[2:]
+                
     def execute(self, vm):
         stack = vm.stack
         m = vm.current_method()
         
-        variable = m.locals[self.index]
+        if self.label is None:
+            variable = m.locals[self.index]
+        else:
+            for x in m.locals:
+                if x.alias == self.label:
+                    variable = x
+            
         stack.push(variable.value) # fixme - value? or variable?
 
 register('ldloc', ldloc)
@@ -101,7 +114,7 @@ class ldlocTest(unittest.TestCase):
         self.assertEqual(vm.stack.count(), 1)
         self.assertEqual(vm.stack.pop(), 123)
         
-    def test_execute_s(self):
+    def test_execute_s_index(self):
         from VM import VM
         vm = VM()
         x = ldloc('s 2')
@@ -115,3 +128,19 @@ class ldlocTest(unittest.TestCase):
         
         self.assertEqual(vm.stack.count(), 1)
         self.assertEqual(vm.stack.pop(), 987)
+
+    def test_execute_s_label(self):
+        from VM import VM
+        vm = VM()
+        x = ldloc('s ghi')
+        m = MethodDefinition()
+        m.locals.append(Variable(0, alias='abc'))
+        m.locals.append(Variable(0, alias='def'))
+        m.locals.append(Variable(987, alias='ghi'))
+        m.locals.append(Variable(0, alias='jkl'))
+        vm.set_current_method(m)
+        x.execute(vm)
+        
+        self.assertEqual(vm.stack.count(), 1)
+        self.assertEqual(vm.stack.pop(), 987)
+

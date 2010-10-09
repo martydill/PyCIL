@@ -18,6 +18,7 @@ class mul(Instruction):
         rhs = stack.pop()
         lhs = stack.pop()
         stack.push(Variable(lhs.value * rhs.value))
+        # fixme - set type of return variable
         # fixme - overflow
 
 register('mul', mul)
