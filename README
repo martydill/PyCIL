@@ -9,6 +9,7 @@ call
 clt
 ldarg
 ldc
+ldfld
 ldloc
 ldstr
 mul
