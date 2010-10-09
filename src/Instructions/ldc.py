@@ -42,7 +42,7 @@ class ldc(Instruction):
         stack = vm.stack
 
         if self.suffix == 'i4':
-            stack.push(int(self.value))
+            stack.push(self.string_to_number(self.value))
         elif self.suffix == 'i8':
             stack.push(long(self.value))
         elif self.suffix == 'r4':
@@ -72,9 +72,24 @@ class ldc(Instruction):
         elif self.suffix == 'i4.s':
             stack.push(int(self.value))
 
+    def string_to_number(self, str):
+        if str.startswith('0x'):
+            return int(str, 16)
+        else:
+            return int(str
+                       )
 register('ldc', ldc)
 
 class ldcTest(unittest.TestCase):
+
+    def test_execute_i4_hex(self):
+        from VM import VM
+        vm = VM()
+        x = ldc('i4 0x4d2')
+        x.execute(vm)
+
+        self.assertEqual(vm.stack.count(), 1)
+        self.assertEqual(vm.stack.pop(), 0x4d2)
 
     def test_execute_i4(self):
         from VM import VM
