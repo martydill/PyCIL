@@ -8,3 +8,4 @@ class Method():
         self.maxStack = -1
         self.returnType = None
         self.parameters = []
+        self.attributes = []

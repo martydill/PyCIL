@@ -38,6 +38,7 @@ class MethodDefinition():
         m.instructions = self.instructions
         m.maxStack = self.maxStack
         m.returnType = self.returnType
+        m.attributes = self.attributes
         return m
     
     def __str__(self):

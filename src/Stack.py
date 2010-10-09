@@ -57,8 +57,13 @@ class Stack ():
         self.stackFrames.append(self.currentFrame)
 
     def endFrame(self):
-        self.stackFrames.pop();
-
+        frame = self.stackFrames.pop();
+        
+        i = frame.count
+        while i > 0:
+            i -= 1
+            self.stack.pop()
+        
         if len(self.stackFrames) > 0:
             self.currentFrame = self.stackFrames[-1]
         else:
@@ -161,3 +166,15 @@ class StackTest(unittest.TestCase):
         s.push(444)
         self.assertEqual(s.get_number_of_frames(), 1)
         self.assertEqual(s.currentFrame, s.stackFrames[0])
+        
+    def test_end_frame_removes_stack_values(self):
+        s = Stack(5)
+        s.push(987)
+        m1 = MethodDefinition()
+        s.beginFrame(5, m1)
+        s.push(123)
+        s.push(456)
+        s.push(99999)
+        s.endFrame()
+        self.assertEqual(s.currentFrame.method, None)
+        self.assertEqual(s.count(), 1)

@@ -3,6 +3,7 @@ import unittest
 import Types
 from Method import Method
 from Instructions.Instruction import register
+from MethodDefinition import MethodDefinition
 
 class Ret(Instruction):
   
@@ -15,7 +16,8 @@ class Ret(Instruction):
     def execute(self, vm):
         t = vm.current_method()
         vm.stack.endFrame()
-        if t.returnType is not None:
+        
+        if t.returnType != None and t.returnType != Types.Void:
             vm.current_stack_frame().count += 1
         
         # fixme - return value?
@@ -44,6 +46,27 @@ class RetTest(unittest.TestCase):
         r.execute(vm)
         self.assertEqual(vm.current_method(), None)
 
+    def test_execute_instance_clears_stack_with_void_return_type(self):
+        from VM import VM
+        vm = VM()
+        m = Method()
+        m.name = 'TestMethod'
+        m.attributes.append(MethodDefinition.AttributeTypes['instance'])
+        m.returnType = Types.Void
+        m.maxStack = 99
+        m.parameters = []
+        vm.methods.append(m)
+        vm.stack.push(111)
+        vm.execute_method(m)
+        vm.stack.push(124)
+        vm.stack.push(987)
+        
+        r = Ret()
+        r.execute(vm)
+        self.assertEqual(vm.current_method(), None)
+        self.assertEqual(vm.stack.count(), 1)
+        self.assertEqual(vm.stack.pop(), 111)
+        
     def test_execute_int_no_parameters_increments_return_frame_count(self):
         from VM import VM
         vm = VM()
