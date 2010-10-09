@@ -57,7 +57,7 @@ class stloc(Instruction):
                 if x.name == self.targetName:
                     variable = x
             
-        variable.value = stack.pop()            
+        variable.value = stack.pop().value            
 
 register('stloc', stloc)
 

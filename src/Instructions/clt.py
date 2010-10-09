@@ -2,6 +2,7 @@ from Instruction import Instruction
 import unittest
 from Stack import StackStateException
 from Instructions.Instruction import register
+from Variable import Variable
 
 class clt(Instruction):
 
@@ -17,9 +18,9 @@ class clt(Instruction):
         v2 = stack.pop()
         v1 = stack.pop()
         if v1 < v2:
-            stack.push(1)
+            stack.push(Variable(1))
         else:
-            stack.push(0)
+            stack.push(Variable(0))
         
         # fixme - floats?
 
@@ -38,32 +39,32 @@ class cltTest(unittest.TestCase):
     def test_execute_v1_less_than_v2_ints(self):
         from VM import VM
         vm = VM()
-        vm.stack.push(5)
-        vm.stack.push(999)
+        vm.stack.push(Variable(5))
+        vm.stack.push(Variable(999))
         x = clt()
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 1)
+        self.assertEqual(vm.stack.pop().value, 1)
 
     def test_execute_v1_greater_than_v2_ints(self):
         from VM import VM
         vm = VM()
-        vm.stack.push(777)
-        vm.stack.push(44)
+        vm.stack.push(Variable(777))
+        vm.stack.push(Variable(44))
         x = clt()
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 0)
+        self.assertEqual(vm.stack.pop().value, 0)
 
     def test_execute_equal_ints(self):
         from VM import VM
         vm = VM()
-        vm.stack.push(555)
-        vm.stack.push(555)
+        vm.stack.push(Variable(555))
+        vm.stack.push(Variable(555))
         x = clt()
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 0)
+        self.assertEqual(vm.stack.pop().value, 0)

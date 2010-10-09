@@ -32,9 +32,6 @@ class ldfld(Instruction):
             if field.name == self.fieldName:
                 vm.stack.push(field)    # fixme - address...
                 
-        #variable = m.locals[self.index]
-        #variable.value = stack.pop()
-
 register('ldfld', ldfld)
 
 class ldfldTest(unittest.TestCase):
