@@ -15,10 +15,10 @@ class Debugger():
         self.handle_input()
     
     def pre_method_hook(self, method):
-        print 'Entered method ' + method.name
+        print 'Entered method ' + method.namespace + '::' + method.name
         
     def post_method_hook(self, method):
-        print 'Exited method ' + method.name
+        print 'Exited method ' + method.namespace + '::' + method.name
         
     def handle_input(self):
         while True:
