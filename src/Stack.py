@@ -24,7 +24,7 @@ class Stack ():
 
     def push(self, value):
         if self.currentFrame.frameSize == self.currentFrame.count:
-            raise StackSizeException('Stack size exceeded')
+            raise StackSizeException('Stack size exceeded, size ' + str(self.currentFrame.count) + ', limit ' + str(self.currentFrame.size))
 
         self.currentFrame.count += 1
         self.stack.append(value)
