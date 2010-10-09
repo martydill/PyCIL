@@ -40,6 +40,8 @@ class MethodDefinition():
         m.returnType = self.returnType
         return m
     
+    def __str__(self):
+        return self.returnType + ' ' + self.namespace + '::' + self.name
     
 class MethodDefinitionTests(unittest.TestCase):
     

@@ -17,7 +17,8 @@ class ClassParser(object):
             elif token == 'extends':
                 c.base = parserContext.get_next_token()
             elif token == '.method':
-                m = MethodParser().parse(parserContext)            
+                m = MethodParser().parse(parserContext)
+                m.namespace = c.namespace + '.' + c.name       
                 c.methods.append(m)
                 parserContext.methods.append(m)
                 # fixme - should i add to both?
@@ -108,5 +109,28 @@ class ClassParserTests(unittest.TestCase):
         c = cp.parse(p)
         
         self.assertEqual(Types.resolve_type('ConsoleApplication1.bar').classRef, c)
+
+   
+    def test_method_in_class_gets_class_namespace(self):
+        from ParserContext import ParserContext
+        s = '''.class private auto ansi beforefieldinit ConsoleApplication1.foo
+        extends [mscorlib]System.Object
+        {
+          .field public int32 z
+          .method public hidebysig specialname rtspecialname 
+                  instance void  .ctor() cil managed
+          {
+            // Code size       7 (0x7)
+            .maxstack  8
+            IL_0000:  ldarg.0
+            IL_0001:  call       instance void [mscorlib]System.Object::.ctor()
+            IL_0006:  ret
+          } // end of method foo::.ctor
+       } // end of class ConsoleApplication1.foo'''
         
+        p = ParserContext(s)
+        cp = ClassParser()
+        c = cp.parse(p)
         
+        self.assertEqual(c.methods[0].name, 'ctor')
+        self.assertEqual(c.methods[0].namespace, 'ConsoleApplication1.foo' )

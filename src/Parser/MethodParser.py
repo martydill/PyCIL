@@ -19,7 +19,7 @@ class MethodParser(object):
         token = self.context.get_next_token()
 
         while token != BlockStart:
-
+            print token
             if token == '(':
                 self.parse_parameters(method)
             elif token in MethodDefinition.AttributeTypes.keys():
@@ -29,7 +29,9 @@ class MethodParser(object):
             elif token == '.method':
                 pass
             else:
-                method.name = token
+                parts = token.rpartition('.')
+                method.namespace = parts[0]
+                method.name = parts[2]
                 self.parse_parameters(method)
                 
             token = self.context.get_next_token()
@@ -205,11 +207,11 @@ class MethodParserTest(unittest.TestCase):
         
     def test_parse_multiple_methods_no_parameters(self):
         from ParserContext import ParserContext
-        s = ('.method public void main() {\n '
+        s = ('.method public void A.B.main() {\n '
              'IL_0001:    ret\n'
              ' }\n'
              '\n'
-             '.method public void main2() {\n '
+             '.method public void N.S.main2() {\n '
              'IL_0001:    ret\n'
              ' }\n')
         
@@ -218,5 +220,7 @@ class MethodParserTest(unittest.TestCase):
         
         self.assertEqual(2, len(p.methods))
         self.assertEqual('main', p.methods[0].name)
+        self.assertEqual('A.B', p.methods[0].namespace)
         self.assertEqual('main2', p.methods[1].name)
+        self.assertEqual('N.S', p.methods[1].namespace)
    
