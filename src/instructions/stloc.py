@@ -19,10 +19,12 @@ class stloc(Instruction):
     }
 
     def __init__(self, suffix):
+        super(stloc, self).__init__()
         self.name = 'stloc.' + suffix
         self.suffix = suffix
         self.index = 0
-        self.label = None
+        self.targetName = None
+        
         if(stloc.opcodePrefixTable.has_key(suffix)):
             self.opcode = stloc.opcodePrefixTable[suffix]
         
@@ -40,7 +42,7 @@ class stloc(Instruction):
                 self.op = stloc.opcodePrefixTable['s']
             else:   # label
                 self.op = stloc.opcodePrefixTable['s']
-                self.label = self.suffix[2:]
+                self.targetName = self.suffix[2:]
                 
     def execute(self, vm):
         stack = vm.stack
@@ -48,11 +50,11 @@ class stloc(Instruction):
         if stack.get_frame_count() < 1:
             raise StackStateException('Not enough values on the stack')
         
-        if self.label is None:
+        if self.targetName is None:
             variable = m.locals[self.index]
         else:
             for x in m.locals:
-                if x.alias == self.label:
+                if x.name == self.targetName:
                     variable = x
             
         variable.value = stack.pop()            
@@ -149,10 +151,10 @@ class stlocTest(unittest.TestCase):
         vm = VM()
         x = stloc('s def')
         m = MethodDefinition()
-        m.locals.append(Variable(0, alias='xyz'))
-        m.locals.append(Variable(0, alias='abc'))
-        m.locals.append(Variable(0, alias='def'))
-        m.locals.append(Variable(0, alias='ghi'))
+        m.locals.append(Variable(0, name='xyz'))
+        m.locals.append(Variable(0, name='abc'))
+        m.locals.append(Variable(0, name='def'))
+        m.locals.append(Variable(0, name='ghi'))
         vm.set_current_method(m)
         vm.stack.push(987)
         x.execute(vm)

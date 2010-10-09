@@ -36,9 +36,9 @@ class newobj(Instruction):
         vm.stack.push(r)
         
         m = vm.find_method_by_signature(t.namespace + '.' + t.name, 'ctor', None, None) # fixme - should name have a . in it?
-        parameter = Variable()
-        parameter.value = r
-        m.parameters = [parameter] # fixme - create a new method object so we don't overwrite the parameters?
+        #parameter = Variable()
+        #parameter.value = r
+        m.parameters = [r] # fixme - create a new method object so we don't overwrite the parameters?
         #fixme - should we even use parameters? or just the stack?
         vm.execute_method(m)
         

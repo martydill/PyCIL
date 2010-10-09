@@ -30,7 +30,7 @@ class stfld(Instruction):
         object = vm.stack.pop()
         for field in object.fields:
             if field.name == self.fieldName:
-                field.value = value
+                field.value = value.value
                 
         #variable = m.locals[self.index]
         #variable.value = stack.pop()
@@ -58,7 +58,7 @@ class stfldTest(unittest.TestCase):
         
         r.fields.append(v)
         vm.stack.push(r)
-        vm.stack.push(9876)
+        vm.stack.push(Variable(9876))
         
         x = stfld('int32 a.b::xyz')
         

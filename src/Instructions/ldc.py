@@ -1,6 +1,7 @@
 from Instruction import Instruction
 import unittest
 from Instructions.Instruction import register
+from Variable import Variable
 
 class ldc(Instruction):
 
@@ -42,42 +43,42 @@ class ldc(Instruction):
         stack = vm.stack
 
         if self.suffix == 'i4':
-            stack.push(self.string_to_number(self.value))
+            stack.push(Variable(self.string_to_number(self.value)))
         elif self.suffix == 'i8':
-            stack.push(long(self.value))
+            stack.push(Variable(long(self.value)))
         elif self.suffix == 'r4':
-            stack.push(float(self.value))
+            stack.push(Variable(float(self.value)))
         elif self.suffix == 'r8':
-            stack.push(float(self.value))
+            stack.push(Variable(float(self.value)))
         elif self.suffix == 'i4.0':
-            stack.push(0)
+            stack.push(Variable(0))
         elif self.suffix == 'i4.1':
-            stack.push(1)
+            stack.push(Variable(1))
         elif self.suffix == 'i4.2':
-            stack.push(2)
+            stack.push(Variable(2))
         elif self.suffix == 'i4.3':
-            stack.push(3)
+            stack.push(Variable(3))
         elif self.suffix == 'i4.4':
-            stack.push(4)
+            stack.push(Variable(4))
         elif self.suffix == 'i4.5':
-            stack.push(5)
+            stack.push(Variable(5))
         elif self.suffix == 'i4.6':
-            stack.push(6)
+            stack.push(Variable(6))
         elif self.suffix == 'i4.7':
-            stack.push(7)
+            stack.push(Variable(7))
         elif self.suffix == 'i4.8':
-            stack.push(8)
+            stack.push(Variable(8))
         elif self.suffix == 'i4.m1' or self.suffix == 'i4.M1':
-            stack.push(-1)
+            stack.push(Variable(-1))
         elif self.suffix == 'i4.s':
-            stack.push(int(self.value))
+            stack.push(Variable(int(self.value)))
 
     def string_to_number(self, str):
         if str.startswith('0x'):
             return int(str, 16)
         else:
-            return int(str
-                       )
+            return int(str)
+        
 register('ldc', ldc)
 
 class ldcTest(unittest.TestCase):
@@ -89,7 +90,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 0x4d2)
+        self.assertEqual(vm.stack.pop().value, 0x4d2)
 
     def test_execute_i4(self):
         from VM import VM
@@ -98,7 +99,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 12345)
+        self.assertEqual(vm.stack.pop().value, 12345)
 
     def test_execute_i8(self):
         from VM import VM
@@ -107,7 +108,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 999988887777)
+        self.assertEqual(vm.stack.pop().value, 999988887777)
 
     def test_execute_r4(self):
         from VM import VM
@@ -116,7 +117,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 1.234)
+        self.assertEqual(vm.stack.pop().value, 1.234)
 
 
     def test_execute_r8(self):
@@ -126,7 +127,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 999988887777.111122223333)
+        self.assertEqual(vm.stack.pop().value, 999988887777.111122223333)
 
     def test_execute_i4dot0(self):
         from VM import VM
@@ -136,7 +137,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 0)
+        self.assertEqual(vm.stack.pop().value, 0)
 
     def test_execute_i4dot1(self):
         from VM import VM        
@@ -146,7 +147,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 1)
+        self.assertEqual(vm.stack.pop().value, 1)
 
     def test_execute_i4dot2(self):
         from VM import VM        
@@ -156,7 +157,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 2)
+        self.assertEqual(vm.stack.pop().value, 2)
 
     def test_execute_i4dot3(self):
         from VM import VM
@@ -166,7 +167,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 3)
+        self.assertEqual(vm.stack.pop().value, 3)
 
     def test_execute_i4dot4(self):
         from VM import VM 
@@ -176,7 +177,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 4)
+        self.assertEqual(vm.stack.pop().value, 4)
 
     def test_execute_i4dot5(self):
         from VM import VM 
@@ -186,7 +187,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 5)
+        self.assertEqual(vm.stack.pop().value, 5)
 
     def test_execute_i4dot6(self):
         from VM import VM
@@ -196,7 +197,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 6)
+        self.assertEqual(vm.stack.pop().value, 6)
 
     def test_execute_i4dot7(self):
         from VM import VM        
@@ -206,7 +207,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 7)
+        self.assertEqual(vm.stack.pop().value, 7)
 
     def test_execute_i4dot8(self):
         from VM import VM
@@ -216,7 +217,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 8)
+        self.assertEqual(vm.stack.pop().value, 8)
 
     def test_execute_i4dotm1(self):
         from VM import VM
@@ -226,7 +227,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), -1)
+        self.assertEqual(vm.stack.pop().value, -1)
 
     def test_execute_i4dotM1(self):
         from VM import VM
@@ -236,7 +237,7 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), -1)
+        self.assertEqual(vm.stack.pop().value, -1)
 
     def test_execute_i4dots(self):
         from VM import VM
@@ -246,4 +247,4 @@ class ldcTest(unittest.TestCase):
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 123)
+        self.assertEqual(vm.stack.pop().value, 123)

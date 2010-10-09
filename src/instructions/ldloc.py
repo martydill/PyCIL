@@ -19,10 +19,11 @@ class ldloc(Instruction):
 
 
     def __init__(self, suffix):
+        super(ldloc, self).__init__()
         self.name = 'ldloc.' + suffix
         self.suffix = suffix
         self.index = 0
-        self.label = None
+        self.targetName = None
         
         if(ldloc.opcodePrefixTable.has_key(suffix)):
             self.opcode = ldloc.opcodePrefixTable[suffix]
@@ -41,20 +42,20 @@ class ldloc(Instruction):
                 self.op = ldloc.opcodePrefixTable['s']
             else:   # label
                 self.op = ldloc.opcodePrefixTable['s']
-                self.label = self.suffix[2:]
+                self.targetName = self.suffix[2:]
                 
     def execute(self, vm):
         stack = vm.stack
         m = vm.current_method()
         
-        if self.label is None:
+        if self.targetName is None:
             variable = m.locals[self.index]
         else:
             for x in m.locals:
-                if x.alias == self.label:
+                if x.name == self.targetName:
                     variable = x
             
-        stack.push(variable.value) # fixme - value? or variable?
+        stack.push(variable)
 
 register('ldloc', ldloc)
 
@@ -70,7 +71,7 @@ class ldlocTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 987)
+        self.assertEqual(vm.stack.pop().value, 987)
 
     def test_execute_1(self):
         from VM import VM
@@ -83,7 +84,7 @@ class ldlocTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 987)
+        self.assertEqual(vm.stack.pop().value, 987)
         
     def test_execute_2(self):
         from VM import VM
@@ -97,7 +98,7 @@ class ldlocTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 8888)
+        self.assertEqual(vm.stack.pop().value, 8888)
 
     def test_execute_3(self):
         from VM import VM
@@ -112,7 +113,7 @@ class ldlocTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 123)
+        self.assertEqual(vm.stack.pop().value, 123)
         
     def test_execute_s_index(self):
         from VM import VM
@@ -127,20 +128,20 @@ class ldlocTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 987)
+        self.assertEqual(vm.stack.pop().value, 987)
 
     def test_execute_s_label(self):
         from VM import VM
         vm = VM()
         x = ldloc('s ghi')
         m = MethodDefinition()
-        m.locals.append(Variable(0, alias='abc'))
-        m.locals.append(Variable(0, alias='def'))
-        m.locals.append(Variable(987, alias='ghi'))
-        m.locals.append(Variable(0, alias='jkl'))
+        m.locals.append(Variable(0, name='abc'))
+        m.locals.append(Variable(0, name='def'))
+        m.locals.append(Variable(987, name='ghi'))
+        m.locals.append(Variable(0, name='jkl'))
         vm.set_current_method(m)
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 987)
+        self.assertEqual(vm.stack.pop().value, 987)
 

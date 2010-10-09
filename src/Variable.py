@@ -1,8 +1,8 @@
 
 class Variable(object):
 
-    def __init__(self, value = None, type = None, alias = None):
-        self.name = 'unnamed'
+    def __init__(self, value = None, type = None, alias = None, name = None):
+        self.name = name
         self.value = value
         self.type = type
         self.alias = alias
