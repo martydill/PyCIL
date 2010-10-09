@@ -13,12 +13,11 @@ class InvalidOpCodeException(Exception):
         return repr(self.value)
 
 
-class Instruction:
-
+class Instruction(object):
        
-    def __init__(self, name, opcode):
-        self.name = name
-        self.opcode = opcode
+    def __init__(self):
+        self.name = 'unnamed'
+        self.opcode = 0x0
         self.label = ''
         
     def execute(self, stack):

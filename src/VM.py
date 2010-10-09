@@ -5,6 +5,7 @@ from Parser.ParserContext import ParserContext
 from MethodDefinition import MethodDefinition
 from Parser.MethodParser import MethodParser
 from Method import Method
+from Instructions.Ret import Ret
 
 class DebugHooks:
     PreMethod, PostMethod, PreInstruction, PostInstruction = range(4)
@@ -20,10 +21,19 @@ class VM:
         self.instructionPointer = 0
         
     def start(self):
+        self.add_builtins()
         method = self.find_method_by_signature(None, 'Main', None, None)
         self.execute_method(method)
         pass
-
+    
+    def add_builtins(self):
+        m = MethodDefinition()
+        m.instructions.append(Ret())
+        m.name = 'ctor'
+        m.namespace = '[mscorlib]System.Object'
+        m.returnType = Types.Void
+        self.methods.append(m)
+        
     def load(self, fileName):
         f = open(fileName, 'r')
         s = f.read()

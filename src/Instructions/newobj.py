@@ -35,7 +35,7 @@ class newobj(Instruction):
         
         vm.stack.push(r)
         
-        m = vm.find_method_by_signature(t.namespace + '.' + t.name, '.ctor', None, None)
+        m = vm.find_method_by_signature(t.namespace + '.' + t.name, 'ctor', None, None) # fixme - should name have a . in it?
         parameter = Variable()
         parameter.value = r
         m.parameters = [parameter] # fixme - create a new method object so we don't overwrite the parameters?
@@ -53,7 +53,7 @@ class newobjTest(unittest.TestCase):
         vm = VM()
 
         m = MethodDefinition()
-        m.name = '.ctor'
+        m.name = 'ctor'
         m.namespace = 'testnamespace.testclass'
         vm.methods.append(m)
         
@@ -64,7 +64,7 @@ class newobjTest(unittest.TestCase):
         
         t = Types.register_custom_type(c)
 
-        n = newobj('instance void testnamespace.testclass::.ctor()')
+        n = newobj('instance void testnamespace.testclass::ctor()')
         n.execute(vm)
         Types.unregister_custom_type(t)
         
@@ -78,7 +78,7 @@ class newobjTest(unittest.TestCase):
         vm = VM()
 
         m = MethodDefinition()
-        m.name = '.ctor'
+        m.name = 'ctor'
         m.namespace = 'testnamespace.testclass'
         vm.methods.append(m)
         
@@ -100,7 +100,7 @@ class newobjTest(unittest.TestCase):
         vm = VM()
 
         m = MethodDefinition()
-        m.name = '.ctor'
+        m.name = 'ctor'
         m.namespace = 'testnamespace.testclass'
         vm.methods.append(m)
         

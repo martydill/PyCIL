@@ -19,7 +19,8 @@ class call(Instruction):
             
         self.method_type = Types.BuiltInTypes[parts[0]]
         self.method_namespace, self.method_name = parts[1].split('::')
-        
+        if self.method_name[0] == '.':
+            self.method_name = self.method_name[1:]
         #self.method_name = method_name
         #self.method_type = method_type
         self.method_parameters = '' #method_parameters
@@ -51,6 +52,27 @@ class callTest(unittest.TestCase):
         self.assertEqual(vm.currentMethod, None)
 
         c = call('int32 A.B::TestMethod()')
+        c.execute(vm)
+
+        self.assertEqual(vm.currentMethod, m)
+        self.assertEqual(vm.stack.get_number_of_frames(), 2)
+        
+    def test_call_constructor_strips_period(self):
+        from VM import VM
+        from MethodDefinition import MethodDefinition
+        vm = VM()
+
+        m = MethodDefinition()
+        m.name = 'ctor()'
+        m.namespace = 'A.B'
+        m.returnType = Types.Int32
+        m.parameters = []
+        m.names = 'A.B'
+        vm.methods.append(m)
+
+        self.assertEqual(vm.currentMethod, None)
+
+        c = call('int32 A.B::.ctor()')
         c.execute(vm)
 
         self.assertEqual(vm.currentMethod, m)
