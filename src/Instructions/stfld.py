@@ -12,8 +12,13 @@ from ReferenceType import ReferenceType
 class stfld(Instruction):
 
     def __init__(self, field):
-        self.name = 'stfld.' + field
-        self.field = field
+        super(stfld, self).__init__() # fixme - set opcode
+        self.name = 'stfld ' + field
+        
+        parts = field.split(' ')[1].rpartition('::')
+        self.fieldName = parts[2]
+        self.className = parts[0].rpartition('.')[2]
+        self.namespaceName = parts[0].rpartition('.')[0]
         
     def execute(self, vm):
         stack = vm.stack
@@ -24,7 +29,7 @@ class stfld(Instruction):
         value = vm.stack.pop()
         object = vm.stack.pop()
         for field in object.fields:
-            if field.name == self.field:
+            if field.name == self.fieldName:
                 field.value = value
                 
         #variable = m.locals[self.index]
@@ -55,7 +60,7 @@ class stfldTest(unittest.TestCase):
         vm.stack.push(r)
         vm.stack.push(9876)
         
-        x = stfld('xyz')
+        x = stfld('int32 a.b::xyz')
         
         x.execute(vm)
         self.assertEqual(vm.stack.count(), 0)

@@ -12,8 +12,14 @@ from ReferenceType import ReferenceType
 class ldfld(Instruction):
 
     def __init__(self, field):
-        self.name = 'ldfld.' + field
-        self.field = field
+        super(ldfld, self).__init__()
+        # fixme - set opcode
+        self.name = 'ldfld ' + field
+        #fixme - put this code somewhere it can be used by everyone
+        parts = field.split(' ')[1].rpartition('::')
+        self.fieldName = parts[2]
+        self.className = parts[0].rpartition('.')[2]
+        self.namespaceName = parts[0].rpartition('.')[0]
         
     def execute(self, vm):
         stack = vm.stack
@@ -23,7 +29,7 @@ class ldfld(Instruction):
         
         object = vm.stack.pop()
         for field in object.fields:
-            if field.name == self.field:
+            if field.name == self.fieldName:
                 vm.stack.push(field)    # fixme - address...
                 
         #variable = m.locals[self.index]
@@ -38,10 +44,10 @@ class ldfldTest(unittest.TestCase):
         vm = VM()
         
         c = ClassDefinition()
-        c.namespace = 'a'
-        c.name = 'b'
+        c.namespace = 'ConsoleApplication1'
+        c.name = 'foo'
         v = Variable()
-        v.name = 'abc'
+        v.name = 'z'
         v.type = Types.Int32
         
         c.fieldDefinitions.append(v)
@@ -53,12 +59,12 @@ class ldfldTest(unittest.TestCase):
         r.fields.append(v)
         vm.stack.push(r)
         
-        x = ldfld('abc')
+        x = ldfld('int32 ConsoleApplication1.foo::z')
         
         x.execute(vm)
         self.assertEqual(vm.stack.count(), 1)
         self.assertEqual(r.fields[0], vm.stack.pop())
-
+ 
     def test_execute_multiple_fields(self):
         from VM import VM
         vm = VM()
@@ -71,7 +77,7 @@ class ldfldTest(unittest.TestCase):
         v.name = 'abc'
         v.type = Types.Int32
         c.fieldDefinitions.append(v)
-
+ 
         v2 = Variable()
         v2.name = 'def'
         v2.type = Types.Int32
@@ -85,7 +91,7 @@ class ldfldTest(unittest.TestCase):
         r.fields.append(v2)
         vm.stack.push(r)
         
-        x = ldfld('def')
+        x = ldfld('int32 ConsoleApplication1.foo::def')
         
         x.execute(vm)
         self.assertEqual(vm.stack.count(), 1)
