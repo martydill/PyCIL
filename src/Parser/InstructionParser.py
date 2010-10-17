@@ -14,6 +14,8 @@ from Instructions.clt import clt
 from Instructions.ldarg import ldarg
 from Instructions.Instruction import Instruction, Instructions
 from Instructions.newobj import newobj
+from Instructions.ceq import ceq
+
 class InstructionParser(object):
     
     def __init__(self):
