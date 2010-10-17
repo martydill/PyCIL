@@ -2,6 +2,7 @@ from Instruction import Instruction
 import unittest
 from Instructions.ldc import ldc
 from Instructions.Instruction import register
+from Variable import Variable
 
 class brtrue(Instruction):
 
@@ -19,8 +20,9 @@ class brtrue(Instruction):
             
     def execute(self, vm):
         # fixme check if there aren't enough stack values
-        value = vm.stack.pop()
-        if value != 0:
+        
+        variable = vm.stack.pop()
+        if variable.value != 0:
             index = vm.find_instruction_pointer_by_label(self.target)
             vm.current_stack_frame().instructionPointer = index
         # fixme - check for null objects
@@ -44,7 +46,7 @@ class brtrueTest(unittest.TestCase):
         m.instructions.append(dest)
         
         vm.set_current_method(m)
-        vm.stack.push(1)
+        vm.stack.push(Variable(1))
         x = brtrue('asdf') # fixme optional parameters
         x.execute(vm)
 
@@ -67,7 +69,7 @@ class brtrueTest(unittest.TestCase):
         m.instructions.append(dest)
         
         vm.set_current_method(m)
-        vm.stack.push(0)
+        vm.stack.push(Variable(0))
         x = brtrue('asdf') # fixme optional parameters
         x.execute(vm)
 
@@ -91,7 +93,7 @@ class brtrueTest(unittest.TestCase):
         m.instructions.append(dest)
         
         vm.set_current_method(m)
-        vm.stack.push(1)
+        vm.stack.push(Variable(1))
         x = brtrue('s asdf') # fixme optional parameters
         x.execute(vm)
 
@@ -114,7 +116,7 @@ class brtrueTest(unittest.TestCase):
         m.instructions.append(dest)
         
         vm.set_current_method(m)
-        vm.stack.push(0)
+        vm.stack.push(Variable(0))
         x = brtrue('s asdf') # fixme optional parameters
         x.execute(vm)
 

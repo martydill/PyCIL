@@ -65,9 +65,9 @@ class stloc(Instruction):
             for x in range(len(m.locals)):
                 if m.locals[x].name == self.targetName:
                     if isinstance(value, ReferenceType):
-                         value.name = variable.name
-                         # fixme - set other properties?
-                         m.locals[x] = value
+                        value.name = variable.name
+                        # fixme - set other properties?
+                        m.locals[x] = value
                     else:
                         m.locals[x].value = value.value
         

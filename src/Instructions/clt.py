@@ -17,7 +17,7 @@ class clt(Instruction):
 
         v2 = stack.pop()
         v1 = stack.pop()
-        if v1 < v2:
+        if v1.value < v2.value:
             stack.push(Variable(1))
         else:
             stack.push(Variable(0))
@@ -31,7 +31,7 @@ class cltTest(unittest.TestCase):
     def test_execute_not_enough_stack_values(self):
         from VM import VM
         vm = VM()
-        vm.stack.push(1)
+        vm.stack.push(Variable(1))
         x = clt()
 
         self.assertRaises(StackStateException, x.execute, vm)
