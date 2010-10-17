@@ -15,7 +15,11 @@ class stfld(Instruction):
         super(stfld, self).__init__() # fixme - set opcode
         self.name = 'stfld ' + field
         
-        parts = field.split(' ')[1].rpartition('::')
+        if field.startswith('class'):
+            parts = field.split(' ')[2].rpartition('::')
+        else:
+            parts = field.split(' ')[1].rpartition('::')
+            
         self.fieldName = parts[2]
         self.className = parts[0].rpartition('.')[2]
         self.namespaceName = parts[0].rpartition('.')[0]
@@ -28,9 +32,10 @@ class stfld(Instruction):
         
         value = vm.stack.pop()
         object = vm.stack.pop()
-        for field in object.fields:
-            if field.name == self.fieldName:
-                field.value = value.value
+        for fieldIndex in range(len(object.fieldNames)):
+            fieldName = object.fieldNames[fieldIndex]
+            if fieldName == self.fieldName:
+                object.fields[fieldIndex] = value
                 return
             
         raise Exception("Field named " + self.fieldName + " not found")
@@ -49,7 +54,6 @@ class stfldTest(unittest.TestCase):
         c.namespace = 'a'
         c.name = 'b'
         v = Variable()
-        v.name = 'xyz'
         v.type = Types.Int32
         
         c.fieldDefinitions.append(v)
@@ -59,6 +63,8 @@ class stfldTest(unittest.TestCase):
         r.type = t
         
         r.fields.append(v)
+        r.fieldNames.append('xyz')
+
         vm.stack.push(r)
         vm.stack.push(Variable(9876))
         
@@ -68,3 +74,40 @@ class stfldTest(unittest.TestCase):
         self.assertEqual(vm.stack.count(), 0)
         self.assertEqual(r.fields[0].value, 9876)
         
+    def test_execute_reference_type_parameter(self):
+        from VM import VM
+        vm = VM()
+        
+        foo = ClassDefinition()
+        foo.namespace = 'ConsoleApplication1'
+        foo.name = 'foo'
+        fooType = Types.register_custom_type(foo)
+        
+        fooObject = ReferenceType()
+        fooObject.name = 'f'
+        fooObject.type = fooType
+        fooObject.value = Variable(3333)
+        
+        bar = ClassDefinition()
+        bar.namespace = 'ConsoleApplication1'
+        bar.name = 'bar'
+        #bar.fieldDefinitions.append(fooObject)
+        barType = Types.register_custom_type(bar)
+        
+        barObject = ReferenceType()
+        barObject.type = barType
+        barObject.fields.append(ReferenceType())
+        barObject.fields[0].value = 0
+        barObject.fields[0].type = fooType
+        barObject.fieldNames.append('f')
+        
+        vm.stack.push(barObject)
+        vm.stack.push(fooObject)
+        
+        x = stfld('class ConsoleApplication1.foo ConsoleApplication1.bar::f')
+        
+        x.execute(vm)
+        self.assertEqual(vm.stack.count(), 0)
+        self.assertEqual(barObject.fields[0], fooObject)
+        
+    
