@@ -12,6 +12,9 @@ def register_custom_type(c):
 
 def unregister_custom_type(t):
     UserDefinedTypes.remove(t)
+
+def unregister_all_custom_types():
+    del UserDefinedTypes[:]
     
 def resolve_type(typename):
     for type in UserDefinedTypes:

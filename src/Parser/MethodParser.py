@@ -20,7 +20,6 @@ class MethodParser(object):
         token = self.context.get_next_token()
 
         while token != BlockStart:
-            print token
             if token == '(':
                 self.parse_parameters(method)
             elif token in MethodDefinition.AttributeTypes.keys():
@@ -39,7 +38,6 @@ class MethodParser(object):
 
         token = self.context.get_next_token()
         while token != BlockEnd:
-            print token
             if token == '.maxstack':
                 method.maxStack = int(self.context.get_next_token())
             elif token == '.entrypoint':

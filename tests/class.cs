@@ -4,27 +4,19 @@ using System.Text;
 
 namespace ConsoleApplication1
 {
-   class foo
-   {
-      public int count;
-   }
+    class foo
+    {
+        public int z;
+    }
 
-   class bar
-   {
-      public foo f;
-   }
-
-   class Program
-   {
-      // returns 4444
-      static int Main(string[] args)
-      {
-         bar b = new bar();
-         b.f = new foo();
-
-         b.f.count = 4444;
-
-         return b.f.count;
-      }
-   }
+    class Program
+    {
+        // returns 1234
+        static int Main(string[] args)
+        {
+            foo f = new foo();
+            f.z = 1234;
+            return f.z;
+        }
+    }
 }
