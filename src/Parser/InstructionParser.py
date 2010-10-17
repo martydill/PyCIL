@@ -6,6 +6,7 @@ from Instructions.add import add
 from Instructions.mul import mul
 from Instructions.nop import nop
 from Instructions.call import call
+from Instructions.callvirt import callvirt
 from Instructions.ldloc import ldloc
 from Instructions.stloc import stloc
 from Instructions.brtrue import brtrue

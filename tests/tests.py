@@ -48,3 +48,8 @@ class tests(unittest.TestCase):
     def test_class_field_reference_comparison(self):
         result = self.run_test('class5.il')
         self.assertEqual(result.value, 9999)
+    
+    def test_class_method_with_return_value(self):
+        result = self.run_test('class6.il')
+        self.assertEqual(result.value, 987653)
+    
