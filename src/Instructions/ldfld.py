@@ -31,7 +31,10 @@ class ldfld(Instruction):
         for field in object.fields:
             if field.name == self.fieldName:
                 vm.stack.push(field)    # fixme - address...
-                
+                return
+            
+        raise Exception("Field " + self.fieldName + " not found!")
+    
 register('ldfld', ldfld)
 
 class ldfldTest(unittest.TestCase):

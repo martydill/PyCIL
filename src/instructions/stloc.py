@@ -5,6 +5,7 @@ from Variable import Variable
 from MethodDefinition import MethodDefinition
 from Instructions.Instruction import register
 from Utility import is_number
+from ReferenceType import ReferenceType
 
 
 class stloc(Instruction):
@@ -50,19 +51,51 @@ class stloc(Instruction):
         if stack.get_frame_count() < 1:
             raise StackStateException('Not enough values on the stack')
         
+        # handle referencetype case
+        value = stack.pop()
         if self.targetName is None:
             variable = m.locals[self.index]
+            if isinstance(value, ReferenceType):
+                value.name = variable.name
+                # fixme - set other properties?
+                m.locals[self.index] = value
+            else:
+                m.locals[self.index].value = value.value
         else:
-            for x in m.locals:
-                if x.name == self.targetName:
-                    variable = x
-            
-        variable.value = stack.pop().value            
+            for x in range(len(m.locals)):
+                if m.locals[x].name == self.targetName:
+                    if isinstance(value, ReferenceType):
+                         value.name = variable.name
+                         # fixme - set other properties?
+                         m.locals[x] = value
+                    else:
+                        m.locals[x].value = value.value
+        
+        #temp = stack.pop()
+        
+        #variable.value = stack.pop().value            
 
 register('stloc', stloc)
 
 class stlocTest(unittest.TestCase):
 
+    def test_execute_reference_type_stores_reference_type_in_local_but_doesnt_change_name(self):
+        from VM import VM
+        vm = VM()
+        x = stloc('0')
+        m = MethodDefinition()
+        localr = ReferenceType()
+        localr.name = 'foobar'
+        m.locals.append(localr)
+        vm.set_current_method(m)
+        r2 = ReferenceType()
+        vm.stack.push(r2)
+        x.execute(vm)
+        
+        self.assertEqual(vm.stack.count(), 0)
+        self.assertEqual(m.locals[0], r2)
+        self.assertEqual(m.locals[0].name, 'foobar')
+        
     def test_execute_0(self):
         from VM import VM
         vm = VM()
@@ -70,7 +103,7 @@ class stlocTest(unittest.TestCase):
         m = MethodDefinition()
         m.locals.append(Variable(0))
         vm.set_current_method(m)
-        vm.stack.push(987)
+        vm.stack.push(Variable(987))
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 0)
@@ -84,12 +117,28 @@ class stlocTest(unittest.TestCase):
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         vm.set_current_method(m)
-        vm.stack.push(987)
+        vm.stack.push(Variable(987))
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 0)
         self.assertEqual(m.locals[0].value, 0)
         self.assertEqual(m.locals[1].value, 987)
+        
+    def test_execute_1_sets_value(self):
+        from VM import VM
+        vm = VM()
+        x = stloc('1')
+        m = MethodDefinition()
+        local = Variable(0)
+        m.locals.append(Variable(0))
+        m.locals.append(local)
+        vm.set_current_method(m)
+        vm.stack.push(Variable(987))
+        x.execute(vm)
+        
+        self.assertEqual(vm.stack.count(), 0)
+        self.assertEqual(m.locals[0].value, 0)
+        self.assertEqual(m.locals[1], local)
         
     def test_execute_2(self):
         from VM import VM
@@ -100,7 +149,7 @@ class stlocTest(unittest.TestCase):
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         vm.set_current_method(m)
-        vm.stack.push(987)
+        vm.stack.push(Variable(987))
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 0)
@@ -118,7 +167,7 @@ class stlocTest(unittest.TestCase):
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         vm.set_current_method(m)
-        vm.stack.push(987)
+        vm.stack.push(Variable(987))
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 0)
@@ -137,7 +186,7 @@ class stlocTest(unittest.TestCase):
         m.locals.append(Variable(0))
         m.locals.append(Variable(0))
         vm.set_current_method(m)
-        vm.stack.push(987)
+        vm.stack.push(Variable(987))
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 0)
@@ -156,7 +205,7 @@ class stlocTest(unittest.TestCase):
         m.locals.append(Variable(0, name='def'))
         m.locals.append(Variable(0, name='ghi'))
         vm.set_current_method(m)
-        vm.stack.push(987)
+        vm.stack.push(Variable(987))
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 0)

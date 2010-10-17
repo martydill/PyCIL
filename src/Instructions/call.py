@@ -29,8 +29,9 @@ class call(Instruction):
 
     def execute(self, vm):
         targetMethod = vm.find_method_by_signature(self.method_namespace, self.method_name, self.method_type, self.method_parameters)
+        m = targetMethod.get_method()
         #fixme throw exception
-        vm.execute_method(targetMethod)
+        vm.execute_method(m)
 
 register('call', call)
 
@@ -54,7 +55,7 @@ class callTest(unittest.TestCase):
         c = call('int32 A.B::TestMethod()')
         c.execute(vm)
 
-        self.assertEqual(vm.currentMethod, m)
+        self.assertEqual(vm.currentMethod.methodDefinition, m)
         self.assertEqual(vm.stack.get_number_of_frames(), 2)
         
     def test_call_constructor_strips_period(self):
@@ -75,7 +76,7 @@ class callTest(unittest.TestCase):
         c = call('int32 A.B::.ctor()')
         c.execute(vm)
 
-        self.assertEqual(vm.currentMethod, m)
+        self.assertEqual(vm.currentMethod.methodDefinition, m)
         self.assertEqual(vm.stack.get_number_of_frames(), 2)
         
     def test_call_one_parameter_int(self):
@@ -97,7 +98,7 @@ class callTest(unittest.TestCase):
         c = call('int32 A.B::TestMethod()')
         c.execute(vm)
         
-        self.assertEqual(vm.currentMethod, m)
+        self.assertEqual(vm.currentMethod.methodDefinition, m)
         self.assertEqual(vm.stack.get_number_of_frames(), 2)
         self.assertEqual(vm.stack.pop(), param)
         
@@ -119,5 +120,5 @@ class callTest(unittest.TestCase):
         c = call('instance int32 A.B::TestMethod()')
         c.execute(vm)
 
-        self.assertEqual(vm.currentMethod, m)
+        self.assertEqual(vm.currentMethod.methodDefinition, m)
         self.assertEqual(vm.stack.get_number_of_frames(), 2)

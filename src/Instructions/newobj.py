@@ -35,7 +35,8 @@ class newobj(Instruction):
         
         vm.stack.push(r)
         
-        m = vm.find_method_by_signature(t.namespace + '.' + t.name, 'ctor', None, None) # fixme - should name have a . in it?
+        md = vm.find_method_by_signature(t.namespace + '.' + t.name, 'ctor', None, None) # fixme - should name have a . in it?
+        m = md.get_method()
         #parameter = Variable()
         #parameter.value = r
         m.parameters = [r] # fixme - create a new method object so we don't overwrite the parameters?
@@ -70,7 +71,7 @@ class newobjTest(unittest.TestCase):
         
         o = vm.stack.pop()
         self.assertEqual(o.type, t)
-        self.assertEquals(vm.current_method(), m)
+        self.assertEquals(vm.current_method().methodDefinition, m)
         
     def test_newobj_no_parameters_adds_this_pointer_to_parameters(self):
         from VM import VM

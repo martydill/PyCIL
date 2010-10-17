@@ -31,7 +31,9 @@ class stfld(Instruction):
         for field in object.fields:
             if field.name == self.fieldName:
                 field.value = value.value
-                
+                return
+            
+        raise Exception("Field named " + self.fieldName + " not found")
         #variable = m.locals[self.index]
         #variable.value = stack.pop()
 

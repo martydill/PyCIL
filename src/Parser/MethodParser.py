@@ -3,6 +3,7 @@ import Types
 from Variable import Variable
 import unittest
 from ClassDefinition import ClassDefinition
+from ReferenceType import ReferenceType
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -77,15 +78,19 @@ class MethodParser(object):
         lastToken = ''
         while not token.endswith(')'):
             v = Variable()
-            locals.append(v)
             if token.startswith('['):
                 v.alias = token[1:-1]
                 lastToken = token
                 token = context.get_next_token()
             if token == 'class':
-                v.type = Types.resolve_type(context.get_next_token())
+                v2 = ReferenceType()
+                v2.alias = v.alias
+                v2.type = Types.resolve_type(context.get_next_token())
+                v = v2
             else:
                 v.type = Types.BuiltInTypes[token] # fixme - non-builtin types
+            
+            locals.append(v)
             lastToken = token
             token = context.get_next_token()
             #if token.endswith(')'):
@@ -116,6 +121,7 @@ class MethodParserTest(unittest.TestCase):
         
         locals = mp.parse_locals(p)
         self.assertEqual(len(locals), 1)
+        self.assertTrue(isinstance(locals[0], ReferenceType))
         self.assertEqual(locals[0].name, 'f')
         self.assertEqual(locals[0].alias, '0')
         self.assertEqual(locals[0].type.name, 'C')
