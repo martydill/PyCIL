@@ -32,6 +32,7 @@ class newobj(Instruction):
             o.name = f.name
             o.value = 0 # fixme - reference types?
             r.fields.append(o)
+            r.fieldNames.append(f.name)
         
         vm.stack.push(r)
         
@@ -126,3 +127,6 @@ class newobjTest(unittest.TestCase):
         self.assertEqual(o.type, t)
         self.assertEqual(len(o.fields), 1)
         self.assertEqual(o.fields[0].value, 0)
+        
+        self.assertEqual(len(o.fieldNames), 1)
+        self.assertEqual(o.fieldNames[0], 'xyz')

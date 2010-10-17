@@ -89,6 +89,7 @@ class ClassParserTests(unittest.TestCase):
         
         self.assertEquals(c.name, 'foo')
         self.assertEqual(c.namespace, 'ConsoleApplication1')
+        
         self.assertEquals(len(c.fieldDefinitions), 1)
         f = c.fieldDefinitions[0]
         self.assertEqual(f.name, 'z')
