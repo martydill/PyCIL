@@ -16,7 +16,10 @@ class ldfld(Instruction):
         # fixme - set opcode
         self.name = 'ldfld ' + field
         #fixme - put this code somewhere it can be used by everyone
-        parts = field.split(' ')[1].rpartition('::')
+        if field.startswith('class'):
+            parts = field.split(' ')[2].rpartition('::')
+        else:
+            parts = field.split(' ')[1].rpartition('::')
         self.fieldName = parts[2]
         self.className = parts[0].rpartition('.')[2]
         self.namespaceName = parts[0].rpartition('.')[0]
@@ -95,3 +98,39 @@ class ldfldTest(unittest.TestCase):
         self.assertEqual(vm.stack.count(), 1)
         self.assertEqual(r.fields[1], vm.stack.pop())
                 
+
+    def test_execute_reference_type_parameter(self):
+        from VM import VM
+        vm = VM()
+        
+        foo = ClassDefinition()
+        foo.namespace = 'ConsoleApplication1'
+        foo.name = 'foo'
+        fooType = Types.register_custom_type(foo)
+        
+        fooObject = ReferenceType()
+        fooObject.name = 'f'
+        fooObject.type = fooType
+        fooObject.value = Variable(3333)
+        
+        bar = ClassDefinition()
+        bar.namespace = 'ConsoleApplication1'
+        bar.name = 'bar'
+        barType = Types.register_custom_type(bar)
+        
+        barObject = ReferenceType()
+        barObject.type = barType
+        field = ReferenceType()
+        field.name = 'f'
+        field.type = fooType
+        barObject.add_field(field)
+        
+        vm.stack.push(barObject)
+        
+        x = ldfld('class ConsoleApplication1.foo ConsoleApplication1.bar::f')
+        
+        x.execute(vm)
+        self.assertEqual(vm.stack.count(), 1)
+        self.assertEqual(barObject.fields[0], vm.stack.pop())
+        
+    
