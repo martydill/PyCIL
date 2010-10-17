@@ -28,9 +28,10 @@ class ldfld(Instruction):
             raise StackStateException('Not enough values on the stack')
         
         object = vm.stack.pop()
-        for field in object.fields:
-            if field.name == self.fieldName:
-                vm.stack.push(field)    # fixme - address...
+        for fieldIndex in range(len(object.fieldNames)):
+            fieldName = object.fieldNames[fieldIndex]
+            if fieldName == self.fieldName:
+                vm.stack.push(object.fields[fieldIndex])
                 return
             
         raise Exception("Field " + self.fieldName + " not found!")
@@ -46,17 +47,15 @@ class ldfldTest(unittest.TestCase):
         c = ClassDefinition()
         c.namespace = 'ConsoleApplication1'
         c.name = 'foo'
+        
         v = Variable()
         v.name = 'z'
         v.type = Types.Int32
         
-        c.fieldDefinitions.append(v)
-        
         r = ReferenceType()
         t = Types.register_custom_type(c)
         r.type = t
-        
-        r.fields.append(v)
+        r.add_field(v)
         vm.stack.push(r)
         
         x = ldfld('int32 ConsoleApplication1.foo::z')
@@ -76,7 +75,6 @@ class ldfldTest(unittest.TestCase):
         v = Variable()
         v.name = 'abc'
         v.type = Types.Int32
-        c.fieldDefinitions.append(v)
  
         v2 = Variable()
         v2.name = 'def'
@@ -87,8 +85,8 @@ class ldfldTest(unittest.TestCase):
         t = Types.register_custom_type(c)
         r.type = t
         
-        r.fields.append(v)
-        r.fields.append(v2)
+        r.add_field(v)
+        r.add_field(v2)
         vm.stack.push(r)
         
         x = ldfld('int32 ConsoleApplication1.foo::def')

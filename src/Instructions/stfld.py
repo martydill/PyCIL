@@ -54,16 +54,14 @@ class stfldTest(unittest.TestCase):
         c.namespace = 'a'
         c.name = 'b'
         v = Variable()
+        v.name = 'xyz'
         v.type = Types.Int32
-        
-        c.fieldDefinitions.append(v)
         
         r = ReferenceType()
         t = Types.register_custom_type(c)
         r.type = t
-        
-        r.fields.append(v)
-        r.fieldNames.append('xyz')
+
+        r.add_field(v)        
 
         vm.stack.push(r)
         vm.stack.push(Variable(9876))
@@ -96,10 +94,10 @@ class stfldTest(unittest.TestCase):
         
         barObject = ReferenceType()
         barObject.type = barType
-        barObject.fields.append(ReferenceType())
-        barObject.fields[0].value = 0
-        barObject.fields[0].type = fooType
-        barObject.fieldNames.append('f')
+        field = ReferenceType()
+        field.name = 'f'
+        field.type = fooType
+        barObject.add_field(field)
         
         vm.stack.push(barObject)
         vm.stack.push(fooObject)

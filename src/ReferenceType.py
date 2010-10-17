@@ -7,5 +7,9 @@ class ReferenceType(Variable):
         super(ReferenceType, self).__init__()
         self.fields = []
         self.fieldNames = []
+        
+    def add_field(self, field):
+        self.fields.append(field)
+        self.fieldNames.append(field.name)
 
         
