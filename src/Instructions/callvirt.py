@@ -31,6 +31,12 @@ class callvirt(Instruction):
         targetMethod = vm.find_method_by_signature(self.method_namespace, self.method_name, self.method_type, self.method_parameters)
         m = targetMethod.get_method()
         #fixme throw exception
+          # push this pointer on to stack
+        
+        if self.instance:
+            obj = vm.stack.pop()
+            m.parameters.append(obj)
+            
         vm.execute_method(m)
 
 register('callvirt', callvirt)
