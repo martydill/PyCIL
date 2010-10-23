@@ -8,7 +8,7 @@ class tests(unittest.TestCase):
         vm = VM()
         vm.load(fileName)
         vm.start()
-        return vm.stack.lastFrameReturnValue
+        return vm.stack.pop()
                 
     def tearDown(self):
         Types.unregister_all_custom_types()
@@ -51,5 +51,5 @@ class tests(unittest.TestCase):
     
     def test_class_method_with_return_value(self):
         result = self.run_test('class6.il')
-        self.assertEqual(result.value, 987653)
+        self.assertEqual(result.value, 987654)
     
