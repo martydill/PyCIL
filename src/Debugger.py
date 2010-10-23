@@ -40,7 +40,7 @@ class Debugger():
                     print 'Loaded ' + filename
                     self.vm.start()
                     print 'Execution finished'
-                    print 'Return code: ' + str(self.vm.stack.lastFrameReturnValue)
+                    print 'Return code: ' + str(self.vm.stack.pop())
                     return
                 except IOError:
                     print 'Unable to load file'

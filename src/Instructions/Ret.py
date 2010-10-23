@@ -4,6 +4,7 @@ import Types
 from Method import Method
 from Instructions.Instruction import register
 from MethodDefinition import MethodDefinition
+from Variable import Variable
 
 class Ret(Instruction):
   
@@ -15,10 +16,13 @@ class Ret(Instruction):
 
     def execute(self, vm):
         t = vm.current_method()
-        vm.stack.endFrame()
-        
+
         if t.returnType != None and t.returnType != Types.Void:
-            vm.current_stack_frame().count += 1
+            value = vm.stack.pop()
+            vm.stack.endFrame()
+            vm.stack.push(value)
+        else:
+            vm.stack.endFrame()
         
         # fixme - return value?
 
@@ -66,7 +70,7 @@ class RetTest(unittest.TestCase):
         self.assertEqual(vm.stack.count(), 1)
         self.assertEqual(vm.stack.pop(), 111)
         
-    def test_execute_int_no_parameters_increments_return_frame_count(self):
+    def test_execute_int_no_parameters_returns_value_on_stack(self):
         from VM import VM
         vm = VM()
         m = Method()
@@ -75,12 +79,15 @@ class RetTest(unittest.TestCase):
         m.parameters = []
         vm.methods.append(m)
 
+        v = Variable(888)
         self.assertEqual(vm.current_method(), None)
         self.assertEqual(vm.stack.get_frame_count(), 0)
         vm.execute_method(m)
+        vm.stack.push(v)
         self.assertEqual(vm.current_method(), m)
         # fixme - test return value too
         r = Ret()
         r.execute(vm)
         self.assertEqual(vm.current_method(), None)
         self.assertEqual(vm.stack.get_frame_count(), 1)
+        self.assertEqual(vm.stack.pop(), v)
