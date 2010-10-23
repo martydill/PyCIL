@@ -44,7 +44,7 @@ class ldarg(Instruction):
         m = vm.current_method()
         
         variable = m.parameters[self.index]
-        stack.push(variable.value) # fixme - value? or variable?
+        stack.push(variable)
 
 register('ldarg', ldarg)
 
@@ -60,7 +60,7 @@ class LdargTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 987)
+        self.assertEqual(vm.stack.pop().value, 987)
 
     def test_execute_1(self):
         from VM import VM
@@ -73,7 +73,7 @@ class LdargTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 987)
+        self.assertEqual(vm.stack.pop().value, 987)
         
     def test_execute_2(self):
         from VM import VM
@@ -87,7 +87,7 @@ class LdargTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 8888)
+        self.assertEqual(vm.stack.pop().value, 8888)
 
     def test_execute_3(self):
         from VM import VM
@@ -102,7 +102,7 @@ class LdargTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 123)
+        self.assertEqual(vm.stack.pop().value, 123)
         
     def test_execute_s(self):
         from VM import VM
@@ -117,4 +117,4 @@ class LdargTest(unittest.TestCase):
         x.execute(vm)
         
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop(), 987)
+        self.assertEqual(vm.stack.pop().value, 987)
