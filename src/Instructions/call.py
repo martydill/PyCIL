@@ -10,7 +10,7 @@ from ReferenceType import ReferenceType
 class call(Instruction):
 
     def __init__(self, method):
-        self.name = 'call'
+        self.name = 'call ' + method
         parts = method.split()
         if parts[0] == 'instance':
             self.instance = True
@@ -20,11 +20,16 @@ class call(Instruction):
             
         self.method_type = Types.BuiltInTypes[parts[0]]
         self.method_namespace, self.method_name = parts[1].split('::')
+        self.method_parameters = []
         if self.method_name[0] == '.':
             self.method_name = self.method_name[1:]
+        if not self.method_name.find('()') != -1: # if we have parameters...
+            parts = self.method_name.split('(')
+            self.method_name = parts[0]
+            parameters = parts[1][:-1]
+            self.method_parameters.append(Types.resolve_type(parameters))
         #self.method_name = method_name
         #self.method_type = method_type
-        self.method_parameters = '' #method_parameters
         self.opcode = 0x28
         self.value = None
 
@@ -93,7 +98,7 @@ class callTest(unittest.TestCase):
 
         m = MethodDefinition()
         m.namespace = 'A.B'
-        m.name = 'TestMethod()' # fixme - name shouldn't have brackets
+        m.name = 'TestMethod'
         m.returnType = Types.Int32
         m.parameters = [Types.Int32]
         vm.methods.append(m)
@@ -103,7 +108,7 @@ class callTest(unittest.TestCase):
         param.type = Types.Int32
         vm.stack.push(param)
         
-        c = call('int32 A.B::TestMethod()')
+        c = call('int32 A.B::TestMethod(int32)')
         c.execute(vm)
         
         self.assertEqual(vm.currentMethod.methodDefinition, m)

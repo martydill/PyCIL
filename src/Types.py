@@ -17,6 +17,9 @@ def unregister_all_custom_types():
     del UserDefinedTypes[:]
     
 def resolve_type(typename):
+    if BuiltInTypes.has_key(typename):
+        return BuiltInTypes[typename]
+    
     for type in UserDefinedTypes:
         if type.namespace + '.' + type.name == typename:
             return type

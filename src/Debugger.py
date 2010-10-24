@@ -11,7 +11,7 @@ class Debugger():
         self.vm.add_hook(DebugHooks.PostMethod, self.post_method_hook)
                 
     def pre_instruction_hook(self, instruction):
-        print instruction.label + ':\t' + instruction.name + ' ' + hex(instruction.opcode)
+        print instruction.label + ':\t' + instruction.name
         self.handle_input()
     
     def pre_method_hook(self, method):

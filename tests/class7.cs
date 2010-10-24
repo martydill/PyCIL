@@ -8,18 +8,24 @@ namespace ConsoleApplication1
    {
       private int count = 987654;
 
+      public void SetCount(int c)
+      {
+         count = c;
+      }
+
       public int GetCount()
       {
-         return count;
+         return count - 1;
       }
    }
 
    class Program
    {
-      // returns 987654
-      static int Main(string[] args)
+        // returns 999
+        static int Main(string[] args)
         {
             foo f = new foo();
+            f.SetCount(1000);
             return f.GetCount();
         }
    }
