@@ -26,8 +26,9 @@ class call(Instruction):
         if not self.method_name.find('()') != -1: # if we have parameters...
             parts = self.method_name.split('(')
             self.method_name = parts[0]
-            parameters = parts[1][:-1]
-            self.method_parameters.append(Types.resolve_type(parameters))
+            if len(parts) > 1:
+                parameters = parts[1][:-1]
+                self.method_parameters.append(Types.resolve_type(parameters))
         #self.method_name = method_name
         #self.method_type = method_type
         self.opcode = 0x28

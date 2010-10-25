@@ -65,14 +65,14 @@ class VM:
             if len(m.parameters) == len(params):
                 equal = True
                 for i in range(len(params)):
-                    if params[i] != m.parameters[i]:
+                    if params[i].type != m.parameters[i].type:
                         equal = False
                         break
 
                 if equal:
                     return m
 
-        raise "method not found"
+        raise Exception("method not found: " + name)  
         return None
     
     def current_method(self):

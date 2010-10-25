@@ -122,7 +122,8 @@ def my_split(s, seps):
                     for i in range(len(string)):
                         c = string[i]
                         if c in seps:
-                            res+= [string[0:i]]
+                            res += [string[0:i]]
+                            res += [string[i]]
                             res += [string[i + 1:]]
                             added = True
                             break
@@ -133,6 +134,12 @@ def my_split(s, seps):
 
 class parseTest(unittest.TestCase):
 
+    def test_fill_token_buffer_includes_left_parenthesis(self):
+        str = "callvirt   instance void ConsoleApplication1.foo::SetCount(int32)"
+        p = ParserContext(str)
+        p.fill_token_buffer()
+        self.assertTrue(p.tokens.index('(') != -1)
+        
     def test_fill_token_buffer_with_comment_on_last_line(self):
         str = """ // this is a comment """
         

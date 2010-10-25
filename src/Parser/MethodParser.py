@@ -58,8 +58,15 @@ class MethodParser(object):
 
     def parse_parameters(self, method):
         token = self.context.get_next_token()
-        while token != ')':
-            # fixme
+        while token != ')' and token != '':
+            if token != '(':
+                type = Types.resolve_type(token)
+                name = self.context.get_next_token()
+                v = Variable()
+                v.type = type
+                v.name = name
+                method.parameters.append(v)
+                
             token = self.context.get_next_token()
             
                    
@@ -189,17 +196,33 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual('ret', m.instructions[0].name)
         self.assertEqual('IL_0001', m.instructions[0].label)
 
+    def test_parse_single_method_with_parameters(self):
+        from ParserContext import ParserContext
+        s = """.method public hidebysig instance void 
+              SetCount(int32 c) cil managed
+              {
+                // Code size       9 (0x9)
+                .maxstack  8
+                IL_0000:  nop
+              } // end of method foo::SetCount"""
+    
+        p = ParserContext()
+        p.parse(s) # fixme - don't pass s to both
+        self.assertEqual(len(p.methods[0].parameters), 1)
+        self.assertEqual(p.methods[0].parameters[0].name, 'c')
+        self.assertEqual(p.methods[0].parameters[0].type, Types.Int32)
+        
     def test_parse_multiple_methods_with_parameters(self):
         from ParserContext import ParserContext
-        s = ('.method public void main(string[] args) {\n '
+        s = ('.method public void main(int args) {\n '
              'IL_0001:    ret\n'
              ' }\n'
              '\n'
-             '.method public void main2(string[] args) {\n '
+             '.method public void main2(int args) {\n '
              'IL_0001:    ret\n'
              ' }\n')
         
-        p = ParserContext(s)
+        p = ParserContext()
         p.parse(s) # fixme - don't pass s to both
         
         self.assertEqual(2, len(p.methods))
@@ -208,7 +231,7 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual('main2', p.methods[1].name)
         self.assertEqual(1, len(p.methods[1].parameters))
         
-        
+    
     def test_parse_multiple_methods_no_parameters(self):
         from ParserContext import ParserContext
         s = ('.method public void A.B.main() {\n '

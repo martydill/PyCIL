@@ -53,3 +53,7 @@ class tests(unittest.TestCase):
         result = self.run_test('class6.il')
         self.assertEqual(result.value, 987654)
     
+    def test_class_method_with_parameter(self):
+        result = self.run_test('class7.il')
+        self.assertEqual(result.value, 999)
+    

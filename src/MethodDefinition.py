@@ -34,7 +34,7 @@ class MethodDefinition():
         m = Method()
         m.methodDefinition = self;
         m.locals = copy.deepcopy(self.locals)
-        m.parameters= copy.deepcopy(self.parameters)
+        #m.parameters= copy.deepcopy(self.parameters)
         m.instructions = self.instructions
         m.maxStack = self.maxStack
         m.returnType = self.returnType
