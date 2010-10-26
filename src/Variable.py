@@ -6,6 +6,7 @@ class Variable(object):
         self.value = value
         self.type = type
         self.alias = alias
+        self.arrayType = None
         
     def __str__(self):
         return str(self.value) + ' - ' + str(self.type)

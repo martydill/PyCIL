@@ -92,6 +92,9 @@ class MethodParser(object):
                 v2.alias = v.alias
                 v2.type = Types.resolve_type(context.get_next_token())
                 v = v2
+            elif token.endswith('[]'): # array
+                v.type = Types.Array
+                v.arrayType = Types.resolve_type(token[:-2])
             else:
                 v.type = Types.BuiltInTypes[token] # fixme - non-builtin types
             
