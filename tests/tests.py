@@ -57,3 +57,6 @@ class tests(unittest.TestCase):
         result = self.run_test('class7.il')
         self.assertEqual(result.value, 999)
     
+    def test_fibbonacci_recursion(self):
+        result = self.run_test('fib.il')
+        self.assertEqual(result.value, 21)
