@@ -158,6 +158,20 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual(locals[0].name, 'j')
         self.assertEqual(locals[0].alias, None)
         self.assertEqual(locals[0].type, Types.Int32)
+
+    def test_parse_single_local_array_with_no_alias(self):
+        from ParserContext import ParserContext
+        s = 'init (int32[] j)'
+        p = ParserContext()
+        p.set_parse_data(s);
+        mp = MethodParser()
+
+        locals = mp.parse_locals(p)
+        self.assertEqual(len(locals), 1)
+        self.assertEqual(locals[0].name, 'j')
+        self.assertEqual(locals[0].alias, None)
+        self.assertEqual(locals[0].type, Types.Array)
+        self.assertEqual(locals[0].arrayType, Types.Int32)
         
     def test_parse_multiple_local_with_no_alias(self):
         from ParserContext import ParserContext

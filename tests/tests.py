@@ -60,3 +60,7 @@ class tests(unittest.TestCase):
     def test_fibbonacci_recursion(self):
         result = self.run_test('fib.il')
         self.assertEqual(result.value, 21)
+        
+    def test_array_length(self):
+        result = self.run_test('arraylength.il')
+        self.assertEqual(result.value, 100)

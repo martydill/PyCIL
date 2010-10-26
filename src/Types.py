@@ -43,6 +43,7 @@ class Type():
         self.name = parts[2]
         self.dataSize = dataSize
         self.classRef = classRef
+        self.arrayType = None
         
     def __str__(self):
         return self.name + ' (' + str(self.dataSize) + ' B)'
@@ -84,3 +85,5 @@ Float32 = BuiltInTypes['float32']
 Float64 = BuiltInTypes['float64']
 Void = BuiltInTypes['void']
 Bool = BuiltInTypes['bool'] # CLR type, not VES type
+
+Array = Type('array', 4)
