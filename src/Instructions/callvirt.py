@@ -108,12 +108,14 @@ class callvirtTest(unittest.TestCase):
         from VM import VM
         from MethodDefinition import MethodDefinition
         vm = VM()
-
+        
+        paramObject = Variable()
+        paramObject.type = Types.Int32
         m = MethodDefinition()
         m.namespace = 'A.B'
         m.name = 'TestMethod'
         m.returnType = Types.Int32
-        m.parameters = [Types.Int32]
+        m.parameters = [paramObject]
         vm.methods.append(m)
         
         param = Variable()
@@ -133,11 +135,14 @@ class callvirtTest(unittest.TestCase):
         from MethodDefinition import MethodDefinition
         vm = VM()
 
+        paramObject = Variable()
+        paramObject.type = Types.Int32
+        
         m = MethodDefinition()
         m.name = 'TestMethod'
         m.namespace = 'A.B'
         m.returnType = Types.Int32
-        m.parameters = [Types.Int32]
+        m.parameters = [paramObject]
         m.names = 'A.B'
         m.attributes.append(MethodDefinition.AttributeTypes['instance'])
         vm.methods.append(m)
