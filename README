@@ -11,6 +11,7 @@ clt
 ldarg
 ldc
 ldfld
+ldlen
 ldloc
 ldstr
 mul
@@ -18,7 +19,7 @@ newobj
 newarr
 nop
 ret
-stfld
+stfld	
 stloc
 sub
 
