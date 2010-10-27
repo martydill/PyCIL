@@ -15,6 +15,7 @@ ldloc
 ldstr
 mul
 newobj
+newarr
 nop
 ret
 stfld

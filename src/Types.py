@@ -17,6 +17,9 @@ def unregister_all_custom_types():
     del UserDefinedTypes[:]
     
 def resolve_type(typename):
+    if typename.startswith('['):
+        typename = typename[typename.find(']') + 1:]
+        
     if BuiltInTypes.has_key(typename):
         return BuiltInTypes[typename]
     
@@ -43,13 +46,9 @@ class Type():
         self.name = parts[2]
         self.dataSize = dataSize
         self.classRef = classRef
-        self.arrayType = None
         
     def __str__(self):
         return self.name + ' (' + str(self.dataSize) + ' B)'
-
-
-
 
 
 # Defined in ECMA-335 12.1 - Supported Data Types
@@ -72,6 +71,9 @@ BuiltInTypes = {
     'void':Type('void', 0),
     'bool':Type('bool', 4)
 }
+
+# fixme - need a better method for defining aliases
+BuiltInTypes['System.Int32'] = BuiltInTypes['int32'] 
 
 Int8 = BuiltInTypes['int8']
 UInt8 = BuiltInTypes['uint8']
