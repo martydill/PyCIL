@@ -3,6 +3,7 @@ PyCIL is an experimental project designed primarily as a learning exercise in bo
 It currently provides at least partial support for the following instructions:
 
 add
+beq
 br
 brtrue
 call

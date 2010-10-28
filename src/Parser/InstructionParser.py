@@ -21,6 +21,7 @@ from Instructions.ldlen import ldlen
 from Instructions.conv import conv
 from Instructions.stelem import stelem
 from Instructions.ldelem import ldelem
+from Instructions.beq import beq
 
 class InstructionParser(object):
     

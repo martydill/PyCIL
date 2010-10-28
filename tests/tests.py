@@ -28,7 +28,11 @@ class tests(unittest.TestCase):
     def test_while(self):
         result = self.run_test('while.il')
         self.assertEqual(result.value, 10)
-        
+
+    def test_switch(self):
+        result = self.run_test('switch.il')
+        self.assertEqual(result.value, 555)
+                
     def test_simple_class(self):
         result = self.run_test('class.il')
         self.assertEqual(result.value, 1234)
