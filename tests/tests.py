@@ -68,3 +68,8 @@ class tests(unittest.TestCase):
     def test_array_get_and_set_elements(self):
         result = self.run_test('arrayelements.il')
         self.assertEqual(result.value, 987987)
+        
+    def test_pass_array_as_function_parameter(self):
+        result = self.run_test('arrayparameter.il')
+        self.assertEqual(result.value, 232232)
+    
