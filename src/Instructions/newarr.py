@@ -18,8 +18,8 @@ class newarr(Instruction):
         self.type = Types.resolve_type(arguments)
         
     def execute(self, vm):
-        a = Array()
-        a.length = vm.stack.pop().value
+        length = vm.stack.pop().value
+        a = Array(length)
         a.arrayType = self.type
         vm.stack.push(a)
     
@@ -27,7 +27,7 @@ register('newarr', newarr)
 
 class newarrTest(unittest.TestCase):
 
-    def test_newarr_one(self):
+    def test_newarr_int32_one_element(self):
         from VM import VM
 
         vm = VM()
