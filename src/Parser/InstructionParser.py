@@ -19,6 +19,7 @@ from Instructions.ceq import ceq
 from Instructions.newarr import newarr
 from Instructions.ldlen import ldlen
 from Instructions.conv import conv
+from Instructions.stelem import stelem
 
 class InstructionParser(object):
     

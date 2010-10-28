@@ -64,3 +64,7 @@ class tests(unittest.TestCase):
     def test_array_length(self):
         result = self.run_test('arraylength.il')
         self.assertEqual(result.value, 100)
+        
+    def test_array_get_and_set_elements(self):
+        result = self.run_test('arrayelements.il')
+        self.assertEqual(result.value, 987987)

@@ -19,6 +19,7 @@ newobj
 newarr
 nop
 ret
+stelem
 stfld	
 stloc
 sub
