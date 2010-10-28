@@ -18,6 +18,7 @@ from Instructions.newobj import newobj
 from Instructions.ceq import ceq
 from Instructions.newarr import newarr
 from Instructions.ldlen import ldlen
+from Instructions.conv import conv
 
 class InstructionParser(object):
     

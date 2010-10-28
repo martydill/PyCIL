@@ -23,7 +23,9 @@ class ldlen(Instruction):
             raise StackStateException('Not enough values on the stack')
         
         array = vm.stack.pop()
-        vm.stack.push(Variable(array.length))
+        result = Variable(array.length)
+        result.type = Types.UInt32
+        vm.stack.push(result)
         # fixme - should be native unsigned int
         
 register('ldlen', ldlen)

@@ -3,6 +3,7 @@ import unittest
 from Stack import StackStateException
 from Instructions.Instruction import register
 from Variable import Variable
+import Types
 
 
 class conv(Instruction):
@@ -38,10 +39,26 @@ class conv(Instruction):
         if stack.get_frame_count() < 1:
             raise StackStateException('Not enough values on the stack')
 
-        rhs = stack.pop().value
-        lhs = stack.pop().value
-        stack.push(Variable(lhs + rhs))
+        input = stack.pop()
+        result = None
+        if self.suffix == 'i4':
+            result = self.convert_to_i4(input)
+        else:
+            raise Exception('Unimplemented conversion ' + self.suffix)
+        
+        stack.push(result)
 
+    def convert_to_i4(self, input):
+        type = Types.Int32
+        value = None
+        if input.type == Types.UInt32:
+            value = input.value # fixme - truncate/overflow/etc
+        else:
+            raise Exception('Unimplemented i4 conversion ' + input.type)
+        result = Variable(value)
+        result.type = type
+        return result
+    
 register('conv', conv)
 
 
@@ -50,18 +67,20 @@ class convTest(unittest.TestCase):
     def test_execute_notEnoughStackValues(self):
         from VM import VM
         vm = VM()
-        vm.stack.push(Variable(1))
         x = conv('i1')
 
         self.assertRaises(StackStateException, x.execute, vm)
 
-    def test_execute_ints(self):
+    def test_execute_i4_no_overflow(self):
         from VM import VM
         vm = VM()
-        vm.stack.push(Variable(5))
-        vm.stack.push(Variable(999))
-        x = conv('')
+        v = Variable(999)
+        v.type = Types.UInt32
+        vm.stack.push(v)
+        x = conv('i4')
         x.execute(vm)
 
         self.assertEqual(vm.stack.count(), 1)
-        self.assertEqual(vm.stack.pop().value, 999+5)
+        result = vm.stack.pop()
+        self.assertEqual(result.value, 999)
+        self.assertEqual(result.type, Types.Int32)
