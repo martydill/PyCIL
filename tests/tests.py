@@ -32,6 +32,10 @@ class tests(unittest.TestCase):
     def test_switch(self):
         result = self.run_test('switch.il')
         self.assertEqual(result.value, 555)
+
+    def test_call_static_method_with_return_value(self):
+        result = self.run_test('method.il')
+        self.assertEqual(result.value, 5)
                 
     def test_simple_class(self):
         result = self.run_test('class.il')

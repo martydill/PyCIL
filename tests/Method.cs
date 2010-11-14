@@ -10,7 +10,8 @@ namespace ConsoleApplication1
         {
             return 5;
         }
-
+		
+		// returns 5
         static int Main(string[] args)
         {
             int a = 0;
