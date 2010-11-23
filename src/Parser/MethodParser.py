@@ -44,6 +44,9 @@ class MethodParser(object):
                 method.attributes.append(token)
             elif token == '.locals':
                 method.locals = self.parse_locals(self.context)
+            elif token == '.try':
+                self.parse_try_block(self.context)
+                pass
             else:
                 from InstructionParser import InstructionParser
                 instruction = InstructionParser().parse_instruction(token, self.context)
@@ -111,6 +114,8 @@ class MethodParser(object):
             
         return locals
     
+    def parse_try_block(self, context):
+        token = context.get_next_token()
     
 class MethodParserTest(unittest.TestCase):
 
@@ -267,4 +272,31 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual('A.B', p.methods[0].namespace)
         self.assertEqual('main2', p.methods[1].name)
         self.assertEqual('N.S', p.methods[1].namespace)
+   
+   
+    def test_parse_empty_try_catch_block(self):
+        from ParserContext import ParserContext
+        s = ('.method private hidebysig static int32  Main(string[] args) cil managed\n'
+            '{\n'
+            '  .entrypoint\n'
+            '  .maxstack  1\n'
+            '  .locals init ([0] int32 CS$1$0000)\n'
+            '  .try\n'
+            '  {\n'
+            '    IL_0008:  leave.s    IL_0010\n'
+            '  }  // end .try\n'
+            '  catch [mscorlib]System.Object \n'
+            '  {\n'
+            '    IL_000e:  leave.s    IL_0010\n'
+            '  }  // end handler\n'
+            '  IL_0010:  nop\n'
+            '  IL_0011:  ldloc.0\n'
+            '  IL_0012:  ret\n'
+            '} // end of method Program::Main')
+        
+        p = ParserContext(s)
+        p.parse(s) # fixme - don't pass s to both
+        
+        self.assertEqual(1, len(p.methods))
+        self.assertEqual('main', p.methods[0].name)
    

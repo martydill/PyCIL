@@ -22,6 +22,7 @@ from Instructions.conv import conv
 from Instructions.stelem import stelem
 from Instructions.ldelem import ldelem
 from Instructions.beq import beq
+from Instructions.leave import leave
 
 class InstructionParser(object):
     
@@ -45,44 +46,6 @@ class InstructionParser(object):
             
         if Instructions.has_key(instructionName):
             instruction  = Instructions[instructionName]((instructionArguments + ' ' + parserContext.read_to_end_of_line()).strip())
-        #=======================================================================
-        #    
-        # if instructionName == 'ldstr':
-        #    instruction = ldstr()
-        # elif instructionName == 'ret':
-        #    instruction = Ret()
-        # elif instructionName.startswith('ldc'):
-        #    instruction = ldc(instructionName.rpartition('ldc')[2], parserContext.peek_next_token())
-        #    # fixme this is ugly
-        #    # Eat up the next token if it was used by the ldc instruction 
-        #    if instruction.value != None:
-        #        parserContext.get_next_token()
-        # elif instructionName == 'sub':
-        #    instruction = sub()
-        # elif instructionName == 'add':
-        #    instruction = add()
-        # elif instructionName == 'mul':
-        #    instruction = mul()
-        # elif instructionName == 'nop':
-        #    instruction = nop()
-        # elif instructionName.startswith('call'):
-        #    instruction = call(parserContext.read_to_end_of_line())
-        # elif instructionName.startswith('ldloc'):
-        #    instruction = ldloc(instructionName.rpartition('ldloc')[2])
-        # elif instructionName.startswith('ldarg'):
-        #    instruction = ldarg(instructionName.rpartition('ldarg')[2])
-        # elif instructionName.startswith('stloc'):
-        #    instruction = stloc(instructionName.rpartition('stloc')[2])
-        # elif instructionName.startswith('brtrue'):
-        #    instruction = brtrue(instructionName.rpartition('brtrue')[2])
-        #    instruction.target = parserContext.get_next_token()
-        # elif instructionName.startswith('br'):
-        #    instruction = br(instructionName.rpartition('br')[2])
-        #    instruction.target = parserContext.get_next_token()
-        # elif instructionName == 'clt':
-        #    instruction = clt()
-        # else:
-        #=======================================================================
         else:
             from Parser.ParserContext import ParseException
             raise ParseException('Unknown instruction ' + instructionName)
