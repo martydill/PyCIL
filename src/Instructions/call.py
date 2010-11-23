@@ -46,7 +46,6 @@ class call(Instruction):
         targetMethod = vm.find_method_by_signature(self.method_namespace, self.method_name, self.method_type, self.method_parameters)
         m = targetMethod.get_method()
         #fixme throw exception
-        
                 
         for x in range(len(self.method_parameters)):
             m.parameters.insert(0, vm.stack.pop())

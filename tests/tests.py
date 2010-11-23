@@ -12,7 +12,8 @@ class tests(unittest.TestCase):
                 
     def tearDown(self):
         Types.unregister_all_custom_types()
-        
+    
+    # Misc language features tests
     def test_add(self):
         result = self.run_test('add.il')
         self.assertEqual(result.value, 7)
@@ -36,7 +37,13 @@ class tests(unittest.TestCase):
     def test_call_static_method_with_return_value(self):
         result = self.run_test('method.il')
         self.assertEqual(result.value, 5)
-                
+    
+    def test_fibbonacci_recursion(self):
+        result = self.run_test('fib.il')
+        self.assertEqual(result.value, 21)    
+        
+        
+    # Class tests            
     def test_simple_class(self):
         result = self.run_test('class.il')
         self.assertEqual(result.value, 1234)
@@ -65,10 +72,8 @@ class tests(unittest.TestCase):
         result = self.run_test('class7.il')
         self.assertEqual(result.value, 999)
     
-    def test_fibbonacci_recursion(self):
-        result = self.run_test('fib.il')
-        self.assertEqual(result.value, 21)
-        
+    
+    # Array tests
     def test_array_length(self):
         result = self.run_test('arraylength.il')
         self.assertEqual(result.value, 100)
@@ -81,3 +86,8 @@ class tests(unittest.TestCase):
         result = self.run_test('arrayparameter.il')
         self.assertEqual(result.value, 232232)
     
+    
+    # Exception handling tests
+    def test_try_catch_all_not_throwing_exception(self):
+        result = self.run_test('try1.il')
+        self.assertEqual(result.value, 1234)
