@@ -19,6 +19,7 @@ class VM:
         self.stack = Stack(8)
         self.hooks = [None, None, None, None] 
         self.instructionPointer = 0
+        self.protected_blocks = []
         
     def start(self):
         self.add_builtins()
@@ -116,6 +117,9 @@ class VM:
         
     def get_instruction_pointer(self):
         return self.current_stack_frame().instructionPointer
+    
+    def get_protected_blocks(self):
+        return self.protected_blocks
     
 class VMTest(unittest.TestCase):
 
