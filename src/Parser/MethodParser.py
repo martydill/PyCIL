@@ -298,5 +298,5 @@ class MethodParserTest(unittest.TestCase):
         p.parse(s) # fixme - don't pass s to both
         
         self.assertEqual(1, len(p.methods))
-        self.assertEqual('main', p.methods[0].name)
+        self.assertEqual('Main', p.methods[0].name)
    
