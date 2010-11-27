@@ -288,8 +288,10 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual('main2', p.methods[1].name)
         self.assertEqual('N.S', p.methods[1].namespace)
    
-   
-    def test_parse_empty_try_block(self):
+
+class TryCatchParseTest(unittest.TestCase):
+    
+    def setUp(self):
         from ParserContext import ParserContext
         s = ('.method private hidebysig static int32  Main(string[] args) cil managed\n'
             '{\n'
@@ -309,11 +311,19 @@ class MethodParserTest(unittest.TestCase):
             '  IL_0012:  ret\n'
             '} // end of method Program::Main')
         
-        p = ParserContext()
-        p.parse(s)
+        parser = ParserContext()
+        parser.parse(s)
         
-        self.assertEqual(1, len(p.methods))
-        m = p.methods[0]
-        self.assertIsInstance(m.instructions[0], BeginTry)
-        self.assertIsInstance(m.instructions[2], EndTry)
+        self.method = parser.methods[0]
+    
+    def test_parse_try_block_adds_begin_try_instructions(self):
+        self.assertIsInstance(self.method.instructions[0], BeginTry)
         
+    def test_parse_try_block_adds_end_try_instruction(self):
+        self.assertIsInstance(self.method.instructions[2], EndTry)
+        
+    def test_parse_catch_block_adds_begin_catch_instruction(self):
+        self.assertIsInstance(self.method.instructions[3], BeginCatch)
+        
+    def test_parse_catch_block_adds_end_catch_instruction(self):
+        self.assertIsInstance(self.method.instructions[5], EndCatch)
