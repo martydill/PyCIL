@@ -6,6 +6,8 @@ from ClassDefinition import ClassDefinition
 from ReferenceType import ReferenceType
 from Instructions.Special.BeginTry import BeginTry
 from Instructions.Special.EndTry import EndTry
+from Instructions.Special.BeginCatch import BeginCatch
+from Instructions.Special.EndCatch import EndCatch
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -50,6 +52,8 @@ class MethodParser(object):
                 method.locals = self.parse_locals(self.context)
             elif token == '.try':
                 self.parse_try_block(method)
+            elif token == 'catch':
+                self.parse_catch_block(method)
             elif token == BlockEnd:
                 self.parse_end_block(method)
             else:
@@ -123,6 +127,12 @@ class MethodParser(object):
         method.instructions.append(BeginTry())
         self.context.get_next_token()  # eat up the bracket
         self.end_block_instructions.append(EndTry())
+        
+    def parse_catch_block(self, method):
+        method.instructions.append(BeginCatch())
+        self.context.get_next_token()   # TODO - grab the exception type we are catching
+        self.context.get_next_token()   # eat up the bracket
+        self.end_block_instructions.append(EndCatch())
         
     def parse_end_block(self, method):
         endBlockInstruction = self.end_block_instructions.pop()
