@@ -20,6 +20,7 @@ mul
 newobj
 newarr
 nop
+pop
 ret
 stelem
 stfld	

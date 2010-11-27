@@ -23,6 +23,7 @@ from Instructions.stelem import stelem
 from Instructions.ldelem import ldelem
 from Instructions.beq import beq
 from Instructions.leave import leave
+from Instructions.pop import pop
 
 class InstructionParser(object):
     
