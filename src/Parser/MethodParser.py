@@ -4,6 +4,8 @@ from Variable import Variable
 import unittest
 from ClassDefinition import ClassDefinition
 from ReferenceType import ReferenceType
+from Instructions.Special.BeginTry import BeginTry
+from Instructions.Special.EndTry import EndTry
 
 BlockStart = '{'
 BlockEnd = '}'
@@ -12,7 +14,9 @@ class MethodParser(object):
     
     def __init__(self):
         self.context = None
-    
+        self.try_block_count = 0
+        self.end_block_instructions = []
+        
     def parse(self, parserContext):
         self.context = parserContext
         method = MethodDefinition()
@@ -37,7 +41,7 @@ class MethodParser(object):
             token = self.context.get_next_token()
 
         token = self.context.get_next_token()
-        while token != BlockEnd:
+        while token != BlockEnd or len(self.end_block_instructions) > 0:
             if token == '.maxstack':
                 method.maxStack = int(self.context.get_next_token())
             elif token == '.entrypoint':
@@ -45,8 +49,9 @@ class MethodParser(object):
             elif token == '.locals':
                 method.locals = self.parse_locals(self.context)
             elif token == '.try':
-                self.parse_try_block(self.context)
-                pass
+                self.parse_try_block(method)
+            elif token == BlockEnd:
+                self.parse_end_block(method)
             else:
                 from InstructionParser import InstructionParser
                 instruction = InstructionParser().parse_instruction(token, self.context)
@@ -113,18 +118,23 @@ class MethodParser(object):
             token = context.get_next_token()
             
         return locals
-    
-    def parse_try_block(self, context):
-        token = context.get_next_token()
-    
+        
+    def parse_try_block(self, method):
+        method.instructions.append(BeginTry())
+        self.context.get_next_token()  # eat up the bracket
+        self.end_block_instructions.append(EndTry())
+        
+    def parse_end_block(self, method):
+        endBlockInstruction = self.end_block_instructions.pop()
+        method.instructions.append(endBlockInstruction)
+        
 class MethodParserTest(unittest.TestCase):
 
     def test_parse_class_local_with_alias(self):
         from ParserContext import ParserContext
         s = 'init ([0] class NS.C f)'
         
-        p = ParserContext()
-        p.set_parse_data(s);
+        p = ParserContext(s)
         mp = MethodParser()
 
         c = ClassDefinition()
@@ -144,8 +154,7 @@ class MethodParserTest(unittest.TestCase):
         from ParserContext import ParserContext
         s = 'init ([0] int32 j)'
         
-        p = ParserContext()
-        p.set_parse_data(s);
+        p = ParserContext(s)
         mp = MethodParser()
 
         locals = mp.parse_locals(p)
@@ -157,8 +166,7 @@ class MethodParserTest(unittest.TestCase):
     def test_parse_single_local_with_no_alias(self):
         from ParserContext import ParserContext
         s = 'init (int32 j)'
-        p = ParserContext()
-        p.set_parse_data(s);
+        p = ParserContext(s)
         mp = MethodParser()
 
         locals = mp.parse_locals(p)
@@ -170,8 +178,7 @@ class MethodParserTest(unittest.TestCase):
     def test_parse_single_local_array_with_no_alias(self):
         from ParserContext import ParserContext
         s = 'init (int32[] j)'
-        p = ParserContext()
-        p.set_parse_data(s);
+        p = ParserContext(s)
         mp = MethodParser()
 
         locals = mp.parse_locals(p)
@@ -186,8 +193,7 @@ class MethodParserTest(unittest.TestCase):
         s = ('init (int32 first,'
              'int32 second,'
              'int32 result)')
-        p = ParserContext()
-        p.set_parse_data(s);
+        p = ParserContext(s)
         mp = MethodParser()
 
         locals = mp.parse_locals(p)
@@ -209,8 +215,7 @@ class MethodParserTest(unittest.TestCase):
              'IL_0001:    ret\n'
              ' }')
         
-        p = ParserContext()
-        p.set_parse_data(s);
+        p = ParserContext(s)
         mp = MethodParser()
         m = mp.parse(p)
         
@@ -229,7 +234,7 @@ class MethodParserTest(unittest.TestCase):
               } // end of method foo::SetCount"""
     
         p = ParserContext()
-        p.parse(s) # fixme - don't pass s to both
+        p.parse(s)
         self.assertEqual(len(p.methods[0].parameters), 1)
         self.assertEqual(p.methods[0].parameters[0].name, 'c')
         self.assertEqual(p.methods[0].parameters[0].type, Types.Int32)
@@ -245,7 +250,7 @@ class MethodParserTest(unittest.TestCase):
              ' }\n')
         
         p = ParserContext()
-        p.parse(s) # fixme - don't pass s to both
+        p.parse(s)
         
         self.assertEqual(2, len(p.methods))
         self.assertEqual('main', p.methods[0].name)
@@ -264,8 +269,8 @@ class MethodParserTest(unittest.TestCase):
              'IL_0001:    ret\n'
              ' }\n')
         
-        p = ParserContext(s)
-        p.parse(s) # fixme - don't pass s to both
+        p = ParserContext()
+        p.parse(s)
         
         self.assertEqual(2, len(p.methods))
         self.assertEqual('main', p.methods[0].name)
@@ -274,7 +279,7 @@ class MethodParserTest(unittest.TestCase):
         self.assertEqual('N.S', p.methods[1].namespace)
    
    
-    def test_parse_empty_try_catch_block(self):
+    def test_parse_empty_try_block(self):
         from ParserContext import ParserContext
         s = ('.method private hidebysig static int32  Main(string[] args) cil managed\n'
             '{\n'
@@ -294,9 +299,11 @@ class MethodParserTest(unittest.TestCase):
             '  IL_0012:  ret\n'
             '} // end of method Program::Main')
         
-        p = ParserContext(s)
-        p.parse(s) # fixme - don't pass s to both
+        p = ParserContext()
+        p.parse(s)
         
         self.assertEqual(1, len(p.methods))
-        self.assertEqual('Main', p.methods[0].name)
-   
+        m = p.methods[0]
+        self.assertIsInstance(m.instructions[0], BeginTry)
+        self.assertIsInstance(m.instructions[2], EndTry)
+        
