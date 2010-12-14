@@ -13,7 +13,8 @@ class EndTry(Instruction):
 
     def __init__(self, arguments = None):
         self.name = 'EndTry'
-
+        self.label = None
+        
     def execute(self, vm):
         if len(vm.get_protected_blocks()) == 0:
             raise Exception('Cannot end try block with no try block started!')

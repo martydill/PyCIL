@@ -13,6 +13,7 @@ class EndCatch(Instruction):
 
     def __init__(self, arguments = None):
         self.name = 'EndCatch'
+        self.label = None
 
     def execute(self, vm):
         if len(vm.get_protected_blocks()) == 0:
