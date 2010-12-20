@@ -91,3 +91,8 @@ class tests(unittest.TestCase):
     def test_try_catch_all_not_throwing_exception(self):
         result = self.run_test('try1.il')
         self.assertEqual(result.value, 1234)
+        
+    def test_try_catch_all_nested_not_throwing_exception(self):
+        result = self.run_test('try2.il')
+        self.assertEqual(result.value, 1234)
+        
