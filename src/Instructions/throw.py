@@ -1,3 +1,7 @@
+# throw.py
+# The CIL throw instruction
+# Copyright 2010 Marty Dill - see LICENSE for details
+
 from Instruction import Instruction
 import unittest
 from Instructions.Instruction import register

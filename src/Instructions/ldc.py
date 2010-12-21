@@ -1,3 +1,7 @@
+# ldc.py
+# The CIL ldc instruction
+# Copyright 2010 Marty Dill - see LICENSE for details
+
 from Instruction import Instruction
 import unittest
 from Instructions.Instruction import register

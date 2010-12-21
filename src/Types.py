@@ -1,3 +1,8 @@
+# Types.py - PyCIL type handling
+# Copyright 2010 Marty Dill
+# See LICENSE for details
+
+import unittest
 
 UserDefinedTypes = []
 
@@ -89,3 +94,14 @@ Void = BuiltInTypes['void']
 Bool = BuiltInTypes['bool'] # CLR type, not VES type
 
 Array = Type('array', 4)
+
+
+
+class TypeTests(unittest.TestCase): 
+    
+    def test_resolve_mscorlib_type_returns_custom_type(self):
+        from CLI.BaseException import BaseException
+        
+        result = resolve_type('[mscorlib]System.Exception::.ctor()')
+        self.assertIsInstance(result, BaseException)
+        

@@ -1,3 +1,7 @@
+# ldelem.py
+# The CIL ldelem instruction
+# Copyright 2010 Marty Dill - see LICENSE for details
+
 from Instruction import Instruction
 from Stack import Stack, StackStateException
 import unittest

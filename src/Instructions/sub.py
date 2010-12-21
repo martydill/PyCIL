@@ -1,3 +1,7 @@
+# sub.py
+# The CIL sub instruction
+# Copyright 2010 Marty Dill - see LICENSE for details
+
 from Instruction import Instruction
 import unittest
 from Stack import StackStateException

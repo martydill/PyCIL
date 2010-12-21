@@ -1,3 +1,6 @@
+# Instruction.py
+# The base class for all instructions
+# Copyright 2010 Marty Dill - see LICENSE for details
 
 Instructions = {}
 

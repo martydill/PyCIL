@@ -1,3 +1,7 @@
+# nop.py
+# The CIL nop instruction
+# Copyright 2010 Marty Dill - see LICENSE for details
+
 from Instruction import Instruction
 import unittest
 import Types
