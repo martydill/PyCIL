@@ -24,6 +24,7 @@ from Instructions.ldelem import ldelem
 from Instructions.beq import beq
 from Instructions.leave import leave
 from Instructions.pop import pop
+from Instructions.throw import throw
 
 class InstructionParser(object):
     
