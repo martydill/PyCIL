@@ -13,7 +13,7 @@ class BeginTry(Instruction):
 
     def __init__(self, arguments = None):
         self.name = 'BeginTry'
-        self.label = None
+        self.label = ''
         
     def execute(self, vm):
         vm.get_protected_blocks().append(ProtectedBlock())

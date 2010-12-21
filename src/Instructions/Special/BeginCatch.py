@@ -13,7 +13,7 @@ class BeginCatch(Instruction):
 
     def __init__(self, arguments = None):
         self.name = 'BeginCatch'
-        self.label = None
+        self.label = ''
         
     def execute(self, vm):
         vm.get_protected_blocks().append(ProtectedBlock())
@@ -24,7 +24,7 @@ class BeginCatchTest(unittest.TestCase):
     def test_execute_starts_catch_block(self):
         from VM import VM
         vm = VM()
-        x = Begincatch()
+        x = BeginCatch()
         x.execute(vm)
         self.assertEquals(len(vm.protected_blocks), 1)
         
