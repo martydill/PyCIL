@@ -3,6 +3,7 @@
 # See LICENSE for details
 
 import unittest
+from ClassDefinition import ClassDefinition
 
 UserDefinedTypes = []
 
@@ -51,6 +52,7 @@ class Type():
         self.name = parts[2]
         self.dataSize = dataSize
         self.classRef = classRef
+        self.assemblyName = None
         
     def __str__(self):
         return self.name + ' (' + str(self.dataSize) + ' B)'
@@ -96,12 +98,17 @@ Bool = BuiltInTypes['bool'] # CLR type, not VES type
 Array = Type('array', 4)
 
 
-
 class TypeTests(unittest.TestCase): 
     
     def test_resolve_mscorlib_type_returns_custom_type(self):
         from CLI.BaseException import BaseException
+        c = ClassDefinition()
+        c.namespace = 'System'
+        c.name = 'Exception'
+        c.assembly = 'mscorlib'
         
+        t = register_custom_type(c)
         result = resolve_type('[mscorlib]System.Exception::.ctor()')
-        self.assertIsInstance(result, BaseException)
+        self.assertEqual(t, result)
+        unregister_custom_type(t)
         

@@ -9,5 +9,6 @@ class Assembly:
         self.version = '1.0.0.0'
         self.hashAlgorithm = None
         self.customAttributes = []
+        self.classes = []
         
 
