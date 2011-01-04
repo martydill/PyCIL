@@ -9,7 +9,8 @@ class ClassDefinition(object):
         self.namespace = None
         self.name = None
         self.baseClass = None
-        self.methods = [].append(self.get_consructor_defintion())
+        self.methods = []
+        self.methods.append(self.get_constructor_definition())
         self.flags = []
         self.fieldDefinitions = []
         self.assemblyName = ''

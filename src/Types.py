@@ -3,7 +3,6 @@
 # See LICENSE for details
 
 import unittest
-from ClassDefinition import ClassDefinition
 
 UserDefinedTypes = []
 
@@ -102,6 +101,7 @@ class TypeTests(unittest.TestCase):
     
     def test_resolve_mscorlib_type_returns_custom_type(self):
         from CLI.BaseException import BaseException
+        from ClassDefinition import ClassDefinition
         c = ClassDefinition()
         c.namespace = 'System'
         c.name = 'Exception'
