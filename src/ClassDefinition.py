@@ -13,7 +13,7 @@ class ClassDefinition(object):
         self.methods.append(self.get_constructor_definition())
         self.flags = []
         self.fieldDefinitions = []
-        self.assemblyName = ''
+        self.assembly = None
         
     def get_constructor_definition(self):
         m = MethodDefinition()

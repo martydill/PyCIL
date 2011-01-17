@@ -12,6 +12,7 @@ NativePointerSize = 4
 
 def register_custom_type(c):
     t = Type(c.namespace + '.' + c.name, c)
+    t.assembly = c.assembly
     UserDefinedTypes.append(t)
     return t
 
@@ -22,14 +23,20 @@ def unregister_all_custom_types():
     del UserDefinedTypes[:]
     
 def resolve_type(typename):
+    assemblyName = None
     if typename.startswith('['):
+        assemblyName = typename[1:typename.find(']')]
         typename = typename[typename.find(']') + 1:]
+        
+    # Support types both directly and with this prefix (as per newobj instruction)
+    if typename.endswith('::.ctor()'):
+        typename = typename[:-9]
         
     if BuiltInTypes.has_key(typename):
         return BuiltInTypes[typename]
     
     for type in UserDefinedTypes:
-        if type.namespace + '.' + type.name == typename:
+        if type.namespace + '.' + type.name == typename and assemblyName == type.assembly:            
             return type
         
     return None
@@ -51,7 +58,7 @@ class Type():
         self.name = parts[2]
         self.dataSize = dataSize
         self.classRef = classRef
-        self.assemblyName = None
+        self.assembly = None
         
     def __str__(self):
         return self.name + ' (' + str(self.dataSize) + ' B)'
@@ -99,6 +106,11 @@ Array = Type('array', 4)
 
 class TypeTests(unittest.TestCase): 
     
+    def test_resolve_builtin_type_returns_builtin_type(self):
+        
+        result = resolve_type('System.Int32')
+        self.assertEqual(Int32, result)
+        
     def test_resolve_mscorlib_type_returns_custom_type(self):
         from CLI.BaseException import BaseException
         from ClassDefinition import ClassDefinition
