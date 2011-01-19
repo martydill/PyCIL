@@ -23,6 +23,14 @@ def unregister_all_custom_types():
     del UserDefinedTypes[:]
     
 def resolve_type(typename):
+    
+    # Handle array types
+    isArray = False
+    if typename.endswith('[]'):
+        isArray = True
+        typename = typename[0:-2]
+    
+    # Parse the assembly name    
     assemblyName = None
     if typename.startswith('['):
         assemblyName = typename[1:typename.find(']')]
@@ -31,19 +39,31 @@ def resolve_type(typename):
     # Support types both directly and with this prefix (as per newobj instruction)
     if typename.endswith('::.ctor()'):
         typename = typename[:-9]
-        
-    if BuiltInTypes.has_key(typename):
-        return BuiltInTypes[typename]
     
-    for type in UserDefinedTypes:
-        if type.namespace + '.' + type.name == typename and assemblyName == type.assembly:            
-            return type
-        
-    if assemblyName == None:
-        assemblyName = '<no assembly specified>'
-        
-    raise Exception('Could not find type ' + typename + ' in assembly ' + assemblyName)
+    resolvedType = None
+    if BuiltInTypes.has_key(typename):
+        resolvedType = BuiltInTypes[typename]
+    else:
+        for type in UserDefinedTypes:
+            if type.namespace + '.' + type.name == typename and assemblyName == type.assembly:            
+                resolvedType = type
 
+    # If we didn't find the type, throw an exception    
+    if resolvedType == None:
+        if assemblyName == None:
+            assemblyName = '<no assembly specified>'
+        if isArray:
+            typename = typename + '[]' # fixme - use originalTypeName variable    
+        raise Exception('Could not find type ' + typename + ' in assembly ' + assemblyName)
+    else:
+        if isArray:
+            type = Type('array', 4)   # TODO - is this right? Should somehow be the built-in array type?
+            type.arrayType = resolvedType
+            return type
+        else:
+            return resolvedType
+        
+        
 class InvalidTypeException(Exception):
 
     def __init__(self, value):
@@ -62,6 +82,7 @@ class Type():
         self.dataSize = dataSize
         self.classRef = classRef
         self.assembly = None
+        self.arrayType = None
         
     def __str__(self):
         return self.name + ' (' + str(self.dataSize) + ' B)'
@@ -110,10 +131,14 @@ Array = Type('array', 4)
 class TypeTests(unittest.TestCase): 
     
     def test_resolve_builtin_type_returns_builtin_type(self):
-        
         result = resolve_type('System.Int32')
         self.assertEqual(Int32, result)
-        
+
+    def test_resolve_type_array_returns_corect_array_type(self):
+        result = resolve_type('System.Int32[]')
+        self.assertEqual('array', result.name)
+        self.assertEqual(Int32, result.arrayType)
+                
     def test_resolve_mscorlib_type_returns_custom_type(self):
         from CLI.BaseException import BaseException
         from ClassDefinition import ClassDefinition
