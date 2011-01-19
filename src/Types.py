@@ -39,7 +39,10 @@ def resolve_type(typename):
         if type.namespace + '.' + type.name == typename and assemblyName == type.assembly:            
             return type
         
-    return None
+    if assemblyName == None:
+        assemblyName = '<no assembly specified>'
+        
+    raise Exception('Could not find type ' + typename + ' in assembly ' + assemblyName)
 
 class InvalidTypeException(Exception):
 
