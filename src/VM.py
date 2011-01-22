@@ -76,7 +76,7 @@ class VM:
                     if isinstance(params[i], Variable):
                         parameterType = params[i].type
                         
-                    if parameterType != methodParameterType:
+                    if parameterType != methodParameterType and parameterType.arrayType != methodParameterType.arrayType:
                         equal = False
                         break
 
