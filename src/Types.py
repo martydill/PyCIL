@@ -170,6 +170,7 @@ c.assembly = 'mscorlib'
 stringType = register_custom_type(c, True)
 
 add_type_alias(stringType, 'string')
+add_type_alias(BuiltInTypes['System.Int32'], 'int')
 
 class TypeTests(unittest.TestCase): 
     

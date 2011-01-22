@@ -35,11 +35,16 @@ class MethodParser(object):
             elif token == '.method':
                 pass
             else:
-                parts = token.rpartition('.')
-                method.namespace = parts[0]
-                method.name = parts[2]
-                self.parse_parameters(method)
-                
+                try:
+                    type = Types.resolve_type(token)
+                    method.returnType = type
+                except:
+                    # If the type isn't found it must be the name of the method
+                    parts = token.rpartition('.')
+                    method.namespace = parts[0]
+                    method.name = parts[2]
+                    self.parse_parameters(method)
+                    
             token = self.context.get_next_token()
 
         token = self.context.get_next_token()

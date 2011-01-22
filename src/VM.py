@@ -6,6 +6,7 @@ from MethodDefinition import MethodDefinition
 from Parser.MethodParser import MethodParser
 from Method import Method
 from Instructions.Ret import Ret
+from Variable import Variable
 
 class DebugHooks:
     PreMethod, PostMethod, PreInstruction, PostInstruction = range(4)
@@ -24,8 +25,8 @@ class VM:
     def start(self):
         self.add_builtins()
         md = self.find_method_by_signature(None, 'Main', None, None)
-        
-        self.execute_method(md.get_method())
+        method = md.get_method()
+        self.execute_method(method)
         pass
     
     def add_builtins(self):
@@ -66,15 +67,21 @@ class VM:
             if len(m.parameters) == len(params):
                 equal = True
                 for i in range(len(params)):
-                    if params[i].type != m.parameters[i].type:
+                    
+                    # Support both variables and types as parameter arguments
+                    if isinstance(m.parameters[i], Variable):
+                        if params[i] != m.parameters[i].type:
+                            equal = False
+                            break
+                    elif params[i] != m.parameters[i]:
                         equal = False
                         break
 
                 if equal:
                     return m
 
-        raise Exception("method not found: " + name)  
         return None
+        #raise Exception("method not found: " + name)  
     
     def current_method(self):
         return self.current_stack_frame().method
@@ -123,11 +130,10 @@ class VM:
     
 class VMTest(unittest.TestCase):
 
-    def test_find_when_empty(self):
+    def test_find_when_empty_throws_exception(self):
         vm = VM()
-        m = vm.find_method_by_signature(None, 'nonexistent', Types.Int8, [])
-        self.assertEqual(m, None)
-
+        self.assertRaises(Exception, vm.find_method_by_signature(None, 'nonexistent', Types.Int8, []))
+                          
     def test_find_different_params(self):
         vm = VM()
         method = MethodDefinition()
@@ -243,6 +249,6 @@ class VMTest(unittest.TestCase):
         mp = MethodParser()
         m = mp.parse(p)       
         vm.execute_method(m.get_method())
-        #self.assertEqual(vm.stack.count(), 1) fixme
-        self.assertEqual(vm.stack.lastFrameReturnValue.value, 6)
+        self.assertEqual(vm.stack.count(), 1)
+        self.assertEqual(vm.stack.pop().value, 6)
         

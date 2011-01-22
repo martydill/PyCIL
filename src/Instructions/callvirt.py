@@ -30,9 +30,8 @@ class callvirt(Instruction):
         if len(parts) > 2 and parts[2] == '(':
             index = 3
             while index < len(parts) and parts[index] != ')':
-                v = Variable()
-                v.type = Types.resolve_type(parts[index])
-                self.method_parameters.append(v)
+                type = Types.resolve_type(parts[index])
+                self.method_parameters.append(type)
                 index += 1
 #        if not self.method_name.find('()') != -1: # if we have parameters...
 #            parts = self.method_name.split('(')
