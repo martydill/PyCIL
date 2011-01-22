@@ -6,17 +6,21 @@ import unittest
 from ClassDefinition import ClassDefinition
 
 UserDefinedTypes = []
-
+SystemTypes = []
 Aliases = {}
 NativeIntSize = 4
 NativeFloatSize = 4
 NativePointerSize = 4
 
-def register_custom_type(c):
+def register_custom_type(c, is_system_type = False):
     '''Registers and returns a custom type based on the given class definition'''
     t = Type(c.namespace + '.' + c.name, c)
     t.assembly = c.assembly
-    UserDefinedTypes.append(t)
+    if is_system_type:
+        SystemTypes.append(t)
+    else:
+        UserDefinedTypes.append(t)
+        
     return t
 
 def unregister_custom_type(t):
@@ -31,6 +35,17 @@ def add_type_alias(type, alias):
     '''Adds an alias name for the given type (i.e. string for System.String)'''
     Aliases[alias] = type
     
+
+def FindTypeInList(typeList, typename, assemblyName):
+    resolvedType = None
+    
+    for type in typeList:
+        if type.namespace + '.' + type.name == typename and assemblyName == type.assembly:
+            resolvedType = type
+    
+    return resolvedType
+
+
 def resolve_type(typename):
     '''Returns the type object corresponding to the given name. Throws an exception if it can't be found.'''
     
@@ -56,10 +71,10 @@ def resolve_type(typename):
     elif Aliases.has_key(typename):
         resolvedType = Aliases[typename]
     else:
-        for type in UserDefinedTypes:
-            if type.namespace + '.' + type.name == typename and assemblyName == type.assembly:            
-                resolvedType = type
-
+        resolvedType = FindTypeInList(UserDefinedTypes, typename, assemblyName)
+        if resolvedType == None:
+            resolvedType = FindTypeInList(SystemTypes, typename, assemblyName)
+    
     # If we didn't find the type, throw an exception    
     if resolvedType == None:
         if assemblyName == None:
@@ -146,13 +161,13 @@ c = ClassDefinition()
 c.namespace = 'System'
 c.name = 'Exception'
 c.assembly = 'mscorlib'
-register_custom_type(c)
+register_custom_type(c, True)
 
 c = ClassDefinition()
 c.namespace = 'System'
 c.name = 'String'
 c.assembly = 'mscorlib'
-stringType = register_custom_type(c)
+stringType = register_custom_type(c, True)
 
 add_type_alias(stringType, 'string')
 
