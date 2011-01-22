@@ -3,26 +3,36 @@
 # See LICENSE for details
 
 import unittest
+from ClassDefinition import ClassDefinition
 
 UserDefinedTypes = []
 
+Aliases = {}
 NativeIntSize = 4
 NativeFloatSize = 4
 NativePointerSize = 4
 
 def register_custom_type(c):
+    '''Registers and returns a custom type based on the given class definition'''
     t = Type(c.namespace + '.' + c.name, c)
     t.assembly = c.assembly
     UserDefinedTypes.append(t)
     return t
 
 def unregister_custom_type(t):
+    '''Unregisters the given custom type'''
     UserDefinedTypes.remove(t)
 
 def unregister_all_custom_types():
+    '''Clears the list of user defined types'''
     del UserDefinedTypes[:]
+
+def add_type_alias(type, alias):
+    '''Adds an alias name for the given type (i.e. string for System.String)'''
+    Aliases[alias] = type
     
 def resolve_type(typename):
+    '''Returns the type object corresponding to the given name. Throws an exception if it can't be found.'''
     
     # Handle array types
     isArray = False
@@ -43,6 +53,8 @@ def resolve_type(typename):
     resolvedType = None
     if BuiltInTypes.has_key(typename):
         resolvedType = BuiltInTypes[typename]
+    elif Aliases.has_key(typename):
+        resolvedType = Aliases[typename]
     else:
         for type in UserDefinedTypes:
             if type.namespace + '.' + type.name == typename and assemblyName == type.assembly:            
@@ -65,7 +77,8 @@ def resolve_type(typename):
         
         
 class InvalidTypeException(Exception):
-
+    '''Exception that gets thrown when a type resolution operation fails'''
+    
     def __init__(self, value):
         self.value = value
 
@@ -74,7 +87,8 @@ class InvalidTypeException(Exception):
 
 
 class Type():
-
+    '''Stores information about types in the system'''
+    
     def __init__(self, typeName, classRef, dataSize = 0):
         parts = typeName.rpartition('.')
         self.namespace = parts[0]
@@ -127,7 +141,20 @@ Bool = BuiltInTypes['bool'] # CLR type, not VES type
 
 Array = Type('array', 4)
 
-String = Type('string', 4)
+# TODO - do these in a nicer place
+c = ClassDefinition()
+c.namespace = 'System'
+c.name = 'Exception'
+c.assembly = 'mscorlib'
+register_custom_type(c)
+
+c = ClassDefinition()
+c.namespace = 'System'
+c.name = 'String'
+c.assembly = 'mscorlib'
+stringType = register_custom_type(c)
+
+add_type_alias(stringType, 'string')
 
 class TypeTests(unittest.TestCase): 
     
@@ -144,11 +171,16 @@ class TypeTests(unittest.TestCase):
         from ClassDefinition import ClassDefinition
         c = ClassDefinition()
         c.namespace = 'System'
-        c.name = 'Exception'
+        c.name = 'FooBar'
         c.assembly = 'mscorlib'
         
         t = register_custom_type(c)
-        result = resolve_type('[mscorlib]System.Exception::.ctor()')
+        result = resolve_type('[mscorlib]System.FooBar::.ctor()')
         self.assertEqual(t, result)
         unregister_custom_type(t)
+    
+    def test_resolve_string_array_aliased_type_returns_string_arrary_type(self):
+        result = resolve_type('string[]')
+        self.assertEqual(result.arrayType, resolve_type('string'))
+       
         

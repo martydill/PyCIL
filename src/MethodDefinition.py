@@ -1,6 +1,5 @@
 import unittest
 from Variable import Variable
-import Types
 from Method import Method
 import copy
 
@@ -47,6 +46,7 @@ class MethodDefinition():
 class MethodDefinitionTests(unittest.TestCase):
     
     def test_create_method_references_definition(self):
+        import Types
         md = MethodDefinition()
         md.name = 'foobar'
         v = Variable()
@@ -59,6 +59,7 @@ class MethodDefinitionTests(unittest.TestCase):
         self.assertEqual(m.methodDefinition, md)
 
     def test_create_method_has_new_copy_of_locals(self):
+        import Types
         md = MethodDefinition()
         md.name = 'foobar'
         v = Variable()
@@ -72,6 +73,7 @@ class MethodDefinitionTests(unittest.TestCase):
         self.assertNotEqual(v, m.locals[0])
         
     def test_create_method_has_new_copy_of_locals(self):
+        import Types
         md = MethodDefinition()
         md.name = 'foobar'
         v = Variable()
@@ -85,6 +87,7 @@ class MethodDefinitionTests(unittest.TestCase):
         self.assertNotEqual(v, m.parameters[0])
         
     def test_create_method_has_pointer_to_instructions(self):
+        import Types
         from Instructions.Ret import Ret
         md = MethodDefinition()
         md.name = 'foobar'
@@ -100,6 +103,7 @@ class MethodDefinitionTests(unittest.TestCase):
         
     def test_create_method_has_reference_type_instead_of_value(self):
         from Instructions.Ret import Ret
+        import Types
         md = MethodDefinition()
         md.name = 'foobar'
         v = Variable()
