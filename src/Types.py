@@ -127,6 +127,7 @@ Bool = BuiltInTypes['bool'] # CLR type, not VES type
 
 Array = Type('array', 4)
 
+String = Type('string', 4)
 
 class TypeTests(unittest.TestCase): 
     
@@ -140,7 +141,6 @@ class TypeTests(unittest.TestCase):
         self.assertEqual(Int32, result.arrayType)
                 
     def test_resolve_mscorlib_type_returns_custom_type(self):
-        from CLI.BaseException import BaseException
         from ClassDefinition import ClassDefinition
         c = ClassDefinition()
         c.namespace = 'System'
