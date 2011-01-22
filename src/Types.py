@@ -4,6 +4,7 @@
 
 import unittest
 from ClassDefinition import ClassDefinition
+import Types
 
 UserDefinedTypes = []
 SystemTypes = []
@@ -139,7 +140,7 @@ BuiltInTypes = {
 }
 
 # fixme - need a better method for defining aliases
-BuiltInTypes['System.Int32'] = BuiltInTypes['int32'] 
+#BuiltInTypes['System.Int32'] = BuiltInTypes['int32'] 
 
 Int8 = BuiltInTypes['int8']
 UInt8 = BuiltInTypes['uint8']
@@ -170,7 +171,8 @@ c.assembly = 'mscorlib'
 stringType = register_custom_type(c, True)
 
 add_type_alias(stringType, 'string')
-add_type_alias(BuiltInTypes['System.Int32'], 'int')
+add_type_alias(BuiltInTypes['int32'], 'int')
+add_type_alias(BuiltInTypes['int32'], 'System.Int32')
 
 class TypeTests(unittest.TestCase): 
     
@@ -199,4 +201,7 @@ class TypeTests(unittest.TestCase):
         result = resolve_type('string[]')
         self.assertEqual(result.arrayType, resolve_type('string'))
        
-        
+    def test_int_types_are_equal(self):
+        self.assertEqual(Types.Int32, BuiltInTypes['int32'])    
+        self.assertEqual(Types.Int32, resolve_type('System.Int32'))
+        self.assertEqual(Types.Int32, resolve_type('int'))

@@ -67,13 +67,16 @@ class VM:
             if len(m.parameters) == len(params):
                 equal = True
                 for i in range(len(params)):
-                    
-                    # Support both variables and types as parameter arguments
+                    # support both variables and types
+                    methodParameterType = m.parameters[i]
                     if isinstance(m.parameters[i], Variable):
-                        if params[i] != m.parameters[i].type:
-                            equal = False
-                            break
-                    elif params[i] != m.parameters[i]:
+                        methodParameterType = m.parameters[i].type
+                    
+                    parameterType = params[i]
+                    if isinstance(params[i], Variable):
+                        parameterType = params[i].type
+                        
+                    if parameterType != methodParameterType:
                         equal = False
                         break
 
