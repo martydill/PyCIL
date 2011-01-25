@@ -27,3 +27,14 @@ stfld
 stloc
 sub
 
+
+TO USE:
+Run debugger.py to launch the built-in debugger.
+
+DEBUGGER COMMANDS:
+l file - loads file.il from the tests/ directory
+g - go
+s - step (execute one instruction)
+q - exit
+s - dump the contents of the stack
+
