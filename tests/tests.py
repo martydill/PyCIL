@@ -1,12 +1,14 @@
 import unittest
 from VM import VM
 from VM import Types
+import os
 
 class tests(unittest.TestCase):
     
     def run_test(self, fileName):
         vm = VM()
-        vm.load(fileName)
+        file = os.getcwd() + '/tests/' +  fileName
+        vm.load(file)
         vm.start()
         return vm.stack.pop()
                 
@@ -100,3 +102,6 @@ class tests(unittest.TestCase):
         result = self.run_test('trycatch.il')
         self.assertEqual(result.value, 1234)
     
+
+if __name__ == "__main__":
+    unittest.main()

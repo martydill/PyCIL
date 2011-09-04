@@ -40,8 +40,15 @@ class newobj(Instruction):
         
         vm.stack.push(r)
         
-        md = vm.find_method_by_signature(t.namespace + '.' + t.name, 'ctor', None, None) # fixme - should name have a . in it?
-        m = md.get_method()
+        namespace = t.namespace + '.' + t.name
+        name = 'ctor'
+
+        methodDefinition = vm.find_method_by_signature(namespace, name, None, None) # fixme - should name have a . in it?
+        if methodDefinition is None:
+            raise Exception("Couldn't find " + name + " method for " + namespace)
+
+        
+        m = methodDefinition.get_method()
         #parameter = Variable()
         #parameter.value = r
         m.parameters = [r] # fixme - create a new method object so we don't overwrite the parameters?

@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{d626de7f-aead-4da9-a8d5-7edbefee781e}</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>tests\tests.py</StartupFile>
+    <SearchPath>C:\Projects\Eclipse\PyCIL\src\Instructions\;C:\Projects\Eclipse\PyCIL\src</SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <AssemblyName>PyCIL</AssemblyName>
+    <Name>PyCIL</Name>
+    <RootNamespace>PyCIL</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="EclipsePreferences.epf" />
+    <Content Include="LICENSE" />
+    <Content Include="README" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".git\" />
+    <Folder Include="src\" />
+    <Folder Include="src\BCL\" />
+    <Folder Include="src\Instructions\" />
+    <Folder Include="src\Instructions\Special\" />
+    <Folder Include="src\Parser\" />
+    <Folder Include="tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\Array.py" />
+    <Compile Include="src\Assembly.py" />
+    <Compile Include="src\Attribute.py" />
+    <Compile Include="src\BCL\BaseException.py" />
+    <Compile Include="src\BCL\__init__.py" />
+    <Compile Include="src\ClassDefinition.py" />
+    <Compile Include="src\Debugger.py" />
+    <Compile Include="src\Instructions\add.py" />
+    <Compile Include="src\Instructions\beq.py" />
+    <Compile Include="src\Instructions\br.py" />
+    <Compile Include="src\Instructions\brtrue.py" />
+    <Compile Include="src\Instructions\call.py" />
+    <Compile Include="src\Instructions\callvirt.py" />
+    <Compile Include="src\Instructions\ceq.py" />
+    <Compile Include="src\Instructions\clt.py" />
+    <Compile Include="src\Instructions\conv.py" />
+    <Compile Include="src\Instructions\Instruction.py" />
+    <Compile Include="src\Instructions\ldarg.py" />
+    <Compile Include="src\Instructions\ldc.py" />
+    <Compile Include="src\Instructions\ldelem.py" />
+    <Compile Include="src\Instructions\ldfld.py" />
+    <Compile Include="src\Instructions\ldlen.py" />
+    <Compile Include="src\Instructions\ldloc.py" />
+    <Compile Include="src\Instructions\ldstr.py" />
+    <Compile Include="src\Instructions\leave.py" />
+    <Compile Include="src\Instructions\mul.py" />
+    <Compile Include="src\Instructions\newarr.py" />
+    <Compile Include="src\Instructions\newobj.py" />
+    <Compile Include="src\Instructions\nop.py" />
+    <Compile Include="src\Instructions\pop.py" />
+    <Compile Include="src\Instructions\Ret.py" />
+    <Compile Include="src\Instructions\Special\BeginCatch.py" />
+    <Compile Include="src\Instructions\Special\BeginTry.py" />
+    <Compile Include="src\Instructions\Special\EndCatch.py" />
+    <Compile Include="src\Instructions\Special\EndTry.py" />
+    <Compile Include="src\Instructions\Special\__init__.py" />
+    <Compile Include="src\Instructions\stelem.py" />
+    <Compile Include="src\Instructions\stfld.py" />
+    <Compile Include="src\Instructions\stloc.py" />
+    <Compile Include="src\Instructions\sub.py" />
+    <Compile Include="src\Instructions\throw.py" />
+    <Compile Include="src\Instructions\__init__.py" />
+    <Compile Include="src\Method.py" />
+    <Compile Include="src\MethodDefinition.py" />
+    <Compile Include="src\Parser\AssemblyParser.py" />
+    <Compile Include="src\Parser\ClassParser.py" />
+    <Compile Include="src\Parser\InstructionParser.py" />
+    <Compile Include="src\Parser\MethodParser.py" />
+    <Compile Include="src\Parser\ParserContext.py" />
+    <Compile Include="src\Parser\__init__.py" />
+    <Compile Include="src\ProtectedBlock.py" />
+    <Compile Include="src\ReferenceType.py" />
+    <Compile Include="src\Stack.py" />
+    <Compile Include="src\Types.py" />
+    <Compile Include="src\Utility.py" />
+    <Compile Include="src\Variable.py" />
+    <Compile Include="src\VM.py" />
+    <Compile Include="src\__init__.py" />
+    <Compile Include="tests\tests.py" />
+  </ItemGroup>
+</Project>
